@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ Панель</title>
+</head>
+<body>
+    <p><b>Ники пользователей</b></p>
+    <p><textarea rows="10" cols="45" name="username" id="username" placeholder="Один ник на одну строку"></textarea></p>
+    <div>
+        <p><b>Сумма</b></p>
+        <input type="text" name="amount" id="amount">
+        <p id="services">
+            <input type="checkbox" name="connect" value="a1">Connect<Br>
+            <input type="checkbox" name="qcloud" value="a2">QCloud<Br>
+            <input type="checkbox" name="message" value="a3">Quasar Message<Br> 
+            <input type="checkbox" name="franchise" value="a4">Franchise<Br> 
+            <input type="checkbox" name="insta_comment" value="a5">Insta Comment<Br>
+            <input type="checkbox" name="insta_lead" value="a6">Insta Lead<Br>
+            <input type="checkbox" name="skype_reg" value="a7">Skype Reg<Br>
+            <input type="checkbox" name="vk_lead" value="a8">Vk Lead<Br>
+            <input type="checkbox" name="vk_reg" value="a9">Vk Reg<Br>
+            <input type="checkbox" name="tele_lead" value="a10">Tele Lead<Br>
+        </p>
+        <p><input type="button" value="Начислить" onclick="accrual()"></p>
+    </div>
+    <p><a href="https://matrix.easy-stars.ru/bot/admin-panel/">Назад</a></p>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://matrix.easy-stars.ru/bot/admin-panel/users/main-js"></script></body>
+</html>
