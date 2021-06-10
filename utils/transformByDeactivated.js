@@ -26,6 +26,9 @@ const deleteUser = (tree) => {
 
     //Нахожу ребёнка, с минимальным количеством детей
     for (let i = 0; i < tree.children.length; i++) {
+        if (tree.children[i].children === undefined || tree.children[min].children) {
+            continue;
+        }
         if (tree.children[i].children.length < tree.children[min].children.length) {
             min = i;
         }

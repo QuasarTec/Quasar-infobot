@@ -246,7 +246,7 @@ router.post('/pay/confirm', (req, res) => {
             var inviterId;
 
             if (res.rowCount === 0) {
-                inviterId = findWeakBranch(180);
+                inviterId = findWeakBranch(661); //Поиск слабого звена относительно аккаунта @Quasar_Company (661 - id записи Quasar_Company в бд)
             } else {
                 query = `SELECT id FROM quasar_telegrambot_users_new WHERE ref_id = ${res.rows[0].id}`;
                 let count_refs = await client.query(query);
