@@ -24,16 +24,35 @@ var options = {
 };
 
 bot.onText(/\/start/, async(msg, _match) => {
+    if (msg.chat.type !== 'private') return;
     commands.start(msg, bot, options);
 });
 
 bot.onText(/\/be_admin(.+)/, (msg, _match) => {
+    if (msg.chat.type !== 'private') return;
     commands.admin.beAdmin(msg,bot)
 });
 
 bot.onText(/\/admin_panel/, (msg, _match) => {
+    if (msg.chat.type !== 'private') return;
     commands.admin.adminPanel(msg,bot)
 });
+
+bot.onText(/\/change_text(.+)/, (msg, _match) => {
+    if (msg.chat.type === 'private') return;
+    commands.admin.changeText(msg, bot);
+})
+
+bot.onText(/\/activate_bot/, (msg, _match) => {
+    if (msg.chat.type === 'private') return;
+    console.log('lol')
+    commands.admin.activateDeactivateBot(msg, bot, true)
+})
+
+bot.onText(/\/deactivate_bot/, (msg, _match) => {
+    if (msg.chat.type === 'private') return;
+    commands.admin.activateDeactivateBot(msg, bot, false)
+})
 
 
 bot.on('callback_query', async callbackQuery => {
@@ -469,7 +488,40 @@ bot.on('callback_query', async callbackQuery => {
 
 bot.on("polling_error", (err) => console.error(err));
 
+bot.on('new_chat_members', async msg => {
+    const get_text = `SELECT msg_text, active FROM chats WHERE chat_id = ${msg.chat.id}`;
+
+    const res = await client.query(get_text);
+
+    if (msg.new_chat_participant.username === "quasar_infobot" || res.rowCount === 0) {
+        const chatDoesNotExist = `SELECT * FROM chats WHERE chat_id = ${msg.chat.id}`;
+
+        const res = await client.query(chatDoesNotExist);
+
+        if (res.rowCount > 0) {
+            return;
+        }
+
+        const default_text = '&&&, привет!';
+        const query = `INSERT INTO chats (chat_id, msg_text, active) VALUES (${msg.chat.id}, '${default_text}', true)`;
+
+        client.query(query);
+        return;
+    }
+
+    let post = res.rows[0];
+
+    if (post.active) {
+        let text = post.msg_text;
+        text = text.replace('&&&', '@' + msg.new_chat_participant.username)
+        bot.sendMessage(msg.chat.id, text);
+        return;
+    }
+    
+})
+
 bot.on('message', message => {
+    if (message.chat.type !== 'private') return;
     if(isSendingMessage){
         const query = `SELECT * FROM quasar_telegrambot_users_new WHERE chat_id = '${message.chat.id}'`;
 

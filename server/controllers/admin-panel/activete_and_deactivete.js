@@ -34,27 +34,29 @@ module.exports = (req, res, date) => {
 
         client.query(query);
 
+        console.log(query);
+
     }
 
-    if (!check_services(services)) {
-        return;
-    }
+    if (check_services(services)) {
+        query = query_sets_for_marketings(services, date);
 
-    query = query_sets_for_marketings(services, date);
+        query += " WHERE ";
 
-    query += " WHERE ";
-
-    for (let i = 0; i < usernames.length; i++) {
-        const username = usernames[i];
-        if (i === usernames.length - 1) {
-            query += `user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = '${username}');`
-            
-        } else {
-            query += `user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = '${username}') OR `
+        for (let i = 0; i < usernames.length; i++) {
+            const username = usernames[i];
+            if (i === usernames.length - 1) {
+                query += `user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = '${username}');`
+                
+            } else {
+                query += `user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = '${username}') OR `
+            }
         }
+
+        client.query(query);
+
     }
 
-    client.query(query);
     return res.send('ok');
 }
 

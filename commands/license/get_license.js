@@ -22,15 +22,9 @@ module.exports = async (bot,msg) => {
         return;
     }
 
-    if (await checkConnectNotPayed(msg.chat.id)) {
-        bot.sendMessage(msg.chat.id, 'Этот подарок могут забрать только те пользователи, кто проплатил сервис Connect', INLINE_OPTIONS);
-        return;
-    }
-
     let inviter = await getInviterName(msg.chat.username);
 
-    let query = `SELECT * FROM \`Licensi\` WHERE Username = ${inviter}`;
-
+    let query = `SELECT * FROM \`Licensi\` WHERE Username = '${inviter[0] === "@" ? inviter : "@" + inviter}';`;
     let user = await client_mysql.query(query)
 
     if (user.length === 0) {
@@ -46,12 +40,12 @@ module.exports = async (bot,msg) => {
 
             user.shift();
         } else {
-            bot.sendMessage(msg.chat.id, 'Похоже, что у вашего пригласителя нет подарочных лицензий (Пригласитель тот, кто вас пригласил, а не тот, кого вам выдаёт бот за пригласителя. Хотя иногда это идинаковые люди)', INLINE_OPTIONS);
+            bot.sendMessage(msg.chat.id, 'Похоже, что у вашего пригласителя закончились подарочные лицензии (Пригласитель тот, кто вас пригласил, а не тот, кого вам выдаёт бот за пригласителя. Хотя иногда это идинаковые люди)', INLINE_OPTIONS);
         }
     }		
 
-    if (parseInt((new Date()-user[0].Timeset)/(24*3600*1000)) > user[0].LimitDay) {
-        bot.sendMessage(msg.chat.id, 'Упс, похоже вы опоздали(((', INLINE_OPTIONS);
+    if (await checkLicensesPerDay(user[0].LimitDay, user[0].LimitDate, user[0].PromoType, user[0].Username)) {
+        bot.sendMessage(msg.chat.id, `Похоже ваш пригласитель уже не может сегодня выдавать лицензии, попробуйте завтра`);
         return;
     }
 
@@ -62,11 +56,11 @@ module.exports = async (bot,msg) => {
 
     bot.sendMessage(msg.chat.id, 'Ваша лицензия\nLogin: PromoSoft\nPassword: CianoGenMob', INLINE_OPTIONS);
 
-    let set_gift_recived = `UPDATE quasar_telegrambot_users_new SET gift_reviced = true WHERE chat_id = ${msg.chat.id}`;
+    let set_gift_recived = `UPDATE quasar_telegrambot_users_new SET gift_recived = true WHERE chat_id = ${msg.chat.id}`;
 
     await client.query(set_gift_recived);
 
-    let decriment_gifts = `UPDATE \`Licensi\` SET Limit=Limit-1 WHERE id = ${user[0].id}`;
+    let decriment_gifts = `UPDATE \`Licensi\` SET Limit=Limit-1, LimitDay=LimitDay-1 WHERE id = ${user[0].id}`;
 
     await client_mysql.query(decriment_gifts);
 }
@@ -91,14 +85,6 @@ const checkRecived = async (chat_id) => {
     return res.rowCount > 0 ? res.rows[0].gift_recived : false;
 }
 
-const checkConnectNotPayed = async (chat_id) => {
-    let payed_query = `SELECT last_pay FROM quasar_telegrambot_users_new WHERE chat_id = ${chat_id}`;
-
-    let payed = await client.query(payed_query);
-
-    return payed.rowCount > 0 ? parseInt((new Date()-payed.rows[0].last_pay)/(24*3600*1000)) > 30 : false;
-}
-
 const getInviterName = async (username) => {
     const params = {
         action: 'get',
@@ -119,4 +105,29 @@ const getInviterName = async (username) => {
     console.log(inviter);
     
     return inviter;
+}
+
+const checkLicensesPerDay = async (limitDay, limitDate, promoType, username) => {
+    if (limitDate !== new Date().toJSON().slice(0, 10)) {
+        let licenses;
+        if (promoType === 1) {
+            licenses = 17;
+        } else if (promoType === 2) {
+            licenses = 24;
+        } else if (promoType === 3) {
+            licenses = 40;
+        }
+
+        updateLimitDate = `UPDATE Licensi SET LimitDay = ${licenses}, LimitDate = Now() WHERE Username = '${username}'`;
+
+        client_mysql.query(updateLimitDate);
+
+        return false;
+    }
+
+    if (limitDay <= 0) {
+        return true;
+    }
+
+    return false;
 }

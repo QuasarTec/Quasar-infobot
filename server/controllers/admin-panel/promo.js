@@ -25,7 +25,7 @@ module.exports = (req, res) => {
             el = "@" + el;
         }
 
-        const query = `INSERT INTO Licensi (\`Username\`, \`Timeset\`, \`Activate\`, \`ActivateLicens\`, \`LimitDay\`, \`Limit\`) VALUES ('${el}', '${new Date().toJSON().slice(0, 10)}', 1, true, ${limitDay}, ${licenses});`;
+        const query = `INSERT INTO Licensi (\`Username\`, \`Timeset\`, \`Activate\`, \`ActivateLicens\`, \`LimitDay\`, \`Limit\`, \`LimitDate\`, \`PromoType\`) VALUES ('${el}', '${new Date().toJSON().slice(0, 10)}', 1, true, ${limitDay}, ${licenses}, Now(), ${type[1]});`;
 
         client.query(query);
     })

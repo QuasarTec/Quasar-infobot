@@ -3,7 +3,7 @@ const router = express.Router();
 const SECRET_TOKEN = "92807f35d855546c12b93145446f9950624adcef7a91c551149bd56daf35c463f952861ae23ec99b28ee28243ea89e5ec4c1f6bcb4a8ddb233a5a926b524f9b7"
 
 router.use(async (req, res, next) => {
-    if (SECRET_TOKEN !== req.body.token && req.method === "POST") {
+    if (SECRET_TOKEN !== req.body.token && req.method === "POST" && req.url.includes('admin-panel')) {
         return res.send('Token invalid')
     }
     next();
