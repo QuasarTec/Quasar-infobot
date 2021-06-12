@@ -29,7 +29,7 @@ module.exports = async (bot,msg) => {
     let user = await client_mysql.query(query)
 
     if (user.length === 0) {
-        bot.sendMessage(msg.chat.id, `Уважаемый ${msg.chat.username}, к сожалению у Вашего пригласителя нет подарочных, программных  лицензий.. Рекомендую обратиться за разъяснениями к своему наставнику или задать вопрос чатах Quasar Tehnology`, INLINE_OPTIONS);
+        bot.sendMessage(msg.chat.id, `Уважаемый @${msg.chat.username}, к сожалению у Вашего пригласителя нет подарочных, программных  лицензий.. Рекомендую обратиться за разъяснениями к своему наставнику или задать вопрос чатах Quasar Tehnology`, INLINE_OPTIONS);
         return;
     }
 
@@ -41,33 +41,39 @@ module.exports = async (bot,msg) => {
 
             user.shift();
         } else {
-            bot.sendMessage(msg.chat.id, `Уважаемый ${msg.chat.username}, к сожалению у Вашего пригласителя закончились подарочные, программные  лицензии.. Рекомендую обратиться за разъяснениями к своему наставнику или задать вопрос чатах Quasar Tehnology`, INLINE_OPTIONS);
+            bot.sendMessage(msg.chat.id, `Уважаемый @${msg.chat.username}, к сожалению у Вашего пригласителя закончились подарочные, программные  лицензии.. Рекомендую обратиться за разъяснениями к своему наставнику или задать вопрос чатах Quasar Tehnology`, INLINE_OPTIONS);
         }
     }		
 
-    if (await checkLicensesPerDay(user[0].LimitDay, user[0].LimitDate, user[0].PromoType, user[0].Username)) {
-        bot.sendMessage(msg.chat.id, `Уважаемый ${msg.chat.username}, лимит выдачи подарочных программных лицензий у Вашего пригласителя на сегодня исчерпан.. Вы сможете получить свой подарок завтра. Если у Вас возникли сложности или вопросы, обратитесь за разъяснениями к своему наставнику или в чаты Quasar Tehnology`);
+    if (await checkLicensesPerDay(user[0].LimitDay, user[0].LimitDate, user[0].PromoType, user[0].id)) {
+        bot.sendMessage(msg.chat.id, `Уважаемый @${msg.chat.username}, лимит выдачи подарочных программных лицензий у Вашего пригласителя на сегодня исчерпан.. Вы сможете получить свой подарок завтра. Если у Вас возникли сложности или вопросы, обратитесь за разъяснениями к своему наставнику или в чаты Quasar Tehnology`);
         return;
     }
 
     if (user[0].ActivateLicens === 'false') {
-        bot.sendMessage(msg.chat.id, `Уважаемый ${msg.chat.username}, к сожалению у вашего пригласителя не активирована функция распространения подарочных, программных лицензий.. \nЕсли Вы хотите получить свой подарок, перешлите данное сообщение пригласителя и попросите его обратиться в администрацию компании для успешного решения данного вопроса\nЕсли у Вас возникли сложности или вопросы, обратитесь за разъяснениями к своему наставнику или в чаты Quasar Tehnology`, INLINE_OPTIONS);
+        bot.sendMessage(msg.chat.id, `Уважаемый @${msg.chat.username}, к сожалению у вашего пригласителя не активирована функция распространения подарочных, программных лицензий.. \nЕсли Вы хотите получить свой подарок, перешлите данное сообщение пригласителя и попросите его обратиться в администрацию компании для успешного решения данного вопроса\nЕсли у Вас возникли сложности или вопросы, обратитесь за разъяснениями к своему наставнику или в чаты Quasar Tehnology`, INLINE_OPTIONS);
         return;
     }
 
-    let options = INLINE_OPTIONS;
+    let photo_caption = `@${msg.chat.username}  поздравляю! Вам выписана подарочная лицензия сроком на 2 недели.\nУникальная программа для автоматизации бизнеса и привлечения бесплатного, бесконечного, целевого трафика из соц. сети ВКонтакте, теперь Ваша!\nОтправляю Вам:\n• Архив с программой\n• Описание программного функционала \n• Доступы для авторизации в программе\n• Обучение по использованию софта\nОбращаю внимание, получить программу. VkConnect бесплатно, Вы можете став пользователем Connect сервиса коллективных видео конференций. Смотри подробности в разделе «Для партнеров»  =>  «Продукты и сервисы» в личном кабинете главного бота компании`;
 
-    options.caption = `${msg.chat.username}  поздравляю! Вам выписана подарочная лицензия сроком на 2 недели.\nУникальная программа для автоматизации бизнеса и привлечения бесплатного, бесконечного, целевого трафика из соц. сети ВКонтакте, теперь Ваша!\nОтправляю Вам:\n• Архив с программой\n• Описание программного функционала \n• Доступы для авторизации в программе\n• Обучение по использованию софта\nОбращаю внимание, получить программу. VkConnect бесплатно, Вы можете став пользователем Connect сервиса коллективных видео конференций. Смотри подробности в разделе «Для партнеров»  =>  «Продукты и сервисы» в личном кабинете главного бота компании`;
+    let doc_caption = `Описание VkConnect:\n• Многопоточность\n• Автоприём заявок в друзья\n• Автосообщение + Указание имени получателя\n• Рассылка заявок в друзья по ключевому слову \n• Рассылка заявок в друзья по рекомендованным друзьям \n• Лайкинг\n• Рандомизация текста \n• Автоматическая мультиупаковка аккаунтов \n• Возможность использования  прокси\n• Умный 6 уровневый рандомизированный автоответчик`
 
-    bot.sendPhoto(msg.chat.id, __dirname.replace('license', 'static/img/gift_license.jpg'), options);
+    await bot.sendPhoto(msg.chat.id, __dirname.replace('license', 'static/img/gift_license.jpg'), {
+        caption: photo_caption
+    });
 
-    console.log(options);
+    await bot.sendDocument(msg.chat.id, __dirname.replace('license', 'static/rar/VKConnect.rar'), {
+        caption: doc_caption
+    });
+
+    bot.sendMessage(msg.chat.id, `Ваша лицензия\nLogin: PromoSoft\nPassword: CianoGenMob\nОбучение по работе с программой:\nhttps://youtu.be/kFlbqTKS3IE`, INLINE_OPTIONS)
 
     let set_gift_recived = `UPDATE quasar_telegrambot_users_new SET gift_recived = true WHERE chat_id = ${msg.chat.id}`;
 
     await client.query(set_gift_recived);
 
-    let decriment_gifts = `UPDATE \`Licensi\` SET Limit=Limit-1, LimitDay=LimitDay-1 WHERE id = ${user[0].id}`;
+    let decriment_gifts = `UPDATE Licensi SET \`Limit\` = \`Limit\` -1, LimitDay=LimitDay-1 WHERE id = ${user[0].id};`;
 
     await client_mysql.query(decriment_gifts);
 }
@@ -108,15 +114,13 @@ const getInviterName = async (username) => {
 
 
     let inviter = resp.data.result.User.inviter;
-
-    console.log(inviter);
     
     return inviter;
 }
 
-const checkLicensesPerDay = async (limitDay, limitDate, promoType, username) => {
+const checkLicensesPerDay = async (limitDay, limitDate, promoType, id) => {
     if (limitDate !== new Date().toJSON().slice(0, 10)) {
-        let licenses;
+        var licenses;
         if (promoType === 1) {
             licenses = 17;
         } else if (promoType === 2) {
@@ -125,7 +129,7 @@ const checkLicensesPerDay = async (limitDay, limitDate, promoType, username) => 
             licenses = 40;
         }
 
-        updateLimitDate = `UPDATE Licensi SET LimitDay = ${licenses}, LimitDate = Now() WHERE Username = '${username}'`;
+        updateLimitDate = `UPDATE Licensi SET LimitDay = ${licenses}, LimitDate = Now() WHERE id = ${id}`;
 
         client_mysql.query(updateLimitDate);
 
