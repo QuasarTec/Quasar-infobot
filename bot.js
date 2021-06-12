@@ -126,13 +126,15 @@ bot.on('callback_query', async callbackQuery => {
         text = 'Рассылка была отменена';
         isSendingMessage = false;
     } else if (action === 'license') {
-        text = 'Для активации текущих лицензий пройдите в канал по этой ссылке https://t.me/joinchat/_mTE43yQKy03MmUy и прочитайте закреп.';
-        opts.reply_markup = JSON.stringify({
+        let text = 'Для активации текущих лицензий пройдите в канал по этой ссылке https://t.me/joinchat/_mTE43yQKy03MmUy и прочитайте закреп.';
+        let options = {};
+        options.reply_markup = {
             inline_keyboard: [
                 [{ text: 'Получить лицензию', callback_data: 'get_license'}],
                 [{ text: 'Назад', callback_data: 'main'}]
             ]
-        });
+        };
+        bot.sendMessage(msg.chat.id, text, options);
     } else if (action === 'main') {
         let text = `@${msg.chat.username} приветствую тебя, я главный бот компании Quasar Tehnology. В моём арсенале есть все что тебе потребуется для успешного бизнеса\n\nСледуя моим рекомендациям, ты легко разберёшься в тонкостях компании и быстро получишь желаемый результат\n\nПозвольте я дам Вам совет.. Перед началом работы ознакомьтесь с информацией раздела  «Первые шаги партнера». Сделать это Вы сможете перейдя по одноименной кнопке в моем меню`
         let opts = {};
