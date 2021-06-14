@@ -1,5 +1,5 @@
 SELECT *FROM quasar_telegrambot_users_new WHERE
-username = 'NataStars18';
+username = 'GulsemAnarbaeva';
 ref_id = 228;
 Or username = 'ladygold11'
 Or username = 'Zoreslava43'
@@ -31,7 +31,7 @@ Or username = 'kupava19'
  Popovi52      | 227 |       
 
 INSERT INTO quasar_telegrambot_users_new (username, ref_id, last_pay) VALUES
-('NataStars18',(SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Y4riK07'),Now()),
+('GulsemAnarbaeva',123,Now()),
 ('leoniv25',(SELECT id FROM quasar_telegrambot_users_new WHERE username = 'brilliant989'),Now()),
 ('okhlopru',(SELECT id FROM quasar_telegrambot_users_new WHERE username = 'brilliant989'),Now()),
 ('vipgoldlineoj',(SELECT id FROM quasar_telegrambot_users_new WHERE username = 'systemmoneys'),Now()),
@@ -44,12 +44,12 @@ vk_reg_pay = Now(), insta_king_pay = Now() where user_id = (SELECT id FROM quasa
 UPDATE quasar_telegrambot_users_new SET last_pay = Now();
 
 UPDATE quasar_telegrambot_users_new 
-SET ref_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'NataliaLeukhina') 
-WHERE username = 'evzuraa' OR
-username = 'leoniv25' OR
-username = 'okhlopru' OR
-username = 'vipgoldlineoj' OR
-username = 'InvestExpert_info';
+SET ref_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Quasar_Company') 
+WHERE username = 'Vmlynko' OR
+username = 'topleader111' OR
+username = 'top444444' OR
+username = 'bvornik444' OR
+username = 'asia0001';
 
     username    | id  | ref_id 
 ----------------+-----+--------
@@ -82,3 +82,6 @@ CREATE TABLE chats (
     msg_text text,
     active boolean
 );
+
+DELETE FROM quasar_telegrambot_users_new WHERE username = 'GulsemAnarbaeva';
+UPDATE marketings SET user_id = 9999999 WHERE user_id = 259;

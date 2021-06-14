@@ -24,6 +24,20 @@ const transformByDeactivated = (tree) => {
 const deleteUser = (tree) => {
     let min = 0;
 
+    for (let i = 0; i < tree.children.length; i++) {
+        if (tree.children[i].children === undefined) {
+            let old_tree_el = tree.children[i];
+            let new_tree_el = {
+                name: old_tree_el.username,
+                id: old_tree_el.id,
+                data: {},
+                children: [],
+                active: false
+            }
+            tree.children[i] = new_tree_el;
+        }
+    }
+
     //Нахожу ребёнка, с минимальным количеством детей
     for (let i = 0; i < tree.children.length; i++) {
         if (tree.children[i].children === undefined || tree.children[min].children) {

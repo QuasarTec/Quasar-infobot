@@ -6,7 +6,7 @@ const client_mysql = require('./mysql');
 const INLINE_OPTIONS = {
     reply_markup: {
         inline_keyboard: [
-            [{text: 'Назад', callback_data: 'license'}]
+            [{text: 'Назад', callback_data: 'main'}]
         ]
     }
 }

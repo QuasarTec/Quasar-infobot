@@ -7,9 +7,14 @@ module.exports = async (msg, bot) => {
         return;
     }
 
-    const query = `UPDATE chats SET msg_text = '${msg.text.replace('/change_text ', '')}' WHERE chat_id = ${msg.chat.id}`;
+    const query = `UPDATE chats SET msg_text = '${msg.text.replace('/change_text ', '')}' WHERE chat_id = '${msg.chat.id}'`;
 
-    client.query(query);
+    client.query(query, (err) => {
+        if (err) {
+            bot.sendMessage(msg.chat.id, 'Текст успешно неизменён');
+        }  else {
+            bot.sendMessage(msg.chat.id, 'Текст успешно изменён');
+        }
+    });
 
-    bot.sendMessage(msg.chat.id, 'Текст успешно изменён');
 }

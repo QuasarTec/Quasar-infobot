@@ -91,6 +91,15 @@ const all_deactive = () => {
     axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/deactivate', options)
 }
 
+const permutation = () => {
+    let options = {
+        usernames: getUsernames(),
+        token: prompt('Введите токен')
+    }
+
+    axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/permutation', options)
+}
+
 const getServices = () => {
     var services = document.getElementById('services');
 

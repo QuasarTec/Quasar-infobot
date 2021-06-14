@@ -37,6 +37,10 @@ router.get('/admin-panel/users/promo', async (req, res) => {
     res.sendFile(__dirname + "/static/assets/promo.html");
 })
 
+router.get('/admin-panel/users/permutation', async (req, res) => {
+    res.sendFile(__dirname + "/static/assets/permutation.html");
+})
+
 router.post('/admin-panel/users/activate', (req, res) => {
     require('../../controllers/admin-panel/activete_and_deactivete')(req,res,'Now()')
 })
@@ -51,6 +55,10 @@ router.post('/admin-panel/users/accrual', (req,res) => {
 
 router.post('/admin-panel/users/promo', (req,res) => {
     require('../../controllers/admin-panel/promo')(req,res)
+})
+
+router.post('/admin-panel/users/permutation', (req,res) => {
+    require('../../controllers/admin-panel/permutation')(req,res)
 })
 
 
