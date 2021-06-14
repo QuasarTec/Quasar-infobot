@@ -1,9 +1,15 @@
 const client = require('../../db');
 
 module.exports = async (req, res) => {
-    let { username } = req.query;
+    let { username, service } = req.query;
 
-    const query = `SELECT last_pay FROM quasar_telegrambot_users_new WHERE username = '${username}'`;
+    if (service === undefined) {
+        service = 'last_pay';
+    }
+
+    const query = service === 'last_pay' ? `SELECT last_pay FROM quasar_telegrambot_users_new WHERE username = '${username}'` : 
+                  `SELECT ${service} FROM marketings WHERE user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = '${username}')`;
+
 
     let response = await client.query(query);
 
@@ -14,6 +20,6 @@ module.exports = async (req, res) => {
         return
     }
     res.json({
-        payed: parseInt((new Date()-response.rows[0].last_pay)/(24*3600*1000)) <= 30
+        payed: parseInt((new Date()-response.rows[0][service])/(24*3600*1000)) <= 30
     })
 }

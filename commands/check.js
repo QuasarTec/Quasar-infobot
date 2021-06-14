@@ -2,7 +2,7 @@ const client = require('../db');
 const axios = require('axios');
 const checkOnChatId = require('../utils/CheckOnChatId');
 
-const successful = ' все ok! Ваша учетная запись найдена в глобальной базе Quasar Technology. Зарабатывай в компании развивая личный, высокодоходный бизнес!'
+const successful = ' поздравляю! Твоя учетная запись найдена в глобальной базе State of Quasaria.\n\nВсего два шага:\n\nПолучи подарок и стань частью первого независимого цифрового государства State of Quasaria'
 const not_found  = ` в глобальной базе Quasar Technology не найден..\n
 Проверьте указанный ник, на идентичность.
 Если вы уверены, в том  что данные авторизации внесены верно, Вы зарегистрированы под указываемым Вами telegram ником, обратитесь за помощью тапнув по кнопке "тех поддержка"`
@@ -55,7 +55,8 @@ module.exports = async (msg, bot) => {
             
             options.reply_markup = JSON.stringify({
                 inline_keyboard: [
-                    [{ text: 'Личный кабинет', callback_data: 'main' }],
+                    [{ text: 'Получить подарок', callback_data: 'get_license'}],
+                    [{ text: 'State of Quasaria', callback_data: 'main' }]
                 ]
             })
 

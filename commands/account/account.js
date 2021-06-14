@@ -38,6 +38,7 @@ module.exports = async (msg, opts) => {
                 [{ text: 'Количество рефералов', callback_data: 'refs_count' }, { text: 'Просмотреть рефералов', callback_data: 'refs'}],
                 [{ text: 'Ваш пригласитель', callback_data: 'inviter' }],
                 [{ text: 'Реферальная ссылка', callback_data: 'ref_link'}],
+                [{ text: 'Начисления', callback_data: 'accruals_connect'}],
                 [{ text: 'Главное меню', callback_data: 'main' }],
                 [{ text: 'Назад', callback_data: 'connect'}]
             ]
