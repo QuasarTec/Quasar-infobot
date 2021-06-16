@@ -16,6 +16,14 @@ router.get('/users/check-on-payed', async (req, res) => {
     require('../controllers/checkOnPayed')(req, res);
 })
 
+router.post('/connect/check-code', async (req, res) => {
+    require('../controllers/connect/check-code')(req,res);
+})
+
+router.post('/connect/send-code', async (req, res) => {
+    require('../controllers/connect/send-code')(req,res, bot);
+})
+
 router.post('/message', async(req, res) => {
     const { usernames, text, image } = req.body;
 

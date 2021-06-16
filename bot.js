@@ -246,7 +246,7 @@ bot.on('callback_query', async callbackQuery => {
                 [{text: 'Автоматизация', callback_data: 'auto'}],
                 //[{text: 'Скачать', callback_data: 'message_download'}],
                 [{text: 'Личный кабинет', callback_data: 'service_message'}],
-                [{text: 'Назад', callback_data: 'main'}]
+                [{text: 'Назад', callback_data: 'services'}]
             ]
         })
         
@@ -338,7 +338,7 @@ bot.on('callback_query', async callbackQuery => {
         opts.reply_markup = {
             inline_keyboard: [
                 [{text: 'Личный кабинет', callback_data: 'service_qcloud'}],
-                [{text: "Назад", callback_data: "main"}]
+                [{text: "Назад", callback_data: "services"}]
             ]
         }
 
