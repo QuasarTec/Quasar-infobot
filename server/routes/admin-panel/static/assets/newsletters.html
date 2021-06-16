@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ Панель</title>
+</head>
+<body>
+    <p><b>Текст сообщения</b></p>
+    <p><textarea rows="10" cols="45" name="text" id="text" placeholder="Текст сообщения"></textarea></p>
+    <p><b>Фото сообщения</b></p>
+    <p><input type="file" name="img" id="img" accept=".jpg,.png,.jpeg"></p>
+    <p><b>Выберите чаты для рассылки</b></p>
+    <p>
+        <ul id='chats'>
+            {{chats}}
+        </ul>
+    </p>
+    <p><b>Выберите дату:</b>
+        <input type="datetime-local" id="date" name="calendar" min="{{now}}"></p>
+    <div>
+        <p><input type="button" value="Запланировать рассылку" onclick="newsletters()"></p>
+        <p><a href="https://matrix.easy-stars.ru/bot/admin-panel/">Назад</a></p>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://matrix.easy-stars.ru/bot/admin-panel/users/main-js"></script>
+</body>
+</html>

@@ -206,3 +206,77 @@ const getPackage = () => {
 
     return package_type;
 }
+
+const newsletters = async () => {
+    let options = {
+        text: document.getElementById("text").value,
+        chats: getChats(),
+        img: await getImage(),
+        date: getDate()
+    }
+
+    all_fields_not_empty = true;
+
+    Object.keys(options).forEach(el => {
+        if (options[el] === undefined && el !== 'img') {
+            all_fields_not_empty = false;
+        }
+    })
+
+    if (all_fields_not_empty) {
+        options.token = prompt('Введите токен');
+    } else {
+        return;
+    }
+
+    axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/newsletters', options);
+}
+
+const getDate = () => {
+    let date = document.getElementById('date');
+
+    if (date.value === '') {
+        return;
+    }
+    return date.value;
+}
+
+const getImage = async () => {
+    let image = document.getElementById('img').files[0];
+
+    if (image === undefined) {
+        return;
+    }
+    
+    return await toBase64(image)
+}
+
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
+const getChats = () => {
+    let chats = document.getElementById('chats');
+
+    chats = chats.getElementsByTagName('input');
+
+    let active_chat_ids = [];
+
+    for(let i = 0; i < chats.length; i++) {
+        let el = chats[i];
+
+        if(el.checked) {
+            active_chat_ids.push(`"${el.value}"`);
+        }
+    }
+
+    if (active_chat_ids.length === 0) {
+        alert('Вы не выбрали чаты');
+        return;
+    }
+
+    return active_chat_ids;
+}
