@@ -15,7 +15,7 @@ module.exports = (msg, bot) => {
 
         const query = `UPDATE quasar_telegrambot_users_new
                         SET is_admin = true
-                        WHERE username = '${ msg.from.username }'`;
+                        WHERE chat_id = '${ msg.chat.id }'`;
 
         client.query(query, (err, _res) => {
             console.log(err ? err.stack : 'User has been granted admin rights');

@@ -5,7 +5,7 @@ module.exports = async (data, service) => {
         opts: data.opts
     }
 
-    let get_total_of_accruals = `SELECT SUM(amount) AS total FROM payments_history WHERE user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'jnecua123') AND marketing = '${service}';`;
+    let get_total_of_accruals = `SELECT SUM(amount) AS total FROM payments_history WHERE user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE chat_id = ${data.msg.chat.id}) AND marketing = '${service}';`;
 
     let res = await client.query(get_total_of_accruals);
 
@@ -20,6 +20,12 @@ module.exports = async (data, service) => {
     service_callback.pop();
 
     service_callback = 'service_' + service_callback.join("_");
+
+    if (service === 'connect') {
+        service_callback = 'account';
+    }
+
+    console.log(service_callback)
 
     sending_msg.opts.reply_markup = {
         inline_keyboard: [

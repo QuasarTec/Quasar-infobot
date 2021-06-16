@@ -21,7 +21,7 @@ module.exports = async (data, callback_name, name, db_field_name = 'last_pay') =
     if (res.rowCount === 0 || res.rows[0][db_field_name] === null) {
         sending_msg.opts.reply_markup = {
             inline_keyboard: [
-                [{text: 'Маркетинг', callback_date: 'none'}],
+                [{text: 'Маркетинг', callback_data: 'none'}],
                 [{text: 'Оплата маркетинга', callback_data: callback_name}],
                 [{text: 'Назад', callback_data: 'services'}],
                 [{text: 'Главная', callback_data: 'main'}]
@@ -31,7 +31,7 @@ module.exports = async (data, callback_name, name, db_field_name = 'last_pay') =
         sending_msg.text += '\nВремя вашей подписки истекло, для использования сервиса Connect необходимо продлить подписку';
         sending_msg.opts.reply_markup = {
                 inline_keyboard: [
-                    [{text: 'Маркетинг', callback_date: 'none'}],
+                    [{text: 'Маркетинг', callback_data: 'none'}],
                     [{text: 'Оплата маркетинга', callback_data: callback_name}],
                     [{text: 'Назад', callback_data: 'services'}],
                     [{text: 'Главная', callback_data: 'main'}]
@@ -44,7 +44,7 @@ module.exports = async (data, callback_name, name, db_field_name = 'last_pay') =
         
         sending_msg.opts.reply_markup = {
                 inline_keyboard: [
-                    [{text: 'Маркетинг', callback_date: 'none'}],
+                    [{text: 'Маркетинг', callback_data: 'none'}],
                     [{text: 'Визульный просмотр рефраллов', url: `https://matrix.easy-stars.ru/bot/referrals-vizualization?username=${res.rows[0].username}&type=${db_field_name}`}],
                     [{text: 'Посмотреть начисления', callback_data: `accruals_${db_field_name}`}],
                     [{text: 'Назад', callback_data: 'services'}],

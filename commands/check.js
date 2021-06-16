@@ -62,12 +62,12 @@ module.exports = async (msg, bot) => {
 
             text = "@" + msg.chat.username + successful;
 
-            doesExistQuery = `SELECT * FROM marketings WHERE user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = '${msg.chat.username}');`;
+            doesExistQuery = `SELECT * FROM marketings WHERE user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE chat_id = '${msg.chat.id}');`;
 
             res = await client.query(doesExistQuery)
             if(res.rowCount === 0){
                 query = `INSERT INTO marketings (user_id) 
-                    VALUES ((SELECT id FROM quasar_telegrambot_users_new WHERE username = '${msg.chat.username}'));`;
+                    VALUES ((SELECT id FROM quasar_telegrambot_users_new WHERE chat_id = '${msg.chat.id}'));`;
                 client.query(query, (err) => {
                     if(err) throw err;
                 })
