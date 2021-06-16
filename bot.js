@@ -6,6 +6,7 @@ const token = '1615772907:AAGoM7p1WgrKmS6ZtZBIHjkbwE1VC-XLtn0';
 const axios = require('axios')
 const fs = require('fs');
 const services = require('./commands/services/index');
+const schedule = require('./utils/schedule/schedule');
 
 let sendMsgMass;
 let isSendingMessage = false;
@@ -14,6 +15,8 @@ let isCheckingUser = false;
 let news = {}
 
 const bot = new TelegramBot(token, {polling: true});
+
+schedule(bot);
 
 bot.onText(/\/start/, async(msg, _match) => {
     if (msg.chat.type !== 'private') return;
@@ -379,7 +382,7 @@ bot.on('callback_query', async callbackQuery => {
         });
         await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/first_steps.jpg`)
         bot.sendMessage(msg.chat.id, text, opts)
-    }else if (action === "inviter") {
+    }else if (action === "mentor") {
         const query = `SELECT username FROM quasar_telegrambot_users_new WHERE id = (SELECT ref_id FROM quasar_telegrambot_users_new WHERE chat_id = ${msg.chat.id})`;
 
         let res = await client.query(query);
@@ -395,7 +398,37 @@ bot.on('callback_query', async callbackQuery => {
         } else {
             text = `Ваш пригласитель: @${res.rows[0].username}`;
         }
-    } else if (action === "create_news") {
+    }else if (action === "inviter") {
+        const params = {
+            action: 'get',
+            token: 'D!3%26%23!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%%23%@4112dhas91^^^^31',
+            by: 'username',
+            by_text: msg.chat.username
+        }
+    
+        const resp = await axios.get(`https://api.easy-stars.ru/api/query/user/get?action=${params.action}&token=${params.token}&by=${params.by}&by_text=${params.by_text}`).catch(err => console.error(err));
+        if (resp === undefined) return;
+        if (resp.data.status === 'error') {
+            options.reply_markup = JSON.stringify({
+                inline_keyboard: [
+                    [{ text: 'Тех. Поддержка', callback_data: 'support' }],
+                ]
+            })
+            text = `Пользователь с ником @${params.by_text}` + not_found; 
+        } else {
+            opts.reply_markup = {
+                inline_keyboard: [
+                    [{text: 'Назад', callback_data: 'account'}]
+                ]
+            }
+    
+            if (!resp.data.result.User.inviter) {
+                text = 'У вас нет пригласителя';
+            } else {
+                text = `Ваш пригласитель: ${resp.data.result.User.inviter}`;
+            }
+        }
+    }else if (action === "create_news") {
         text = "Введите свою новость здесь:";
         isSendingMessageNews = true;
     } else if (action === "news") {
@@ -506,7 +539,7 @@ bot.on('new_chat_members', async msg => {
         }
 
         const default_text = '&&&, привет!';
-        const query = `INSERT INTO chats (chat_id, msg_text, active) VALUES ('${msg.chat.id}', '${default_text}', true)`;
+        const query = `INSERT INTO chats (chat_id, msg_text, active, name) VALUES ('${msg.chat.id}', '${default_text}', true, '${msg.chat.title}')`;
 
         client.query(query);
         if (msg.new_chat_participant.username === "quasar_infobot") {

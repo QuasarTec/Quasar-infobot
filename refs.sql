@@ -83,5 +83,4 @@ CREATE TABLE chats (
     active boolean
 );
 
-DELETE FROM quasar_telegrambot_users_new WHERE username = 'GulsemAnarbaeva';
-UPDATE marketings SET user_id = 9999999 WHERE user_id = 259;
+INSERT INTO newsletters (chat_ids, msg_text, img, send_time) VALUES ('{"-558470404"}', 'Хелло индеец', '54326.jpg', '2021-06-15 13:44:00.000000');
