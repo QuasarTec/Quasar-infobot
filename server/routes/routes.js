@@ -21,7 +21,7 @@ router.post('/connect/check-code', async (req, res) => {
 })
 
 router.post('/connect/send-code', async (req, res) => {
-    require('../controllers/connect/send-code')(req,res, bot);
+    require('../controllers/connect/send-code')(req,res,bot);
 })
 
 router.post('/message', async(req, res) => {
@@ -336,9 +336,9 @@ router.get('/users/user-does-exist/', (req,res) => {
 	client.query(userDoesExist, (err, response) => {
 		if (err) {
 			res.json({
-                                userExist: err
-                        });
-			 throw err;
+                    userExist: err
+            });
+			throw err;
 		}
 		if (response.rowCount === 0) {
 			res.json({
@@ -346,8 +346,8 @@ router.get('/users/user-does-exist/', (req,res) => {
 			});
 		} else {
 			res.json({
-                                userExist: true
-                        });
+                    userExist: true
+            });
 		}
 	});
 })

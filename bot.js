@@ -298,33 +298,43 @@ bot.on('callback_query', async callbackQuery => {
                 [{text: "Маркетинг", callback_data: "marketing_connect"}],
                 [{text: "Описание", callback_data: "connect_desk"}],
                 [{text: "О подарке", callback_data: "none"}],
-                [{text: 'Видеоконференции Connect', url: 'https://meet.qtconnect.ru'}],
+                [{text: 'Видеоконференции Connect', url: 'https://qtconnect.ru'}],
                 [{text: "Личный кабинет", callback_data: "account"}],
                 [{text: "Назад", callback_data: "services"}]
             ]
         })
         bot.sendMessage(msg.chat.id, caption, options);
     } else if (action === "marketing_connect") {
-        await bot.sendVideo(msg.chat.id, `${__dirname}/commands/static/video/connect.mp4`);
-        await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/connect_marketing.jpg`);
-        opts.reply_markup = JSON.stringify({
-            inline_keyboard: [
-                [{text: 'Назад', callback_data: 'connect'}],
-                [{text: 'Главное меню', callback_data: 'main'}]
-            ]
-        });
-        bot.sendMessage(msg.chat.id, `В сервисе "Connect" реализован высокодоходный 9-ти уровневый плавающий (живой) маркетинг по принципу "квинтет"`,opts);
-    } else if (action === "connect_desk") {
-        await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/conect_funcs.jpg`)
-        let desk = fs.readFileSync(`${__dirname}/commands/static/html/connect_desk.html`)
-        bot.sendMessage(msg.chat.id, desk, {
+        await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/marketing_connect.jpg`, {
             parse_mode: "HTML",
-            reply_markup: {
-                inline_keyboard: [
-                    [{text: "Назад", callback_data: "connect"}],
-                    [{text: 'Главное меню', callback_data: 'main'}]
-                ]
-            }
+            caption: `<b>Маркетинг Connect сервиса, это классический, девятиуровневый "Квинтет"</b><i>\n\nПрибыль партнёров сервиса, растёт в соответствии с увеличением структуры, а ежемесячные выплаты по маркетингу, делают его мега востребованным!\n\nФинансовая модель маркетинга, проста и понятна каждому. В основу заложен классический, 9 уровневый "квинтет"\n\nВ первой линии, Вашего кабинета, стоит 5 человек, под каждым из них, расположено тоже по 5 партнёров. По этому принципу, программный алгоритм выстраивает Вашу  структуру на 9 уровней в глубину и равномерно распределяет по ней ежемесячную партнерскую прибыль!\n\nС каждой поступившей за услуги сервиса оплаты, 30% идёт в компанию, а 70% равномерно распределяется на 9 уровней, по Вашей структуре. К примеру, если кто то с 9 уровня Вашей структуры осуществит приглашение, то 9 человек стоящие над ним вверх (включая Вас), получат с новичка ежемесячную прибыль в размере 75₽</i>`
+        });
+        fs.readFile(`${__dirname}/commands/static/html/connect_marketing.html`, (err, data) => {
+            if (err) throw err;
+            bot.sendMessage(msg.chat.id, data, {
+                parse_mode: "HTML",
+                reply_markup: {
+                    inline_keyboard: [
+                        [{text: "Назад", callback_data: "connect"}],
+                        [{text: 'Главное меню', callback_data: 'main'}]
+                    ]
+                }
+            })
+        })
+    } else if (action === "connect_desk") {
+        await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/connect_funcs.jpg`)
+        fs.readFile(`${__dirname}/commands/static/html/connect_desk.html`, (err, data) => {
+            console.log(data)
+            if (err) throw err;
+            bot.sendMessage(msg.chat.id, data, {
+                parse_mode: "HTML",
+                reply_markup: {
+                    inline_keyboard: [
+                        [{text: "Назад", callback_data: "connect"}],
+                        [{text: 'Главное меню', callback_data: 'main'}]
+                    ]
+                }
+            })
         })
     } else if (action === "qcloud") {
 
@@ -382,7 +392,7 @@ bot.on('callback_query', async callbackQuery => {
         });
         await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/first_steps.jpg`)
         bot.sendMessage(msg.chat.id, text, opts)
-    }else if (action === "mentor") {
+    } else if (action === "mentor") {
         const query = `SELECT username FROM quasar_telegrambot_users_new WHERE id = (SELECT ref_id FROM quasar_telegrambot_users_new WHERE chat_id = ${msg.chat.id})`;
 
         let res = await client.query(query);
@@ -398,7 +408,7 @@ bot.on('callback_query', async callbackQuery => {
         } else {
             text = `Ваш пригласитель: @${res.rows[0].username}`;
         }
-    }else if (action === "inviter") {
+    } else if (action === "inviter") {
         const params = {
             action: 'get',
             token: 'D!3%26%23!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%%23%@4112dhas91^^^^31',
@@ -428,7 +438,7 @@ bot.on('callback_query', async callbackQuery => {
                 text = `Ваш пригласитель: ${resp.data.result.User.inviter}`;
             }
         }
-    }else if (action === "create_news") {
+    } else if (action === "create_news") {
         text = "Введите свою новость здесь:";
         isSendingMessageNews = true;
     } else if (action === "news") {
@@ -479,8 +489,10 @@ bot.on('callback_query', async callbackQuery => {
             opts.reply_markup.inline_keyboard.push(
                 [{text: 'Insta Comment', callback_data: 'service_insta_comment'},{text: 'Insta Lead', callback_data: 'service_insta_lead'}],
                 [{text: 'Skype Lead', callback_data: 'service_skype_lead'}, {text: 'Skype Reg', callback_data: 'service_skype_reg'}],
+                [{text: 'VK Lead', callback_data: 'service_vk_lead'}, {text: 'VK Reg', callback_data: 'service_vk_reg'}],
                 [{text: 'Tele Lead', callback_data: 'service_tele_lead'}],
-                [{text: 'VK Lead', callback_data: 'service_vk_lead'}, {text: 'VK Reg', callback_data: 'service_vk_reg'}]
+                [{text: 'Autopilot', callback_data: 'service_autopilot'}],
+                [{text: 'Insta King', callback_data: 'service_insta_king'}],
             )
         }
         opts.reply_markup.inline_keyboard.push(
@@ -491,7 +503,7 @@ bot.on('callback_query', async callbackQuery => {
     } else if (action === 'about') {
         let caption = '1 апреля 2020 года, команда из 12 человек, соучередила компанию "EasyStars".\n\nПродуктами компании являлись программы для привлечения трафика из социальных сетей, подкрепленные универсальным маркетинг планом.\nБлагодаря ростущему спросу на программные продукты компании и их первокласному качеству, компания EasyStars стремительно завоевала внимание мирового бизнес сообщества.\n\nС момента основания, компанией:\n• Выпущено 4 революционных сервиса и 14 уникальных программных продуктов\n• Произведена глобальная  капитализация и выпуск цифровых акций\n• Реализована личная автономная экономика \n• Введена в финансовой оборот собственная крипто валюта.\n\nМонеты TopCoin (tc) и LeadCoin (lc) \n\nВ январяе 2021 года, благодаря ребрендингу, компания переименовалась в "Quasar Technology" и перешла на новую модель финансового управления (смена маркетинга).\n\nСегодня компания Quasar Technology является разработчиком высокотехнологичных бизнес  продуктов. \n\nРеволюционные решения программных инженеров Quasar Technology, сделали компанию мировым лидером на рынке "Information Business Technology", а фундаментальные принципы социальной инженерии, заложенные в основу выпускаемых продуктов, сделали их доступными, эффективными и простыми в использовании.\n\nФактически освободив пользователя от временных финансовых трат на различные расходные материалы, за короткий срок, Quasar Technology стала второй семьёй для партнеров из более чем 40 стран мира.\n\nУникальные технологии, сервисы и продукты открыли безграничные возможности  перед человечеством!\n\nОзнакомиться с маркетингом, функционалом сервисов и программных продуктов компании, можно перейдя в раздел "Сервисы и маркетинг"';
     
-        await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/main.jpg`)
+        await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/about_company.jpg`)
 
         bot.sendMessage(msg.chat.id, caption, {
             reply_markup: {

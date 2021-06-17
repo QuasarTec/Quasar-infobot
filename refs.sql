@@ -1,5 +1,5 @@
-SELECT *FROM quasar_telegrambot_users_new WHERE
-username = 'GulsemAnarbaeva';
+SELECT * FROM quasar_telegrambot_users_new WHERE
+username = 'Lelylubimay';
 ref_id = 228;
 Or username = 'ladygold11'
 Or username = 'Zoreslava43'

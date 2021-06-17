@@ -1,14 +1,4 @@
-const connect = require("./services/connect");
-const qcloud = require("./services/qcloud");
-const message = require("./services/message");
-const franchise = require("./services/franchise");
-const insta_comment = require("./services/insta_comment");
-const insta_lead = require("./services/insta_lead");
-const skype_lead = require("./services/skype_lead");
-const skype_reg = require("./services/skype_reg");
-const tele_lead = require("./services/tele_lead");
-const vk_lead = require("./services/vk_lead");
-const vk_reg = require("./services/vk_reg");
+const service_check = require("./services/service_check");
 const pay = require("../account/pay");
 
 module.exports = async (action, data) => {
@@ -16,27 +6,31 @@ module.exports = async (action, data) => {
         opts: data.opts
     }
     if (action === 'service_connect') {
-        return await connect(data);
+        return service_check(data, 'pay_connect', 'Connect');
     }else if (action === 'service_qcloud') {
-        return await qcloud(data);
+        return service_check(data, 'pay_qcloud', 'QCloud', 'qcloud_pay');
     }else if (action === 'service_message') {
-        return await message(data);
+        return service_check(data, 'pay_message', 'Quasar Message', 'message_pay');
     }else if (action === 'service_franchise') {
-        return await franchise(data);
+        return service_check(data, 'pay_franchise', 'Franchise', 'franchise_pay');
     }else if (action === 'service_insta_comment') {
-        return await insta_comment(data);
+        return service_check(data, 'pay_insta_comment', 'Insta Comment', 'insta_comment_pay');
     }else if (action === 'service_insta_lead') {
-        return await insta_lead(data);
+        return service_check(data, 'pay_insta_lead', 'Insta Lead', 'insta_lead_pay');
     }else if (action === 'service_skype_lead') {
-        return await skype_lead(data);
+        return service_check(data, 'pay_skype_lead', 'Skype Lead', 'skype_lead_pay');
     }else if (action === 'service_skype_reg') {
-        return await skype_reg(data);
+        return service_check(data, 'pay_skype_reg', 'Skype Reg', 'skype_reg_pay');
     }else if (action === 'service_tele_lead') {
-        return await tele_lead(data);
+        return service_check(data, 'pay_tele_lead', 'Tele Lead', 'tele_lead_pay');
     }else if (action === 'service_vk_lead') {
-        return await vk_lead(data);
+        return service_check(data, 'pay_vk_lead', 'VK Lead', 'vk_lead_pay');
     }else if (action === 'service_vk_reg') {
-        return await vk_reg(data);
+        return service_check(data, 'pay_vk_reg', 'VK Reg', 'vk_reg_pay');
+    } else if (action === 'service_autopilot') {
+        return service_check(data, 'pay_autopilot', 'Autopilot', 'autopilot_pay');
+    } else if (action === 'service_insta_king') {
+        return service_check(data, 'pay_insta_king', 'Insta King', 'insta_king_pay');
     }
     
     else if (action === 'pay_connect') {
@@ -156,6 +150,28 @@ module.exports = async (action, data) => {
             sending_msg.opts.reply_markup = {
                 inline_keyboard: [
                     [{text: 'Назад', callback_data: 'service_vk_reg'}]
+                ]
+            };
+        }
+        return sending_msg;
+    }else if (action === 'pay_autopilot') {
+        const res = await pay(data.msg,data.bot,'autopilot_pay',300);
+        if (res !== true) {
+            sending_msg.text = res;
+            sending_msg.opts.reply_markup = {
+                inline_keyboard: [
+                    [{text: 'Назад', callback_data: 'service_autopilot'}]
+                ]
+            };
+        }
+        return sending_msg;
+    }else if (action === 'pay_insta_king') {
+        const res = await pay(data.msg,data.bot,'skype_insta_king',420);
+        if (res !== true) {
+            sending_msg.text = res;
+            sending_msg.opts.reply_markup = {
+                inline_keyboard: [
+                    [{text: 'Назад', callback_data: 'service_insta_king'}]
                 ]
             };
         }
