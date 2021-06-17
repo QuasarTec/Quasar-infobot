@@ -208,6 +208,7 @@ const getPackage = () => {
 }
 
 const newsletters = async () => {
+
     let options = {
         text: document.getElementById("text").value,
         chats: getChats(),
@@ -280,3 +281,4 @@ const getChats = () => {
 
     return active_chat_ids;
 }
+

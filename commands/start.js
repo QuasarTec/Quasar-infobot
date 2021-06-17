@@ -8,10 +8,9 @@ let welcomeText =
 var options = {
     reply_markup: JSON.stringify({
         inline_keyboard: [
-            [{ text: 'О компании', callback_data: 'none' }],
+            [{ text: 'О компании', callback_data: 'about' }],
             [{ text: 'Как зарегистрироваться?', callback_data: 'none' }],
             [{ text: 'Проверить регистрацию', callback_data: 'check' }]
-
         ]
     })
 };
@@ -19,7 +18,7 @@ var options = {
 module.exports = async (msg, bot) => {
     const { username, id } = msg.from;
 
-    console.log(username)
+    console.log(username,  ' ', msg.chat.id);
     const query = `INSERT INTO quasar_telegrambot_users_new (username, chat_id) 
                     VALUES ('${username}', '${id}')`;
 

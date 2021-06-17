@@ -39,7 +39,15 @@ module.exports = (response, type) => {
     } else if (type === 'vk_reg_pay') {
         levles = 5;
         amount = 160;
-    }
+    } else if (type === 'autopilot_pay') {
+        levles = 9;
+        amount = 115;
+    } else if (type === 'insta_king_pay') {
+        levles = 5;
+        amount = 295;
+    } 
+ 
+ 
 
     getAllInviters(response.rows[0].id, levels, type).then( async inviters => {
         inviters = inviters.filter(inviter => inviter.id !== response.rows[0].id);
