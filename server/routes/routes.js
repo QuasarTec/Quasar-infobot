@@ -12,7 +12,7 @@ const adminPanel = require('./admin-panel/adminPanel');
 
 router.use(adminPanel);
 
-router.get('/users/check-on-payed', async (req, res) => {
+router.post('/users/check-on-payed', async (req, res) => {
     require('../controllers/checkOnPayed')(req, res);
 })
 
@@ -205,7 +205,6 @@ router.post('/pay/confirm', (req, res) => {
 
 
                 await client.query(query);
-                console.log(query);
             })
             ///А дальше уже не бесплатный пробный период
 
@@ -310,7 +309,6 @@ const findWeakBranch = async (id) => {
             let min_count_refs = 5;
             let min_count_refs_user;
             parents.forEach(el => {
-                console.log(users_of_level[el])
                 if (users_of_level[el].length < min_count_refs) {
                     min_count_refs = users_of_level[el].length;
                     min_count_refs_user = el;

@@ -84,3 +84,9 @@ CREATE TABLE chats (
 );
 
 INSERT INTO newsletters (chat_ids, msg_text, img, send_time) VALUES ('{"-558470404"}', 'Хелло индеец', '54326.jpg', '2021-06-15 13:44:00.000000');
+
+___________________________
+
+DUMP
+PGPASSWORD="DKJ&^%1231dsahldsaj(*&" pg_dump -U apps -h localhost apps > dump/apps.dump
+___________________________

@@ -25,8 +25,6 @@ module.exports = async (data, service) => {
         service_callback = 'account';
     }
 
-    console.log(service_callback)
-
     sending_msg.opts.reply_markup = {
         inline_keyboard: [
             [{text: 'Назад', callback_data: service_callback}],

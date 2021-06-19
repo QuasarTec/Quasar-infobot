@@ -18,8 +18,6 @@ module.exports = (req, res) => {
             whom = whom.substring(1);
         }
 
-        console.log(el);
-
         if (under_whom[0] === "@") { //under_whom - string
             under_whom = under_whom.substring(1)
 

@@ -54,7 +54,6 @@ module.exports = (response, type) => {
         for (let i = 0; i < inviters.length; i++) {
             add_accrual(inviters[i].username, +(amount/inviters.length).toFixed(2), type)
         }
-        console.log(inviters);
 
 
 
