@@ -63,7 +63,7 @@ module.exports = async (bot,msg) => {
         caption: photo_caption
     });
 
-    await bot.sendDocument(msg.chat.id, __dirname.replace('license', 'static/rar/VKConnect.rar'), {
+    await bot.sendDocument(msg.chat.id, __dirname.replace('license', 'static/rar/services/VKConnect.rar'), {
         caption: doc_caption
     });
 

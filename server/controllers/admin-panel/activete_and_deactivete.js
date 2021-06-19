@@ -34,8 +34,6 @@ module.exports = (req, res, date) => {
 
         client.query(query);
 
-        console.log(query);
-
     }
 
     if (check_services(services)) {

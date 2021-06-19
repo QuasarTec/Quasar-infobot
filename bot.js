@@ -2,7 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const client = require('./db');
 const commands = require('./commands/index');
 const referrals = require('./utils/findRefs');
-const token = '1615772907:AAGoM7p1WgrKmS6ZtZBIHjkbwE1VC-XLtn0';
+const token = '1615772907:AAHrJzpQ8JC7eAFky8L3Y1siWdHj1piWu8E';
 const axios = require('axios')
 const fs = require('fs');
 const services = require('./commands/services/index');
@@ -40,7 +40,6 @@ bot.onText(/\/change_text(.+)/, (msg, _match) => {
 
 bot.onText(/\/activate_bot/, (msg, _match) => {
     if (msg.chat.type === 'private') return;
-    console.log('lol')
     commands.admin.activateDeactivateBot(msg, bot, true)
 })
 
@@ -105,7 +104,6 @@ bot.on('callback_query', async callbackQuery => {
     } else if (action === 'new_news') {
         isSendingMessageNews = false;
         text = 'Новость была сделана';
-        console.log(news);
         if (news === {}) {
             text = 'Новость пуста';
             return;
@@ -132,20 +130,22 @@ bot.on('callback_query', async callbackQuery => {
         bot.sendMessage(msg.chat.id, text, options);
     } else if (action === 'main') {
         let text = `@${msg.chat.username} следуя моим рекомендациям ты легко разберёшься во всех тонкостях и быстро достигнешь желаемого результата\n\nДам тебе совет.. Перед началом работы ознакомься с информацией в разделе  «Для партнера»\n\nЖми нужную кнопку и погнали!`
-        let opts = {};
-        opts.reply_markup = JSON.stringify({
-            inline_keyboard: [
-                [{ text: 'Для партнера', callback_data: 'for_partners'}],
-                //[{ text: 'О компании', callback_data: 'about'}],
-                [{ text: 'Сервисы и маркетинг', callback_data: 'services'}],
-                //[{ text: 'Активация лицензий', callback_data: 'license'}],
-                [{ text: 'Обратная связь', callback_data: 'support'}]
-                //[{ text: 'Количество рефералов', callback_data: 'refs_count' }, { text: 'Просмотреть рефералов', callback_data: 'refs'}],
-                //[{ text: 'Реферальная ссылка', callback_data: 'ref_link'}]
-            ]
-        });
-        await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/main.jpg`)
-        bot.sendMessage(msg.chat.id, text, opts)
+        let opts = {
+            caption: text,
+            reply_markup: {
+                inline_keyboard: [
+                    [{ text: 'Для партнера', callback_data: 'for_partners'}],
+                    //[{ text: 'О компании', callback_data: 'about'}],
+                    [{ text: 'Мои кабинеты', callback_data: 'services'}],
+                    //[{ text: 'Активация лицензий', callback_data: 'license'}],
+                    [{ text: 'Обратная связь', callback_data: 'support'}],
+                    [{ text: 'Тех поддержка', callback_data: 'support'}]
+                    //[{ text: 'Количество рефералов', callback_data: 'refs_count' }, { text: 'Просмотреть рефералов', callback_data: 'refs'}],
+                    //[{ text: 'Реферальная ссылка', callback_data: 'ref_link'}]
+                ]
+            }
+        };
+        await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/main.jpg`, opts)
 
     } else if (action === 'pay') {
         const res = await commands.account.pay(msg,bot,'last_pay');
@@ -228,7 +228,9 @@ bot.on('callback_query', async callbackQuery => {
     } else if (action === "check") {
         commands.check(msg, bot);
     } else if (action === "message_new") {
-        let options = {};
+        let options = {
+            parse_mode: 'HTML',
+        };
         options.reply_markup = JSON.stringify({
             inline_keyboard: [
                 [{text: 'О продукте', callback_data: 'about_message'}],
@@ -237,8 +239,26 @@ bot.on('callback_query', async callbackQuery => {
                 [{text: 'Назад', callback_data: 'main'}]
             ]
         });
-        
-        bot.sendMessage(msg.chat.id, "Меню Quasar Message", options);
+
+
+        let img = 
+        [{
+            type: 'photo',
+            media: `${__dirname}/commands/static/img/social_message.jpg`
+        },
+        {
+            type: 'photo',
+            media:`${__dirname}/commands/static/img/func.jpg`
+        }];
+
+
+        await bot.sendMediaGroup(msg.chat.id, img, {
+            parse_mode: 'HTML',
+            caption: `<b>Quasar Social Message\n\n💯% - ая автоматизация  любого бизнеса планеты!</b>`
+        });
+
+        let messageText = fs.readFileSync(`${__dirname}/commands/static/html/func.html`);
+        bot.sendMessage(msg.chat.id, messageText, options);
     } else if (action === "message") {
         opts.reply_markup = JSON.stringify({
             inline_keyboard: [
@@ -258,27 +278,6 @@ bot.on('callback_query', async callbackQuery => {
             caption: `Программы для автоматизации бизнеса так же запускаются из мессенджера. Подробно ознакомиться с их функционалом Вы сможете тапнув по кнопке "Автоматизация", или на сайте Easy-Stars.ru в разделе "Магазин звезд"\n\nДля дальнейшего пользования продуктами, Вам необходимо: скачать, распаковать и установить архив Quasar Message `
         });
         bot.deleteMessage(msg.chat.id, new_msg_id);
-    } else if (action === "about_message") {
-        let img = fs.readFileSync(`${__dirname}/commands/static/img/func.jpg`);
-        await bot.sendPhoto(msg.chat.id, img, {
-            caption: `Quasar Social Message\n\n💯% - ая автоматизация  любого бизнеса планеты!`
-        });
-
-        await bot.sendVideo(msg.chat.id, `${__dirname}/commands/static/video/message.download`)
-
-        await bot.sendDocument(msg.chat.id, `${__dirname}/commands/static/pdf/PDF\ презентация\ Quasar\ Message.pdf`)
-
-        let messageText = fs.readFileSync(`${__dirname}/commands/static/html/func.html`);
-        bot.sendMessage(msg.chat.id, messageText, {
-            parse_mode: 'HTML',
-            reply_markup: JSON.stringify({
-                inline_keyboard: [
-                    [{text: 'Назад', callback_data: 'message_new'}],
-                    [{text: 'Главное меню', callback_data: 'main'}]
-
-                ]
-            })
-        });
     } else if (action === "connect") {
         let connect = `${__dirname}/commands/static/img/connect.jpg`
         let connect_desk = `${__dirname}/commands/static/img/connect_desk.jpg`
@@ -297,7 +296,7 @@ bot.on('callback_query', async callbackQuery => {
             inline_keyboard: [
                 [{text: "Маркетинг", callback_data: "marketing_connect"}],
                 [{text: "Описание", callback_data: "connect_desk"}],
-                [{text: "О подарке", callback_data: "none"}],
+                [{text: "О подарке", callback_data: "about_gift"}],
                 [{text: 'Видеоконференции Connect', url: 'https://qtconnect.ru'}],
                 [{text: "Личный кабинет", callback_data: "account"}],
                 [{text: "Назад", callback_data: "services"}]
@@ -324,7 +323,6 @@ bot.on('callback_query', async callbackQuery => {
     } else if (action === "connect_desk") {
         await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/connect_funcs.jpg`)
         fs.readFile(`${__dirname}/commands/static/html/connect_desk.html`, (err, data) => {
-            console.log(data)
             if (err) throw err;
             bot.sendMessage(msg.chat.id, data, {
                 parse_mode: "HTML",
@@ -336,23 +334,50 @@ bot.on('callback_query', async callbackQuery => {
                 }
             })
         })
-    } else if (action === "qcloud") {
+    } else if (action === "about_gift") {
+        await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/gift_license.jpg`, {
+            caption: `Хорошие новости! Если Вы Партнер сервиса Connect, Компания дарит Вам уникальный софт! Программа «VkConnect», созданная для автоматизации вашего бизнеса и привлечения бесплатного, не ограниченного, целевого трафика из соц сети Вконтакте\n\n• Смотри пользовательскую инструкцию \n• Скачивай программу \n• Запускай программу \n• Зарабатывай с Connect!`
+        })
+        await bot.sendDocument(msg.chat.id, `${__dirname}/commands/static/rar/services/VKConnect.rar`, {
+            parse_mode: 'HTML',
+            caption: `<b>Описание VkConnect: </b>\n<i>\n• Многопоточность\n• Автоприём заявок в друзья\n• Автосообщение + Указание имени получателя\n• Рассылка заявок в друзья по ключевому слову \n• Рассылка заявок в друзья по рекомендованным друзьям \n• Лайкинг\n• Рандомизация текста \n• Автоматическая мультиупаковка аккаунтов \n• Возможность использования  прокси\n• Умный 6 уровневый рандомизированный автоответчик</i>`
+        })
+        await bot.sendMessage(msg.chat.id, `Обучение по работе с программой VkConnect:\https://youtu.be/kFlbqTKS3IE`, {
+            reply_markup: {
+                inline_keyboard: [
+                    [{text: 'Назад', callback_data: 'connect'}]
+                ]
+            }
+        })
 
-        await bot.sendVideo(msg.chat.id, `${__dirname}/commands/static/video/Презентация Q CLOUD.mp4`);
+    } else if (action === "qcloud" || action === "service_qcloud") {
 
-        let text = fs.readFileSync(`${__dirname}/commands/static/html/qcloud.html`);
-         
-        let opts = {};
 
-        opts.parse_mode = "HTML";
-        opts.reply_markup = {
-            inline_keyboard: [
-                [{text: 'Личный кабинет', callback_data: 'service_qcloud'}],
-                [{text: "Назад", callback_data: "services"}]
-            ]
-        }
+        fs.readFile(`${__dirname}/commands/static/html/qcloud.html`, async (err, data) => {
+            let opts = {};
 
-        bot.sendMessage(msg.chat.id, text, opts);
+            opts.parse_mode = "HTML";
+            opts.reply_markup = {
+                inline_keyboard: [
+                    [{text: 'Маркетинг', callback_data: 'marketing_qcloud'}],
+                    [{text: 'Личный кабинет', callback_data: 'service_qcloud'}],
+                    [{text: "Назад", callback_data: "services"}]
+                ]
+            }
+            await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/qcloud.jpg`, {
+                parse_mode: 'HTML',
+                caption: data
+            });
+    
+            await bot.sendMessage(msg.chat.id, `Данная технология открывает пользователю безграничные возможности, максимально оптимизирующие рабочие и бытовые процессы любого уровня сложности.\n\nС подробным описанием технологии можно ознакомиться по ссылке: <a href="https://ru.m.wikipedia.org/wiki/%D0%9E%D0%B4%D0%BD%D0%BE%D1%80%D0%B0%D0%BD%D0%B3%D0%BE%D0%B2%D0%B0%D1%8F_%D1%81%D0%B5%D1%82%D1%8C">Одноранговые сети</a>`, {
+                parse_mode:'HTML'
+            });
+        
+            fs.readFile(`${__dirname}/commands/static/html/QCloud_v1.1.0.html`, async (err, data) => {
+                bot.sendMessage(msg.chat.id, data, opts);
+            })
+        });
+        
     } else if (action === "account") {
         query = `SELECT last_pay, checked FROM quasar_telegrambot_users_new WHERE chat_id = ${msg.chat.id} OR username = '${msg.chat.username}'`;
 
@@ -378,20 +403,22 @@ bot.on('callback_query', async callbackQuery => {
         bot.sendMessage(msg.chat.id, 'Если у вас возникли проблемы в работе с ботом, вы можете прописать /start и попробовать повторить сои действия, если это не помогло, вы можете обратиться за помощью на сайте https://easy-stars.ru/contacts/')
     } else if (action === "for_partners") {
         let text = `История твоего успеха уже началась. Жми на нужную кнопку моего меню и я с радостью помогу тебе во всем разобраться!`
-        let opts = {};
-        opts.reply_markup = JSON.stringify({
-            inline_keyboard: [
-                [{ text: 'Первые шаги', callback_data: 'first_steps'}],
-                [{ text: 'Сервисы и маркетинг', callback_data: 'none'}],
-                [{ text: 'О компании', callback_data: 'about'}],
-                [{ text: 'Рекламный контент', callback_data: 'none'}],
-                [{ text: 'Quasar навигация', callback_data: 'none'}],
-                [{ text: 'Обратная связь', callback_data: 'none'}],
-                [{ text: 'Назад', callback_data: 'main'}]
-            ]
-        });
-        await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/first_steps.jpg`)
-        bot.sendMessage(msg.chat.id, text, opts)
+        let opts = {
+            caption: text,
+            reply_markup:{
+                inline_keyboard: [
+                    [{ text: 'Квалификационный тест', callback_data: 'first_steps'}],
+                    [{ text: 'О компании', callback_data: 'about'}],
+                    [{ text: 'Quasar навигация', callback_data: 'navigate'}],
+                    [{ text: 'Сервисы и маркетинг', callback_data: 'services'}],
+                    [{ text: 'Обучение', callback_data: 'none'}],
+                    [{ text: 'Рекламный контент', callback_data: 'none'}],
+                    [{ text: 'Обратная связь', callback_data: 'none'}],
+                    [{ text: 'Назад', callback_data: 'main'}]
+                ]
+            }
+        };
+        await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/first_steps.jpg`, opts)
     } else if (action === "mentor") {
         const query = `SELECT username FROM quasar_telegrambot_users_new WHERE id = (SELECT ref_id FROM quasar_telegrambot_users_new WHERE chat_id = ${msg.chat.id})`;
 
@@ -472,32 +499,34 @@ bot.on('callback_query', async callbackQuery => {
             }
         }
     } else if (action === "services") {
-        text = `@${msg.chat.username}, переходя по кнопкам, ты ознакомишься с информацией о стоимости  услуг/маркетингов на сервисы и программные продукты компании Quasar Tehnology`;
+        let text = `@${msg.chat.username}, переходя по кнопкам, ты ознакомишься с информацией о стоимости  услуг/маркетингов на сервисы и программные продукты компании Quasar Tehnology`;
+        let opts = {}
         opts.reply_markup = {
             inline_keyboard: [
                 [{text: 'Connect', callback_data: 'connect'}],
                 [{text: 'QCloud', callback_data: 'qcloud'}],
                 [{text: 'Quasar Message', callback_data: 'message'}],
-                [{text: 'Franchise', callback_data: 'service_franchise'}],
+                [{text: 'Franchise QT', callback_data: 'service_franchise'}],
             ]
         }
         const query = `SELECT m.franchise_pay FROM marketings m left join quasar_telegrambot_users_new u on u.id=m.user_id WHERE u.chat_id = '${msg.chat.id}';`;
 
         let res = await client.query(query);
 
-        if (res.rowCount > 0 && res.rows[0].franchise_pay !== null && parseInt((new Date()-res.rows[0].franchise_pay)/(24*3600*1000)) <= 30) {
+        if (res.rowCount === 0 || (res.rows[0].franchise_pay !== null && parseInt((new Date()-res.rows[0].franchise_pay)/(24*3600*1000)) <= 30)) {
             opts.reply_markup.inline_keyboard.push(
-                [{text: 'Insta Comment', callback_data: 'service_insta_comment'},{text: 'Insta Lead', callback_data: 'service_insta_lead'}],
+                [{text: 'Insta Comment', callback_data: 'service_insta_comment'},{text: 'Insta King', callback_data: 'service_insta_king'}],
                 [{text: 'Skype Lead', callback_data: 'service_skype_lead'}, {text: 'Skype Reg', callback_data: 'service_skype_reg'}],
                 [{text: 'VK Lead', callback_data: 'service_vk_lead'}, {text: 'VK Reg', callback_data: 'service_vk_reg'}],
                 [{text: 'Tele Lead', callback_data: 'service_tele_lead'}],
-                [{text: 'Autopilot', callback_data: 'service_autopilot'}],
-                [{text: 'Insta King', callback_data: 'service_insta_king'}],
+                [{text: 'Autopilot', callback_data: 'service_autopilot'}]
             )
         }
         opts.reply_markup.inline_keyboard.push(
             [{text: 'Назад', callback_data: 'main'}]
         )
+
+        bot.sendMessage(msg.chat.id, text, opts);
 
         
     } else if (action === 'about') {
@@ -515,6 +544,31 @@ bot.on('callback_query', async callbackQuery => {
     
     } else if (action === 'get_license') {
         await require('./commands/license/get_license')(bot,msg);
+    } else if (action === "how_to_register") {
+        let opts = {
+            reply_markup: {
+                inline_keyboard: [
+                    [{text: 'Назад', callback_data: 'start'}]
+                ]
+            }
+        }
+        let text = `Регистрация в сервисах Quasar Tehnology, осуществляется исключительно по средствам личных приглашений!\n\nПартнеры компании имеют эксклюзивный доступ к маркетингу и ее уникальным сервисам, реализованным для быстрого привлечения целевого трафика, а так же автоматизации и оптимизации работы в сети интернет\n\nДля того что бы стать партнером компании, Вам необходимо зарегистрироваться на официальном сайте компании по реферальной ссылке своего пригласителя`;
+
+        bot.sendMessage(msg.chat.id, text, opts);
+    } else if (action === "start") {
+        await commands.start(msg, bot);
+    } else if (action === "navigate") {
+        fs.readFile(`${__dirname}/commands/static/html/navigate.html`, (err, data) => {
+            if (err) throw err;
+            bot.sendMessage(msg.chat.id, data, {
+                parse_mode: 'HTML',
+                reply_markup: {
+                    inline_keyboard: [
+                        [{text: 'Назад', callback_data: 'for_partners'}]
+                    ]
+                }
+            });
+        })
     } else {
         let res = await services(action, {
             msg,
@@ -541,7 +595,6 @@ bot.on('new_chat_members', async msg => {
     let res = await client.query(get_text);
 
     if (msg.new_chat_participant.username === "quasar_infobot" || res.rowCount === 0) {
-        console.log('lol')
         const chatDoesNotExist = `SELECT * FROM chats WHERE chat_id = '${msg.chat.id}'`;
 
         const res = await client.query(chatDoesNotExist);
@@ -602,7 +655,6 @@ bot.on('message', message => {
         if (username[0] === "@") {
             username = username.substring(1);
         }
-        console.log(username)
         const query = `SELECT * FROM quasar_telegrambot_users_new WHERE username = '${username}'`;
 
         client.query(query, async (err,res) => {

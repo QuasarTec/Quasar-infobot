@@ -7,7 +7,6 @@ module.exports = (req,res) => {
     let new_services = [];
 
     for (var i = 0; i < Object.keys(services).length; i++) {
-        console.log(services[Object.keys(services)[i]]);
         if (services[Object.keys(services)[i]]) {
             new_services.push(Object.keys(services)[i]);
         }

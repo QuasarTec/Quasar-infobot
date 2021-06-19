@@ -1,4 +1,4 @@
-const service_check = require("./services/service_check");
+const service_check = require("./service_check");
 const pay = require("../account/pay");
 
 module.exports = async (action, data) => {
@@ -186,5 +186,15 @@ module.exports = async (action, data) => {
         service = service.join("_");
 
         return await require('../../commands/accruals/accruals')(data, service);
+    }
+
+    else if (action.split('_')[0] === 'marketing') {
+        let service = action.split('_');
+
+        service.shift();
+        
+        service = service.join("_");
+
+        return await require('./marketings')(data, service);
     }
 }

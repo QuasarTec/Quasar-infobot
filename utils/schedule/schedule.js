@@ -37,5 +37,4 @@ module.exports = async (bot) => {
             client.query(delete_task);
         })
     })
-    console.log(schedule.scheduledJobs);
 }

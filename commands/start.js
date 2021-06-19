@@ -9,7 +9,8 @@ var options = {
     reply_markup: JSON.stringify({
         inline_keyboard: [
             [{ text: 'О компании', callback_data: 'about' }],
-            [{ text: 'Как зарегистрироваться?', callback_data: 'none' }],
+            [{ text: 'Сервисы и маркетинг', callback_data: 'services'}],
+            [{ text: 'Как зарегистрироваться?', callback_data: 'how_to_register'}],
             [{ text: 'Проверить регистрацию', callback_data: 'check' }]
         ]
     })
@@ -18,7 +19,6 @@ var options = {
 module.exports = async (msg, bot) => {
     const { username, id } = msg.from;
 
-    console.log(username,  ' ', msg.chat.id);
     const query = `INSERT INTO quasar_telegrambot_users_new (username, chat_id) 
                     VALUES ('${username}', '${id}')`;
 
@@ -33,11 +33,11 @@ module.exports = async (msg, bot) => {
         fs.readFile(`${__dirname}/static/img/welcome.jpg`, async (err,data) => {
             if (err) {
                 console.error(err);
-                bot.sendMessage(id, `@${username}` + welcomeText, options);
+                bot.sendMessage(msg.chat.id, `@${username}` + welcomeText, options);
                 return;
             }
-            await bot.sendPhoto(id, data);
-            bot.sendMessage(id, `@${username}` + welcomeText, options);
+            options.caption = `@${username}` + welcomeText;
+            await bot.sendPhoto(msg.chat.id, data, options);
 
         })
     });
