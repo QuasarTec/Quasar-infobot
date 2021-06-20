@@ -1,5 +1,5 @@
 SELECT * FROM quasar_telegrambot_users_new WHERE
-username = 'Lelylubimay';
+username = 'jnecua123';
 ref_id = 228;
 Or username = 'ladygold11'
 Or username = 'Zoreslava43'
@@ -39,7 +39,7 @@ INSERT INTO quasar_telegrambot_users_new (username, ref_id, last_pay) VALUES
 
 UPDATE marketings set qcloud_pay = Now(), franchise_pay = Now(),message_pay = Now(),insta_comment_pay = Now(),
 insta_lead_pay = Now(),skype_lead_pay = Now(),skype_reg_pay = Now(), tele_lead_pay = Now(), vk_lead_pay = Now(), 
-vk_reg_pay = Now(), insta_king_pay = Now() where user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Vmlynko');
+vk_reg_pay = Now(), insta_king_pay = Now() where user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'jnecua123');
 
 UPDATE quasar_telegrambot_users_new SET last_pay = Now();
 
@@ -83,10 +83,15 @@ CREATE TABLE chats (
     active boolean
 );
 
+
+DELETE FROM marketings WHERE user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'jnecua123');
+DELETE FROM quasar_telegrambot_users_new WHERE username = 'jnecua123';
+
 INSERT INTO newsletters (chat_ids, msg_text, img, send_time) VALUES ('{"-558470404"}', 'Хелло индеец', '54326.jpg', '2021-06-15 13:44:00.000000');
 
 ___________________________
 
 DUMP
 PGPASSWORD="DKJ&^%1231dsahldsaj(*&" pg_dump -U apps -h localhost apps > dump/apps.dump
+psql -U apps -h localhost apps -W < dump/apps.dump
 ___________________________

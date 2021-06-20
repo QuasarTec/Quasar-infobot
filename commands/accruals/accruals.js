@@ -15,19 +15,9 @@ module.exports = async (data, service) => {
         sending_msg.text = `На вашем счету: ${Number(res.rows[0].total).toFixed(2)} руб`;
     }
 
-    let service_callback = service.split('_');
-
-    service_callback.pop();
-
-    service_callback = 'service_' + service_callback.join("_");
-
-    if (service === 'connect') {
-        service_callback = 'account';
-    }
-
     sending_msg.opts.reply_markup = {
         inline_keyboard: [
-            [{text: 'Назад', callback_data: service_callback}],
+            [{text: 'Назад', callback_data: `account_${service}`}],
             [{text: 'Главная', callback_data: 'main'}]
         ]
 }

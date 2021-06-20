@@ -18,7 +18,7 @@ module.exports = async (data, callback_name, name, db_field_name = 'last_pay') =
 
     let res = await client.query(query);
     
-    if (res.rowCount === 0 || res.rows[0][db_field_name] === null) {
+    if (res.rowCount === 0) {
         sending_msg.opts.reply_markup = {
             inline_keyboard: [
                 [{text: 'Маркетинг', callback_data: `marketing_${callback_name.replace('pay_', '')}`}],
@@ -38,15 +38,10 @@ module.exports = async (data, callback_name, name, db_field_name = 'last_pay') =
                 ]
         }
     } else {
-        let query = `SELECT username FROM quasar_telegrambot_users_new WHERE chat_id = ${data.msg.chat.id};`
-
-        let res = await client.query(query);
-        
         sending_msg.opts.reply_markup = {
                 inline_keyboard: [
                     [{text: 'Маркетинг', callback_data: `marketing_${callback_name.replace('pay_', '')}`}],
-                    [{text: 'Визульный просмотр рефраллов', url: `https://matrix.easy-stars.ru/bot/referrals-vizualization?username=${res.rows[0].username}&type=${db_field_name}`}],
-                    [{text: 'Посмотреть начисления', callback_data: `accruals_${db_field_name}`}],
+                    [{text: 'Личный кабинет', callback_data: `account_${callback_name.replace('pay_', '')}`}],
                     [{text: 'Назад', callback_data: 'services'}],
                     [{text: 'Главная', callback_data: 'main'}]
                 ]
@@ -79,6 +74,8 @@ module.exports = async (data, callback_name, name, db_field_name = 'last_pay') =
         fs.readFile(pathToPhotoCaption, async (err, text) => {
             if (err) throw err;
     
+            photo_opts.caption = text;
+
             let pathToPhoto = __dirname.replace('services', `static/img/services/${db_field_name.replace('_pay', '.jpg')}`);
     
             await data.bot.sendPhoto(data.msg.chat.id, pathToPhoto, photo_opts);
