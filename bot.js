@@ -153,7 +153,7 @@ bot.on('callback_query', async callbackQuery => {
             text = res;
         }
         
-    } else if (action === 'refs_count') {
+    } else if (action === 'refs_count' || (action.split('_')[0] === 'refs' && action.split('_')[1] === 'count')) {
         let query = `SELECT id FROM quasar_telegrambot_users_new WHERE chat_id = ${msg.chat.id}`;
 
         const res = await client.query(query)
@@ -166,40 +166,96 @@ bot.on('callback_query', async callbackQuery => {
             text = `У вас ${response.flat().length} рефералов.\nПриводите ещё, чтобы зарабатывать больше!`
         }
 
-        opts.reply_markup = JSON.stringify({
-            inline_keyboard: [
-                [{ text: 'Назад', callback_data: 'account' }],
-                [{ text: 'Главное меню', callback_data: 'main' }]
-            ]
-        });
+        var service;
 
-    } else if (action === 'refs') {
+        if (action.split('_').length > 2) {
+            service = action.split('_');
+
+            service.shift();
+            service.shift();
+            
+            service = service.join("_");
+
+            opts.reply_markup = JSON.stringify({
+                inline_keyboard: [
+                    [{ text: 'Назад', callback_data: `account_${service}` }],
+                    [{ text: 'Главное меню', callback_data: 'main' }]
+                ]
+            });
+        } else {
+            opts.reply_markup = JSON.stringify({
+                inline_keyboard: [
+                    [{ text: 'Назад', callback_data: 'account' }],
+                    [{ text: 'Главное меню', callback_data: 'main' }]
+                ]
+            });
+        }
+
+    } else if (action === 'refs' || (action.split('_')[0] === "refs" && action.split('_')[1] !== "list")) {
         link = await commands.refs.downRefferals(msg, true);
         let opts = {};
         let text = `Уважаемый партнёр, для просмотра личной структуры нажмите  нужную Вам кнопку в меню`;
-        opts.reply_markup = JSON.stringify({
-            inline_keyboard: [
-                [{ text: 'Визуальный просмотр', url: link }],
-                [{ text: 'Показать списком', callback_data: 'refs_list' }],
-                [{ text: 'Назад', callback_data: 'account' }],
-                [{ text: 'Главное меню', callback_data: 'main' }]
-            ]
-        });
+
+        if (action.split('_').length > 1) {
+            
+            service = action.split('_');
+
+            service.shift();
+            
+            service = service.join("_");
+
+            link = await commands.refs.downRefferals(msg, true, service);
+
+            opts.reply_markup = JSON.stringify({
+                inline_keyboard: [
+                    [{ text: 'Визуальный просмотр', url: link }],
+                    [{ text: 'Показать списком', callback_data: `refs_list_${service}` }],
+                    [{ text: 'Назад', callback_data: `account_${service}` }],
+                    [{ text: 'Главное меню', callback_data: 'main' }]
+                ]
+            });
+        } else {
+            opts.reply_markup = JSON.stringify({
+                inline_keyboard: [
+                    [{ text: 'Визуальный просмотр', url: link }],
+                    [{ text: 'Показать списком', callback_data: 'refs_list' }],
+                    [{ text: 'Назад', callback_data: 'account' }],
+                    [{ text: 'Главное меню', callback_data: 'main' }]
+                ]
+            });
+        }
+
+        
         let img = fs.readFileSync(`${__dirname}/commands/static/img/refs.jpg`);
         await bot.sendPhoto(msg.chat.id, img);
         bot.sendMessage(msg.chat.id, text, opts)
-    } else if (action === "refs_list") {
+    } else if (action === "refs_list" || action.split('_')[0] === "refs") {
         text = await commands.refs.downRefferals(msg);
-        opts.reply_markup = JSON.stringify({
-            inline_keyboard: [
-                [{ text: 'Назад', callback_data: 'refs' }],
-                [{ text: 'Главное меню', callback_data: 'main' }]
-            ]
-        });
-    } else if (action === "ref_link") {
-        const query = `SELECT username FROM quasar_telegrambot_users_new WHERE chat_id = '${msg.chat.id}'`;
 
-        const res = await client.query(query);
+        if (action.split('_').length > 1) {
+            
+            service = action.split('_');
+
+            service.shift();
+            service.shift();
+            
+            service = service.join("_");
+
+            opts.reply_markup = JSON.stringify({
+                inline_keyboard: [
+                    [{ text: 'Назад', callback_data: `refs_${service}` }],
+                    [{ text: 'Главное меню', callback_data: 'main' }]
+                ]
+            });
+        } else {
+            opts.reply_markup = JSON.stringify({
+                inline_keyboard: [
+                    [{ text: 'Назад', callback_data: `refs` }],
+                    [{ text: 'Главное меню', callback_data: 'main' }]
+                ]
+            });
+        }
+    } else if (action === "ref_link" || action.split('_')[0] === "ref") {
 
         const params = {
             action: 'get',
@@ -220,23 +276,38 @@ bot.on('callback_query', async callbackQuery => {
             }
         }
 
-        opts.reply_markup = JSON.stringify({
-            inline_keyboard: [
-                [{ text: 'Личный кабинет', callback_data: 'account' }],
-            ]
-        });
+        if (action.split('_').length > 1) {
+            
+            service = action.split('_');
+
+            service.shift();
+            service.shift();
+            
+            service = service.join("_");
+
+            opts.reply_markup = JSON.stringify({
+                inline_keyboard: [
+                    [{ text: 'Личный кабинет', callback_data: `account_${service}` }],
+                ]
+            });
+        } else {
+            opts.reply_markup = JSON.stringify({
+                inline_keyboard: [
+                    [{ text: 'Личный кабинет', callback_data: 'account' }],
+                ]
+            });
+        }
     } else if (action === "check") {
         commands.check(msg, bot);
-    } else if (action === "message_new") {
+    } else if (action === "message" || action === 'service_message') {
         let options = {
             parse_mode: 'HTML',
         };
         options.reply_markup = JSON.stringify({
             inline_keyboard: [
-                [{text: 'О продукте', callback_data: 'about_message'}],
-                [{text: 'Автоматизация', callback_data: 'auto'}],
+                [{text: 'Маркетинг', callback_data: 'marketing_message'}],
                 //[{text: 'Скачать', callback_data: 'message_download'}],
-                [{text: 'Назад', callback_data: 'main'}]
+                [{text: 'Назад', callback_data: 'services'}]
             ]
         });
 
@@ -259,19 +330,6 @@ bot.on('callback_query', async callbackQuery => {
 
         let messageText = fs.readFileSync(`${__dirname}/commands/static/html/func.html`);
         bot.sendMessage(msg.chat.id, messageText, options);
-    } else if (action === "message") {
-        opts.reply_markup = JSON.stringify({
-            inline_keyboard: [
-                [{text: 'О продукте', callback_data: 'about_message'}],
-                [{text: 'Автоматизация', callback_data: 'auto'}],
-                //[{text: 'Скачать', callback_data: 'message_download'}],
-                [{text: 'Личный кабинет', callback_data: 'service_message'}],
-                [{text: 'Назад', callback_data: 'services'}]
-            ]
-        })
-        
-        text = "Меню Quasar Message";
-
     } else if (action === "message_download") {
         let new_msg_id = (await bot.sendMessage(msg.chat.id, 'Подождите, файл загружается')).message_id;
         await bot.sendDocument(msg.chat.id, `${__dirname}/commands/static/exe/Quasar\ Message\ Setup\ 1.8.0.exe`, {
@@ -315,7 +373,7 @@ bot.on('callback_query', async callbackQuery => {
                 reply_markup: {
                     inline_keyboard: [
                         [{text: "Назад", callback_data: "connect"}],
-                        [{text: 'Главное меню', callback_data: 'main'}]
+                        //[{text: 'Главное меню', callback_data: 'main'}]
                     ]
                 }
             })
@@ -329,7 +387,7 @@ bot.on('callback_query', async callbackQuery => {
                 reply_markup: {
                     inline_keyboard: [
                         [{text: "Назад", callback_data: "connect"}],
-                        [{text: 'Главное меню', callback_data: 'main'}]
+                        //[{text: 'Главное меню', callback_data: 'main'}]
                     ]
                 }
             })
@@ -360,7 +418,7 @@ bot.on('callback_query', async callbackQuery => {
             opts.reply_markup = {
                 inline_keyboard: [
                     [{text: 'Маркетинг', callback_data: 'marketing_qcloud'}],
-                    [{text: 'Личный кабинет', callback_data: 'service_qcloud'}],
+                    [{text: 'Личный кабинет', callback_data: 'none'}],
                     [{text: "Назад", callback_data: "services"}]
                 ]
             }
@@ -387,7 +445,7 @@ bot.on('callback_query', async callbackQuery => {
             opts.reply_markup = JSON.stringify({
                 inline_keyboard: [
                     [{ text: 'Тех. Поддержка', callback_data: 'support' }],
-                    [{ text: 'Главное меню', callback_data: 'main' }]
+                    [{ text: 'Назад', callback_data: 'start' }]
                 ]
             })
         } else {
@@ -395,7 +453,13 @@ bot.on('callback_query', async callbackQuery => {
                 let res = await commands.account.account(msg,opts);
                 text = res.text;
             } else {
-                commands.check(msg, bot)
+                text = `Пользователь с ником @${msg.chat.username} в базе бота не найден`;
+                opts.reply_markup = JSON.stringify({
+                    inline_keyboard: [
+                        [{ text: 'Тех. Поддержка', callback_data: 'support' }],
+                        [{ text: 'Назад', callback_data: 'start' }]
+                    ]
+                })
             }
         }
         
@@ -411,7 +475,7 @@ bot.on('callback_query', async callbackQuery => {
                     [{ text: 'О компании', callback_data: 'about'}],
                     [{ text: 'Quasar навигация', callback_data: 'navigate'}],
                     [{ text: 'Сервисы и маркетинг', callback_data: 'services'}],
-                    [{ text: 'Обучение', callback_data: 'none'}],
+                    [{ text: 'Обучение', callback_data: 'tutorial'}],
                     [{ text: 'Рекламный контент', callback_data: 'none'}],
                     [{ text: 'Обратная связь', callback_data: 'none'}],
                     [{ text: 'Назад', callback_data: 'main'}]
@@ -419,15 +483,30 @@ bot.on('callback_query', async callbackQuery => {
             }
         };
         await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/first_steps.jpg`, opts)
-    } else if (action === "mentor") {
+    } else if (action === "mentor" || action.split('_')[0] === "mentor") {
         const query = `SELECT username FROM quasar_telegrambot_users_new WHERE id = (SELECT ref_id FROM quasar_telegrambot_users_new WHERE chat_id = ${msg.chat.id})`;
 
         let res = await client.query(query);
 
-        opts.reply_markup = {
-            inline_keyboard: [
-                [{text: 'Назад', callback_data: 'account'}]
-            ]
+        if (action.split('_').length > 1) {
+            
+            service = action.split('_');
+
+            service.shift();
+            
+            service = service.join("_");
+
+            opts.reply_markup = JSON.stringify({
+                inline_keyboard: [
+                    [{ text: 'Назад', callback_data: `account_${service}` }],
+                ]
+            });
+        } else {
+            opts.reply_markup = {
+                inline_keyboard: [
+                    [{text: 'Назад', callback_data: 'account'}]
+                ]
+            }
         }
 
         if (res.rowCount === 0) {
@@ -435,7 +514,7 @@ bot.on('callback_query', async callbackQuery => {
         } else {
             text = `Ваш пригласитель: @${res.rows[0].username}`;
         }
-    } else if (action === "inviter") {
+    } else if (action === "inviter" || action.split('_')[0] === "inviter") {
         const params = {
             action: 'get',
             token: 'D!3%26%23!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%%23%@4112dhas91^^^^31',
@@ -453,10 +532,25 @@ bot.on('callback_query', async callbackQuery => {
             })
             text = `Пользователь с ником @${params.by_text}` + not_found; 
         } else {
-            opts.reply_markup = {
-                inline_keyboard: [
-                    [{text: 'Назад', callback_data: 'account'}]
-                ]
+            if (action.split('_').length > 1) {
+            
+                service = action.split('_');
+    
+                service.shift();
+                
+                service = service.join("_");
+    
+                opts.reply_markup = JSON.stringify({
+                    inline_keyboard: [
+                        [{ text: 'Назад', callback_data: `account_${service}` }],
+                    ]
+                });
+            } else {
+                opts.reply_markup = {
+                    inline_keyboard: [
+                        [{text: 'Назад', callback_data: 'account'}]
+                    ]
+                }
             }
     
             if (!resp.data.result.User.inviter) {
@@ -513,7 +607,7 @@ bot.on('callback_query', async callbackQuery => {
 
         let res = await client.query(query);
 
-        if (res.rowCount === 0 || (res.rows[0].franchise_pay !== null && parseInt((new Date()-res.rows[0].franchise_pay)/(24*3600*1000)) <= 30)) {
+        //if (res.rowCount === 0 || (res.rows[0].franchise_pay !== null && parseInt((new Date()-res.rows[0].franchise_pay)/(24*3600*1000)) <= 30)) {
             opts.reply_markup.inline_keyboard.push(
                 [{text: 'Insta Comment', callback_data: 'service_insta_comment'},{text: 'Insta King', callback_data: 'service_insta_king'}],
                 [{text: 'Skype Lead', callback_data: 'service_skype_lead'}, {text: 'Skype Reg', callback_data: 'service_skype_reg'}],
@@ -521,9 +615,9 @@ bot.on('callback_query', async callbackQuery => {
                 [{text: 'Tele Lead', callback_data: 'service_tele_lead'}],
                 [{text: 'Autopilot', callback_data: 'service_autopilot'}]
             )
-        }
+        //}
         opts.reply_markup.inline_keyboard.push(
-            [{text: 'Назад', callback_data: 'main'}]
+            [{text: 'Назад', callback_data: res.rowCount === 0 ? 'start' : 'main'}]
         )
 
         bot.sendMessage(msg.chat.id, text, opts);
@@ -569,7 +663,59 @@ bot.on('callback_query', async callbackQuery => {
                 }
             });
         })
-    } else {
+    } else if (action === "tutorial") {
+        let text = "Обучение (Этот раздел ещё не готов)";
+        let opts = {
+            reply_markup: {
+                inline_keyboard: [
+                    [{text: 'Сервисы', callback_data: 'tutorial_services'}],
+                    [{text: 'Программы', callback_data: 'tutorial_programs'}],
+                    [{text: 'Назад', callback_data: 'for_partners'}]
+                ]
+            }
+        }
+        bot.sendMessage(msg.chat.id, text, opts);
+    } else if (action === "tutorial_services") {
+        let text = 'Обучение сервисам (Раздел  не готов)';
+        let opts = {
+            reply_markup: {
+                inline_keyboard: [
+                    [{text: 'Connect', callback_data: 'none'}],
+                    [{text: 'QCloud', callback_data: 'none'}],
+                    [{text: 'Quasar Message', callback_data: 'none'}],
+                    [{text: 'Назад', callback_data: 'tutorial'}]
+                ]
+            }
+        }
+        bot.sendMessage(msg.chat.id, text, opts);
+    } else if (action === "tutorial_programs") {
+        let text = 'Обучение программам (Раздел  не готов)';
+        let opts = {
+            reply_markup: {
+                inline_keyboard: [
+                    [{text: 'VkLead', callback_data: 'none'}],
+                    [{text: 'VkReg', callback_data: 'none'}],
+                    [{text: 'SkypeLead', callback_data: 'none'}],
+                    [{text: 'SkypeReg', callback_data: 'none'}],
+                    [{text: 'InstaComment', callback_data: 'none'}],
+                    [{text: 'InstaKing', callback_data: 'none'}],
+                    [{text: 'TeleLead', callback_data: 'none'}],
+                    [{text: 'Назад', callback_data: 'tutorial'}]
+                ]
+            }
+        }
+        bot.sendMessage(msg.chat.id, text, opts);
+    } else if (action === "service_franchise") {
+        let text = 'Контент к данному разделу находится в разработке';
+        let opts = {
+            reply_markup: {
+                inline_keyboard: [
+                    [{text: 'Назад', callback_data: 'services'}]
+                ]
+            }
+        }
+        bot.sendMessage(msg.chat.id, text, opts);
+    }else {
         let res = await services(action, {
             msg,
             opts,

@@ -197,4 +197,14 @@ module.exports = async (action, data) => {
 
         return await require('./marketings')(data, service);
     }
+
+    else if (action.split('_')[0] === 'account') {
+        let service = action.split('_');
+
+        service.shift();
+        
+        service = service.join("_");
+
+        return await require('./account')(data, `service_${service}`, service, `${service}_pay`);
+    }
 }
