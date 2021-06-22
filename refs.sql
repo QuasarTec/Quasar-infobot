@@ -1,7 +1,5 @@
 SELECT * FROM quasar_telegrambot_users_new WHERE
-username = 'jnecua123';
-ref_id = 228;
-Or username = 'ladygold11'
+username = 'ladygold11'
 Or username = 'Zoreslava43'
 Or username = 'Farida2606'
 Or username = 'Pifagor9'

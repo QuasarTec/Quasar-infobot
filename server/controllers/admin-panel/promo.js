@@ -1,35 +1,32 @@
-const client = require('../../../commands/license/mysql');
+const client = require("../../../commands/license/mysql");
 
 module.exports = (req, res) => {
-    let {
-        usernames,
-        type
-    } = req.body;
+  let { usernames, type } = req.body;
 
-    var licenses,
-        limitDay;
+  var licenses, limitDay;
 
-    if (type === 'p1') {
-        licenses = 500;
-        limitDay = 17;
-    } else if (type === 'p2') {
-        licenses = 700;
-        limitDay = 24;
-    } else if (type === 'p3') {
-        licenses = 1000;
-        limitDay = 40;
+  if (type === "p1") {
+    licenses = 500;
+    limitDay = 17;
+  } else if (type === "p2") {
+    licenses = 700;
+    limitDay = 24;
+  } else if (type === "p3") {
+    licenses = 1000;
+    limitDay = 40;
+  }
+
+  usernames.forEach((el) => {
+    if (el[0] !== "@") {
+      el = "@" + el;
     }
 
-    usernames.forEach(el => {
-        if (el[0] !== "@") {
-            el = "@" + el;
-        }
+    const query = `INSERT INTO Licensi (\`Username\`, \`Timeset\`, \`Activate\`, \`ActivateLicens\`, \`LimitDay\`, \`Limit\`, \`LimitDate\`, \`PromoType\`) VALUES ('${el}', '${new Date()
+      .toJSON()
+      .slice(0, 10)}', 1, true, ${limitDay}, ${licenses}, Now(), ${type[1]});`;
 
-        const query = `INSERT INTO Licensi (\`Username\`, \`Timeset\`, \`Activate\`, \`ActivateLicens\`, \`LimitDay\`, \`Limit\`, \`LimitDate\`, \`PromoType\`) VALUES ('${el}', '${new Date().toJSON().slice(0, 10)}', 1, true, ${limitDay}, ${licenses}, Now(), ${type[1]});`;
+    client.query(query);
+  });
 
-        client.query(query);
-    })
-
-
-    res.send('Успешно');
-}
+  res.send("Успешно");
+};

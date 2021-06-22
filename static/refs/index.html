@@ -1,248 +1,270 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<!--
+  <!--
 
 Adapted from http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/example1.html
 
 -->
 
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Connect - ваши рефералы</title>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Connect - ваши рефералы</title>
 
-<!-- CSS Files -->
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-<!--[if IE]><script language="javascript" type="text/javascript" src="../../Extras/excanvas.js"></script><![endif]-->
+    <!-- CSS Files -->
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+      crossorigin="anonymous"
+    />
+    <!--[if IE
+      ]><script
+        language="javascript"
+        type="text/javascript"
+        src="../../Extras/excanvas.js"
+      ></script
+    ><![endif]-->
 
-<!-- JIT Library File -->
-<script language="javascript" type="text/javascript" src="https://philogb.github.io/jit/static/v20/Jit/jit.js"></script>
+    <!-- JIT Library File -->
+    <script
+      language="javascript"
+      type="text/javascript"
+      src="https://philogb.github.io/jit/static/v20/Jit/jit.js"
+    ></script>
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
-<style>
-    html, body {
-        margin:0;
-        padding:0;
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
         font-family: "Lucida Grande", Verdana;
         font-size: 0.9em;
         text-align: center;
-        background-image: url('./img/bg.png');
-    }
+        background-image: url("./img/bg.png");
+      }
 
-    input, select {
-        font-size:0.9em;
-    }
+      input,
+      select {
+        font-size: 0.9em;
+      }
 
-    table {
-        margin-top:-10px;
-        margin-left:7px;
-    }
+      table {
+        margin-top: -10px;
+        margin-left: 7px;
+      }
 
-    h4 {
-        font-size:1.1em;
-        text-decoration:none;
-        font-weight:normal;
-        color:#23A4FF;
-    }
+      h4 {
+        font-size: 1.1em;
+        text-decoration: none;
+        font-weight: normal;
+        color: #23a4ff;
+      }
 
-    a {
-        color:#23A4FF;
-    }
+      a {
+        color: #23a4ff;
+      }
 
-    #container {
+      #container {
         width: 100vw;
         height: 95vh;
-        margin:0 auto;
-        position:relative;
-    }
+        margin: 0 auto;
+        position: relative;
+      }
 
-    #center-container {
-        height:100%;
-        position:absolute;
-        top:0;
-    }
+      #center-container {
+        height: 100%;
+        position: absolute;
+        top: 0;
+      }
 
-    #center-container {
-        width:100%;
-        color:#ccc;
-    }
+      #center-container {
+        width: 100%;
+        color: #ccc;
+      }
 
-    .text {
+      .text {
         margin: 7px;
-    }
+      }
 
-    #inner-details {
-        font-size:0.8em;
-        list-style:none;
-        margin:7px;
-    }
+      #inner-details {
+        font-size: 0.8em;
+        list-style: none;
+        margin: 7px;
+      }
 
+      #infovis {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        overflow: hidden;
+      }
 
-
-    #infovis {
-        position:relative;
-        width:100%;
-        height:100%;
-        margin:auto;
-        overflow:hidden;
-    }
-
-    /*TOOLTIPS*/
-    .tip {
+      /*TOOLTIPS*/
+      .tip {
         color: #111;
         width: 139px;
         background-color: white;
-        border:1px solid #ccc;
-        -moz-box-shadow:#555 2px 2px 8px;
-        -webkit-box-shadow:#555 2px 2px 8px;
-        -o-box-shadow:#555 2px 2px 8px;
-        box-shadow:#555 2px 2px 8px;
-        opacity:0.9;
-        filter:alpha(opacity=90);
-        font-size:10px;
-        font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
-        padding:7px;
-    }
+        border: 1px solid #ccc;
+        -moz-box-shadow: #555 2px 2px 8px;
+        -webkit-box-shadow: #555 2px 2px 8px;
+        -o-box-shadow: #555 2px 2px 8px;
+        box-shadow: #555 2px 2px 8px;
+        opacity: 0.9;
+        filter: alpha(opacity=90);
+        font-size: 10px;
+        font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+        padding: 7px;
+      }
 
-    .header {
+      .header {
         height: 5vh;
-    }
+      }
 
-    .logo, .nav, .nav-bar a {
+      .logo,
+      .nav,
+      .nav-bar a {
         width: fit-content !important;
         max-width: fit-content !important;
-    }
+      }
 
-    .nav {
+      .nav {
         width: 25em !important;
         max-width: 25em !important;
-    }
+      }
 
-    .nav-bar {
+      .nav-bar {
         max-width: 100%;
         width: 100%;
-    }
+      }
 
-    .nav-bar a {
+      .nav-bar a {
         font-size: 16px;
         text-decoration: none;
-        color: #EEF0F2;
+        color: #eef0f2;
         border-radius: 5px;
         height: 2em;
-        padding-top: .20em;
+        padding-top: 0.2em;
         padding-left: 2em;
         padding-right: 2em;
         transition: 0.3s;
-    }
+      }
 
-    .nav-bar a:hover {
-        color: #EEF0F2;
-        background-color: rgb(135,67,255);
-    }
-	.node_tooltip {
-		height: 200px;
-		border-radius: 10px;
-		padding: 2px;
-		text-align: left;
-	}
-	.notice {
-		padding: 10px;
-		font-style: italic;
-	}
-</style>
-  
-<!-- Example File -->
-<script language="javascript" type="text/javascript">
-var labelType, useGradients, nativeTextSupport, animate;
+      .nav-bar a:hover {
+        color: #eef0f2;
+        background-color: rgb(135, 67, 255);
+      }
+      .node_tooltip {
+        height: 200px;
+        border-radius: 10px;
+        padding: 2px;
+        text-align: left;
+      }
+      .notice {
+        padding: 10px;
+        font-style: italic;
+      }
+    </style>
 
-(function() {
-  var ua = navigator.userAgent,
-      iStuff = ua.match(/iPhone/i) || ua.match(/iPad/i),
-      typeOfCanvas = typeof HTMLCanvasElement,
-      nativeCanvasSupport = (typeOfCanvas == 'object' || typeOfCanvas == 'function'),
-      textSupport = nativeCanvasSupport 
-        && (typeof document.createElement('canvas').getContext('2d').fillText == 'function');
-  //I'm setting this based on the fact that ExCanvas provides text support for IE
-  //and that as of today iPhone/iPad current text support is lame
-  labelType = (!nativeCanvasSupport || (textSupport && !iStuff))? 'Native' : 'HTML';
-  nativeTextSupport = labelType == 'Native';
-  useGradients = nativeCanvasSupport;
-  animate = !(iStuff || !nativeCanvasSupport);
-})();
+    <!-- Example File -->
+    <script language="javascript" type="text/javascript">
+      var labelType, useGradients, nativeTextSupport, animate;
 
-function init() {
-	// The JSON here would need to be adapted to a swagmap (or vice-versa), of course...
-	let json = 'importJsonHere';
-	var st = new $jit.ST({  
-		//id of viz container element  
-		injectInto: 'infovis',  
-		//set duration for the animation  
-		duration: 400,  
-		//set animation transition type  
-		transition: $jit.Trans.Quart.easeInOut,  
-		//set distance between node and its children  
-		levelDistance: 50,  
-		//enable panning  
-		Navigation: {  
-		  enable:true,  
-		  panning:true  
-		},  
-		offsetX: 200,
-		//set node and edge styles  
-		//set overridable=true for styling individual  
-		//nodes or edges  
-		Node: {  
-			height: 30,  
-			width: 140,  
-			//autoHeight: true,
-			//autoWidth: true,
-			type: 'rectangle',  
-			color: '#5d4c61',  
-			overridable: true  
-		},  
-		  
-		Edge: {  
-			type: 'bezier',  
-			overridable: true  
-		},  
-		  
-		onBeforeCompute: function(node){  
-			//Log.write(node.name);  
-		},  
-		  
-		onAfterCompute: function(){  
-			//Log.write("done");  
-		},  
-		
-		  
-		//This method is called on DOM label creation.  
-		//Use this method to add event handlers and styles to  
-		//your node.  
-		onCreateLabel: function(label, node){  
-			label.id = node.id;              
-			label.innerHTML = node.name;  
-			label.onclick = function(){  
-				st.onClick(node.id); 
-			};  
-			label.onmouseover = function() {
-				console.log("Mouse over " + node.name);
-				console.log(typeof(node.data.instructions));
-				
-				// Remove old tooltips, just in case...
-				$(".node_tooltip").each(function() {
-					if ($(this).attr("id") == "label-" + label.id) {
-						return;
-					}
-					$(this).mouseout();
-				});
-				
-				// Display tooltip
-				var pos = $(label).position();
-				/*var tooltip  = $("<div>")
+      (function () {
+        var ua = navigator.userAgent,
+          iStuff = ua.match(/iPhone/i) || ua.match(/iPad/i),
+          typeOfCanvas = typeof HTMLCanvasElement,
+          nativeCanvasSupport =
+            typeOfCanvas == "object" || typeOfCanvas == "function",
+          textSupport =
+            nativeCanvasSupport &&
+            typeof document.createElement("canvas").getContext("2d").fillText ==
+              "function";
+        //I'm setting this based on the fact that ExCanvas provides text support for IE
+        //and that as of today iPhone/iPad current text support is lame
+        labelType =
+          !nativeCanvasSupport || (textSupport && !iStuff) ? "Native" : "HTML";
+        nativeTextSupport = labelType == "Native";
+        useGradients = nativeCanvasSupport;
+        animate = !(iStuff || !nativeCanvasSupport);
+      })();
+
+      function init() {
+        // The JSON here would need to be adapted to a swagmap (or vice-versa), of course...
+        let json = "importJsonHere";
+        var st = new $jit.ST({
+          //id of viz container element
+          injectInto: "infovis",
+          //set duration for the animation
+          duration: 400,
+          //set animation transition type
+          transition: $jit.Trans.Quart.easeInOut,
+          //set distance between node and its children
+          levelDistance: 50,
+          //enable panning
+          Navigation: {
+            enable: true,
+            panning: true,
+          },
+          offsetX: 200,
+          //set node and edge styles
+          //set overridable=true for styling individual
+          //nodes or edges
+          Node: {
+            height: 30,
+            width: 140,
+            //autoHeight: true,
+            //autoWidth: true,
+            type: "rectangle",
+            color: "#5d4c61",
+            overridable: true,
+          },
+
+          Edge: {
+            type: "bezier",
+            overridable: true,
+          },
+
+          onBeforeCompute: function (node) {
+            //Log.write(node.name);
+          },
+
+          onAfterCompute: function () {
+            //Log.write("done");
+          },
+
+          //This method is called on DOM label creation.
+          //Use this method to add event handlers and styles to
+          //your node.
+          onCreateLabel: function (label, node) {
+            label.id = node.id;
+            label.innerHTML = node.name;
+            label.onclick = function () {
+              st.onClick(node.id);
+            };
+            label.onmouseover = function () {
+              console.log("Mouse over " + node.name);
+              console.log(typeof node.data.instructions);
+
+              // Remove old tooltips, just in case...
+              $(".node_tooltip").each(function () {
+                if ($(this).attr("id") == "label-" + label.id) {
+                  return;
+                }
+                $(this).mouseout();
+              });
+
+              // Display tooltip
+              var pos = $(label).position();
+              /*var tooltip  = $("<div>")
 					.attr("id", "label-" + label.id)
 					.attr("class", "node_tooltip")
 					.css({
@@ -268,97 +290,116 @@ function init() {
 					.hide()
 					.appendTo($("#infovis")
 					).fadeIn();*/
-			}
-			
-			//label.onmouseout  = function() {
-			//	var tooltip = $("#label-" + label.id); 
-			//	if ( ! tooltip.data("claimed") ) {
-			//		tooltip.mouseout();
-			//	}
-			//}
-			
-			//set label styles  
-			var style = label.style;  
-			style.width = 140 + 'px';  
-			style.height = 17 + 'px';              
-			style.cursor = 'pointer';  
-			style.color = '#FFF';  
-			style.fontSize = '1.2em';  
-			style.textAlign= 'center';  
-			style.paddingTop = '3px';  
-		},  
-		  
-		//This method is called right before plotting  
-		//a node. It's useful for changing an individual node  
-		//style properties before plotting it.  
-		//The data properties prefixed with a dollar  
-		//sign will override the global node style properties.  
-		onBeforePlotNode: function(node){  
-			//add some color to the nodes in the path between the  
-			//root node and the selected node.  
-			if (node.selected) {  
-				node.data.$color = "#8743FF";  
-			}  
-			else {  
-				delete node.data.$color;  
-				//if the node belongs to the last plotted level  
-				if(!node.anySubnode("exist")) {  
-					//count children number  
-					var count = 0;  
-					node.eachSubnode(function(n) { count++; });  
-					//assign a node color based on  
-					//how many children it has  
-					node.data.$color = ['#5d4c61', '#513757', '#6a4373', '#8f519c', '#b659c9', '#d400ff'][count];                      
-				}  
-			}  
-		},  
-		  
-		//This method is called right before plotting  
-		//an edge. It's useful for changing an individual edge  
-		//style properties before plotting it.  
-		//Edge data proprties prefixed with a dollar sign will  
-		//override the Edge global style properties.  
-		onBeforePlotLine: function(adj){  
-			if (adj.nodeFrom.selected && adj.nodeTo.selected) {  
-				adj.data.$color = "#eed";  
-				adj.data.$lineWidth = 3;  
-			}  
-			else {  
-				delete adj.data.$color;  
-				delete adj.data.$lineWidth;  
-			}  
-		}  
-	});  
-	st.loadJSON(json);
-	st.compute();
-	st.plot();
-	//st.geom.translate(new $jit.Complex(-300, 0), "current"); 
-	st.onClick(st.root);  
-	console.log("done");
-}
-</script>
-</head>
+            };
 
-<body onload="init();">
-	<div class="header">
-		<div class="container">
-			<div class="row justify-content-between">
-				<div class="logo">
-					<a href="https://meet.qtconnect.ru"><img src="./img/logo.svg" alt="Connect Logo"></a>
-				</div>
-				<nav class="nav">
-					<div class="row justify-content-between align-items-center nav-bar">
-						<a href="https://meet.qtconnect.ru" target="_blank" rel="noopener noreferrer">Главная</a>
-						<a href="https://easy-stars.ru" target="_blank" rel="noopener noreferrer">Easy Stars</a>
-					</div>
-				</nav>
-			</div>
-		</div>
-	</div>
-	<div id="container">
-		<div id="center-container">
-			<div id="infovis"></div>
-		</div>
-	</div>
-</body>
+            //label.onmouseout  = function() {
+            //	var tooltip = $("#label-" + label.id);
+            //	if ( ! tooltip.data("claimed") ) {
+            //		tooltip.mouseout();
+            //	}
+            //}
+
+            //set label styles
+            var style = label.style;
+            style.width = 140 + "px";
+            style.height = 17 + "px";
+            style.cursor = "pointer";
+            style.color = "#FFF";
+            style.fontSize = "1.2em";
+            style.textAlign = "center";
+            style.paddingTop = "3px";
+          },
+
+          //This method is called right before plotting
+          //a node. It's useful for changing an individual node
+          //style properties before plotting it.
+          //The data properties prefixed with a dollar
+          //sign will override the global node style properties.
+          onBeforePlotNode: function (node) {
+            //add some color to the nodes in the path between the
+            //root node and the selected node.
+            if (node.selected) {
+              node.data.$color = "#8743FF";
+            } else {
+              delete node.data.$color;
+              //if the node belongs to the last plotted level
+              if (!node.anySubnode("exist")) {
+                //count children number
+                var count = 0;
+                node.eachSubnode(function (n) {
+                  count++;
+                });
+                //assign a node color based on
+                //how many children it has
+                node.data.$color = [
+                  "#5d4c61",
+                  "#513757",
+                  "#6a4373",
+                  "#8f519c",
+                  "#b659c9",
+                  "#d400ff",
+                ][count];
+              }
+            }
+          },
+
+          //This method is called right before plotting
+          //an edge. It's useful for changing an individual edge
+          //style properties before plotting it.
+          //Edge data proprties prefixed with a dollar sign will
+          //override the Edge global style properties.
+          onBeforePlotLine: function (adj) {
+            if (adj.nodeFrom.selected && adj.nodeTo.selected) {
+              adj.data.$color = "#eed";
+              adj.data.$lineWidth = 3;
+            } else {
+              delete adj.data.$color;
+              delete adj.data.$lineWidth;
+            }
+          },
+        });
+        st.loadJSON(json);
+        st.compute();
+        st.plot();
+        //st.geom.translate(new $jit.Complex(-300, 0), "current");
+        st.onClick(st.root);
+        console.log("done");
+      }
+    </script>
+  </head>
+
+  <body onload="init();">
+    <div class="header">
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="logo">
+            <a href="https://meet.qtconnect.ru"
+              ><img src="./img/logo.svg" alt="Connect Logo"
+            /></a>
+          </div>
+          <nav class="nav">
+            <div class="row justify-content-between align-items-center nav-bar">
+              <a
+                href="https://meet.qtconnect.ru"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Главная</a
+              >
+              <a
+                href="https://easy-stars.ru"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Easy Stars</a
+              >
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div id="container">
+      <div id="center-container">
+        <div id="infovis"></div>
+      </div>
+    </div>
+  </body>
 </html>
