@@ -1,6 +1,6 @@
-const client = require("../../db");
-const referrals = require("../../utils/findRefs");
-const checkOnChatId = require("../../utils/CheckOnChatId");
+const client = require('../../db');
+const referrals = require('../../utils/findRefs');
+const checkOnChatId = require('../../utils/CheckOnChatId');
 
 const transformRefs = (refs, index = 9) => {
   let newRefs = [];
@@ -47,7 +47,7 @@ const transformRefs = (refs, index = 9) => {
   }
 };
 
-module.exports = async (msg, link = false, services = "last_pay") => {
+module.exports = async (msg, link = false, services = 'last_pay') => {
   let query = `SELECT username FROM quasar_telegrambot_users_new WHERE chat_id = ${msg.chat.id};`;
 
   let res = await client.query(query);
@@ -62,18 +62,18 @@ module.exports = async (msg, link = false, services = "last_pay") => {
 
   res = await client.query(query);
   if (res.rows.length === 0) {
-    bot.sendMessage(msg.from.id, "Пользователь не найден");
+    bot.sendMessage(msg.from.id, 'Пользователь не найден');
     return;
   }
 
   let refs = await referrals.getAllReferals([res.rows[0].id], 9);
 
-  let text = "";
+  let text = '';
 
   refs = transformRefs(refs);
 
   if (refs === undefined) {
-    text = "Похоже мы не можем найти у вас рефералов😔";
+    text = 'Похоже мы не можем найти у вас рефералов😔';
     return text;
   }
 
@@ -99,8 +99,8 @@ module.exports = async (msg, link = false, services = "last_pay") => {
     text += `\nВсего пользователей: ${count}\n\n`;
   }
 
-  if (text === "") {
-    text = "У вас нет рефералов";
+  if (text === '') {
+    text = 'У вас нет рефералов';
   }
   return text;
 };

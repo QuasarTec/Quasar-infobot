@@ -1,4 +1,4 @@
-const client = require("../../db");
+const client = require('../../db');
 
 module.exports = (msg, bot) => {
   const query = `SELECT * FROM quasar_telegrambot_users_new WHERE chat_id = '${msg.chat.id}'`;
@@ -14,26 +14,26 @@ module.exports = (msg, bot) => {
         reply_markup: JSON.stringify({
           inline_keyboard: [
             [
-              { text: "Создать оповещение", callback_data: "notification" },
-              { text: "Список пользователей", callback_data: "get_users" },
+              { text: 'Создать оповещение', callback_data: 'notification' },
+              { text: 'Список пользователей', callback_data: 'get_users' },
               {
-                text: "Установить пригласителя пользователю",
-                callback_data: "set_inviter",
+                text: 'Установить пригласителя пользователю',
+                callback_data: 'set_inviter',
               },
             ],
-            [{ text: "Создать новость", callback_data: "create_news" }],
+            [{ text: 'Создать новость', callback_data: 'create_news' }],
             [
               {
-                text: "Проверить пользователя на наличие",
-                callback_data: "check_user",
+                text: 'Проверить пользователя на наличие',
+                callback_data: 'check_user',
               },
             ],
           ],
         }),
       };
-      bot.sendMessage(msg.from.id, "Админ-панель", admin_opts);
+      bot.sendMessage(msg.from.id, 'Админ-панель', admin_opts);
     } else {
-      bot.sendMessage(msg.chat.id, "Вы не являетесь админом");
+      bot.sendMessage(msg.chat.id, 'Вы не являетесь админом');
     }
   });
 };

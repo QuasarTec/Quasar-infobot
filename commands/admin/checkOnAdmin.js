@@ -1,4 +1,4 @@
-const client = require("../../db");
+const client = require('../../db');
 
 module.exports = async (chat_id) => {
   const isAdmin = `SELECT is_admin FROM quasar_telegrambot_users_new WHERE chat_id = ${chat_id}`;

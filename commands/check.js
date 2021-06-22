@@ -1,19 +1,18 @@
-const client = require("../db");
-const axios = require("axios");
-const checkOnChatId = require("../utils/CheckOnChatId");
+const client = require('../db');
+const axios = require('axios');
+const checkOnChatId = require('../utils/CheckOnChatId');
 
 const successful =
-  " поздравляю! Твоя учетная запись найдена в глобальной базе State of Quasaria.\n\nВсего два шага:\n\nПолучи подарок и стань частью первого независимого цифрового государства State of Quasaria";
+  ' поздравляю! Твоя учетная запись найдена в глобальной базе State of Quasaria.\n\nВсего два шага:\n\nПолучи подарок и стань частью первого независимого цифрового государства State of Quasaria';
 const not_found = ` в глобальной базе Quasar Technology не найден..\n
 Проверьте указанный ник, на идентичность.
 Если вы уверены, в том  что данные авторизации внесены верно, Вы зарегистрированы под указываемым Вами telegram ником, обратитесь за помощью тапнув по кнопке "тех поддержка"`;
 
 module.exports = async (msg, bot) => {
   const params = {
-    action: "get",
-    token:
-      "D!3%26%23!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%%23%@4112dhas91^^^^31",
-    by: "username",
+    action: 'get',
+    token: 'D!3%26%23!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%%23%@4112dhas91^^^^31',
+    by: 'username',
     by_text: msg.chat.username,
   };
 
@@ -28,9 +27,9 @@ module.exports = async (msg, bot) => {
     )
     .catch((err) => console.error(err));
   if (resp === undefined) return;
-  if (resp.data.status === "error") {
+  if (resp.data.status === 'error') {
     options.reply_markup = JSON.stringify({
-      inline_keyboard: [[{ text: "Тех. Поддержка", callback_data: "support" }]],
+      inline_keyboard: [[{ text: 'Тех. Поддержка', callback_data: 'support' }]],
     });
     text = `Пользователь с ником @${params.by_text}` + not_found;
   } else {
@@ -57,12 +56,12 @@ module.exports = async (msg, bot) => {
 
     options.reply_markup = JSON.stringify({
       inline_keyboard: [
-        [{ text: "Получить подарок", callback_data: "get_license" }],
-        [{ text: "State of Quasaria", callback_data: "main" }],
+        [{ text: 'Получить подарок', callback_data: 'get_license' }],
+        [{ text: 'State of Quasaria', callback_data: 'main' }],
       ],
     });
 
-    text = "@" + msg.chat.username + successful;
+    text = '@' + msg.chat.username + successful;
 
     doesExistQuery = `SELECT * FROM marketings WHERE user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE chat_id = '${msg.chat.id}');`;
 

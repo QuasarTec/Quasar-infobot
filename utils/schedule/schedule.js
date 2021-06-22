@@ -1,6 +1,6 @@
-const client = require("../../db");
-const schedule = require("node-schedule");
-const fs = require("fs");
+const client = require('../../db');
+const schedule = require('node-schedule');
+const fs = require('fs');
 
 module.exports = async (bot) => {
   let query = `SELECT * FROM newsletters;`;

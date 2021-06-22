@@ -1,4 +1,4 @@
-const client = require("../../../db");
+const client = require('../../../db');
 
 module.exports = (req, res, date) => {
   var { usernames, services } = req.body;
@@ -11,16 +11,16 @@ module.exports = (req, res, date) => {
       client.query(query);
     }
     if (check_services(services)) {
-      query = query_sets_for_marketings(services, date) + ";";
+      query = query_sets_for_marketings(services, date) + ';';
       client.query(query);
     }
-    return res.send("Успешно");
+    return res.send('Успешно');
   }
 
   if (services.connect) {
     query = `UPDATE quasar_telegrambot_users_new SET last_pay = ${date}`;
 
-    query += " WHERE ";
+    query += ' WHERE ';
 
     for (let i = 0; i < usernames.length; i++) {
       const el = usernames[i];
@@ -37,7 +37,7 @@ module.exports = (req, res, date) => {
   if (check_services(services)) {
     query = query_sets_for_marketings(services, date);
 
-    query += " WHERE ";
+    query += ' WHERE ';
 
     for (let i = 0; i < usernames.length; i++) {
       const username = usernames[i];
@@ -51,13 +51,13 @@ module.exports = (req, res, date) => {
     client.query(query);
   }
 
-  return res.send("ok");
+  return res.send('ok');
 };
 
 const query_sets_for_marketings = (services, date) => {
   var keys = Object.keys(services);
 
-  const index = keys.indexOf("connect");
+  const index = keys.indexOf('connect');
   if (index > -1) {
     keys.splice(index, 1);
   }
@@ -65,7 +65,7 @@ const query_sets_for_marketings = (services, date) => {
   var query = `UPDATE marketings SET `;
   keys.forEach((el) => {
     if (services[el]) {
-      query += `${el + "_pay"} = ${date}, `;
+      query += `${el + '_pay'} = ${date}, `;
     }
   });
 
@@ -79,7 +79,7 @@ const check_services = (services) => {
 
   var keys = Object.keys(services);
 
-  const index = keys.indexOf("connect");
+  const index = keys.indexOf('connect');
   if (index > -1) {
     keys.splice(index, 1);
   }

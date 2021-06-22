@@ -1,4 +1,4 @@
-const client = require("../db");
+const client = require('../db');
 
 let query = `SELECT datetime, id FROM quasar_telegrambot_users_new;`;
 

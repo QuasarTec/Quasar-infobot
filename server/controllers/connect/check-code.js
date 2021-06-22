@@ -1,4 +1,4 @@
-const client = require("../../../db");
+const client = require('../../../db');
 
 module.exports = async (req, res) => {
   const { code } = req.body;
@@ -9,12 +9,12 @@ module.exports = async (req, res) => {
 
   if (userWithCode.rowCount === 0) {
     return res.json({
-      status: "Not Found",
+      status: 'Not Found',
     });
   }
 
   res.json({
-    status: "OK",
+    status: 'OK',
     username: userWithCode.rows[0].username,
   });
 

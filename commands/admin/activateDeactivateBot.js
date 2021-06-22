@@ -1,11 +1,11 @@
-const checkOnAdmin = require("./checkOnAdmin");
-const client = require("../../db");
+const checkOnAdmin = require('./checkOnAdmin');
+const client = require('../../db');
 
 module.exports = async (msg, bot, active_state) => {
   if (!(await checkOnAdmin(msg.from.id))) {
     bot.sendMessage(
       msg.chat.id,
-      "Только администратор бота может активировать/деактивировать бота"
+      'Только администратор бота может активировать/деактивировать бота'
     );
     return;
   }
@@ -15,8 +15,8 @@ module.exports = async (msg, bot, active_state) => {
   client.query(query);
 
   if (active_state) {
-    bot.sendMessage(msg.chat.id, "Бот активирован");
+    bot.sendMessage(msg.chat.id, 'Бот активирован');
   } else {
-    bot.sendMessage(msg.chat.id, "Бот деактивирован");
+    bot.sendMessage(msg.chat.id, 'Бот деактивирован');
   }
 };
