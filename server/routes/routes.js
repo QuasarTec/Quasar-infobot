@@ -1,38 +1,37 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const findRefs = require("../../utils/findRefs");
-const transformByDeactivated = require("../../utils/transformByDeactivated");
-const pay_distrib = require("../../utils/pay_distrib");
-const { default: axios } = require("axios");
-const fs = require("fs");
-const client = require("../../db");
-const bot = require("../../bot");
-const adminPanel = require("./admin-panel/adminPanel");
+const findRefs = require('../../utils/findRefs');
+const transformByDeactivated = require('../../utils/transformByDeactivated');
+const pay_distrib = require('../../utils/pay_distrib');
+const { default: axios } = require('axios');
+const fs = require('fs');
+const client = require('../../db');
+const bot = require('../../bot');
+const adminPanel = require('./admin-panel/adminPanel');
 
 router.use(adminPanel);
 
-router.post("/users/check-on-payed", async (req, res) => {
-  require("../controllers/checkOnPayed")(req, res);
+router.post('/users/check-on-payed', async (req, res) => {
+  require('../controllers/checkOnPayed')(req, res);
 });
 
-router.post("/connect/check-code", async (req, res) => {
-  require("../controllers/connect/check-code")(req, res);
+router.post('/connect/check-code', async (req, res) => {
+  require('../controllers/connect/check-code')(req, res);
 });
 
-router.post("/connect/send-code", async (req, res) => {
-  require("../controllers/connect/send-code")(req, res, bot);
+router.post('/connect/send-code', async (req, res) => {
+  require('../controllers/connect/send-code')(req, res, bot);
 });
 
-router.post("/message", async (req, res) => {
+router.post('/message', async (req, res) => {
   const { usernames, text, image } = req.body;
 
   const random = Math.floor(Math.random() * 100000);
   const path = base64ToImg(random, image);
 
   for (username of usernames) {
-    const parsedUsername =
-      username[0] === "@" ? username.substring(1) : username;
+    const parsedUsername = username[0] === '@' ? username.substring(1) : username;
     const id = await getUserId(parsedUsername);
 
     if (id && image) bot.sendPhoto(id, path, { caption: text });
@@ -45,10 +44,10 @@ router.post("/message", async (req, res) => {
     });
   }
 
-  res.send({ msg: "Рассылка сделана" });
+  res.send({ msg: 'Рассылка сделана' });
 });
 
-router.get("/referrals-vizualization", async (req, res) => {
+router.get('/referrals-vizualization', async (req, res) => {
   let root = req.query.username;
   let type = req.query.type;
   if (root === undefined) {
@@ -59,7 +58,7 @@ router.get("/referrals-vizualization", async (req, res) => {
   }
 
   if (type === undefined) {
-    type = "last_pay";
+    type = 'last_pay';
   }
 
   let query = `SELECT id FROM quasar_telegrambot_users_new WHERE username = '${root}';`;
@@ -75,44 +74,39 @@ router.get("/referrals-vizualization", async (req, res) => {
 
   var levels;
 
-  if (type === "last_pay" || type === "qcloud_pay") {
+  if (type === 'last_pay' || type === 'qcloud_pay') {
     levels = 9;
-  } else if (type === "message_pay" || type === "franchise_pay") {
+  } else if (type === 'message_pay' || type === 'franchise_pay') {
     levels = 7;
   } else {
     levels = 5;
   }
 
   let json = {
-    id: "root",
+    id: 'root',
     name: root,
     date: {},
-    children: await findRefs.getAllReferals(
-      [response.rows[0].id],
-      levels,
-      true,
-      type
-    ),
+    children: await findRefs.getAllReferals([response.rows[0].id], levels, true, type),
   };
-
-  console.log(JSON.stringify(json));
 
   json = transformByDeactivated(json);
 
+  console.log(JSON.stringify(json));
+
   json = JSON.stringify(json);
 
-  let html = fs.readFileSync("./static/refs/index.html");
+  let html = fs.readFileSync('./static/refs/index.html');
 
-  html = html.toString().split("'importJsonHere'");
+  html = html.toString().split('"importJsonHere"');
 
   res.send(html[0] + json + html[1]);
 });
 
-router.post("/pay/confirm", (req, res) => {
+router.post('/pay/confirm', (req, res) => {
   let { sign, desk } = req.body;
 
   if (sign === undefined) {
-    return res.send("sign required");
+    return res.send('sign required');
   }
 
   let query = `SELECT chat_id, id, ref_id, username FROM quasar_telegrambot_users_new WHERE sign = '${sign}'`;
@@ -126,7 +120,7 @@ router.post("/pay/confirm", (req, res) => {
 
     if (response.rowCount === 0) {
       res.json({
-        status: "User with this signature not found",
+        status: 'User with this signature not found',
       });
       return;
     }
@@ -145,7 +139,7 @@ router.post("/pay/confirm", (req, res) => {
       }
     });
 
-    if (desk === "last_pay") {
+    if (desk === 'last_pay') {
       query = `UPDATE quasar_telegrambot_users_new SET last_pay = Now(), sign = Null WHERE chat_id = '${response.rows[0].chat_id}'`;
     } else {
       query = `UPDATE marketings SET ${desk} = Now() WHERE user_id = ${response.rows[0].id};`;
@@ -160,7 +154,7 @@ router.post("/pay/confirm", (req, res) => {
 
       bot.sendMessage(
         response.rows[0].chat_id,
-        "Оплата прошла успешно!\nВы можете пользоваться технологией Connect"
+        'Оплата прошла успешно!\nВы можете пользоваться технологией Connect'
       );
 
       //Бесплатные пробный период
@@ -180,29 +174,27 @@ router.post("/pay/confirm", (req, res) => {
           let query = `INSERT INTO marketings (user_id) VALUES ((SELECT id FROM quasar_telegrambot_users_new WHERE chat_id = '${response.rows[0].chat_id}'))`;
           client.query(query);
           test_period_sevices = [
-            "qcloud_pay",
-            "franchise_pay",
-            "message_pay",
-            "insta_comment_pay",
-            "insta_lead_pay",
-            "skype_lead_pay",
-            "skype_reg_pay",
-            "tele_lead_pay",
-            "vk_lead_pay",
-            "vk_reg_pay",
-            "insta_king_pay",
+            'qcloud_pay',
+            'franchise_pay',
+            'message_pay',
+            'insta_comment_pay',
+            'insta_lead_pay',
+            'skype_lead_pay',
+            'skype_reg_pay',
+            'tele_lead_pay',
+            'vk_lead_pay',
+            'vk_reg_pay',
+            'insta_king_pay',
           ];
         } else {
           let sevices = Object.keys(res.rows[0]);
 
           sevices.forEach((service) => {
             if (
-              service !== "id" &&
-              service !== "user_id" &&
+              service !== 'id' &&
+              service !== 'user_id' &&
               (res.rows[0][service] === null ||
-                parseInt(
-                  (new Date() - res.rows[0][service]) / (24 * 3600 * 1000)
-                ) > 30)
+                parseInt((new Date() - res.rows[0][service]) / (24 * 3600 * 1000)) > 30)
             ) {
               test_period_sevices.push(service);
             }
@@ -213,16 +205,14 @@ router.post("/pay/confirm", (req, res) => {
 
         query = `UPDATE marketings SET `;
 
-        let two_weeks_ago = new Date(
-          new Date().getTime() - 2 * 7 * 24 * 3600 * 1000
-        ).toUTCString();
+        let two_weeks_ago = new Date(new Date().getTime() - 2 * 7 * 24 * 3600 * 1000).toUTCString();
 
         if (test_period_sevices.length === 0) {
           return;
         }
 
         test_period_sevices.forEach((service) => {
-          if (service === "last_pay") {
+          if (service === 'last_pay') {
             let query = `UPDATE quasar_telegrambot_users_new SET last_pay = '${new Date(
               new Date().getTime() - 2 * 7 * 24 * 3600 * 1000
             ).toUTCString()}', `;
@@ -243,13 +233,13 @@ router.post("/pay/confirm", (req, res) => {
 
       bot.sendMessage(
         response.rows[0].chat_id,
-        "В честь запуска бота, мы дарим вам пробный период, на все сервисы компании на срок в 2 недели!"
+        'В честь запуска бота, мы дарим вам пробный период, на все сервисы компании на срок в 2 недели!'
       );
 
       pay_distrib(response, desk);
 
       res.json({
-        status: "Succesfully",
+        status: 'Succesfully',
       });
     });
 
@@ -258,10 +248,9 @@ router.post("/pay/confirm", (req, res) => {
     }
 
     const params = {
-      action: "get",
-      token:
-        "D!3%26%23!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%%23%@4112dhas91^^^^31",
-      by: "username",
+      action: 'get',
+      token: 'D!3%26%23!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%%23%@4112dhas91^^^^31',
+      by: 'username',
       by_text: response.rows[0].username,
     };
 
@@ -270,7 +259,7 @@ router.post("/pay/confirm", (req, res) => {
         `https://api.easy-stars.ru/api/query/user/get?action=${params.action}&token=${params.token}&by=${params.by}&by_text=${params.by_text}`
       )
       .catch((err) => console.error(err));
-    if (resp.data.status === "error") {
+    if (resp.data.status === 'error') {
       bot.sendMessage(
         response.rows[0].chat_id,
         `Пользователя с ником @${params.by_text} на сайте https://easy-stars.ru не найдено.\nПроверьте ники, на идентичность.\nЕсли вы уверены, что зарегестрировались, под вашим телеграм ником, обратитесь за помощью на сайте`
@@ -280,7 +269,7 @@ router.post("/pay/confirm", (req, res) => {
 
     let inviter = resp.data.result.User.inviter;
 
-    if (inviter[0] === "@") {
+    if (inviter[0] === '@') {
       inviter = inviter.substring(1);
     }
 
@@ -357,12 +346,12 @@ const findWeakBranch = async (id) => {
   }
 };
 
-router.get("/users/user-does-exist/", (req, res) => {
+router.get('/users/user-does-exist/', (req, res) => {
   let username = req.query.username;
 
   if (username === undefined) {
     res.json({
-      userExist: "username field empty",
+      userExist: 'username field empty',
     });
     return;
   }
@@ -388,12 +377,12 @@ router.get("/users/user-does-exist/", (req, res) => {
   });
 });
 
-router.get("/users/get-balance/", (req, res) => {
+router.get('/users/get-balance/', (req, res) => {
   let username = req.query.username;
 
   if (username === undefined) {
     res.json({
-      userExist: "username field empty",
+      userExist: 'username field empty',
     });
     return;
   }
@@ -413,11 +402,7 @@ router.get("/users/get-balance/", (req, res) => {
       });
     } else {
       let balance =
-        12 -
-        (12 / 30) *
-          parseInt(
-            (new Date() - response.rows[0].last_pay) / (24 * 3600 * 1000)
-          );
+        12 - (12 / 30) * parseInt((new Date() - response.rows[0].last_pay) / (24 * 3600 * 1000));
       res.json({
         balance: balance > 0 ? balance : 0.0,
       });
@@ -430,16 +415,16 @@ const base64ToImg = (fileName, image) => {
     const base64Data = image.substring(1);
     const path = `${fileName}.jpg`;
 
-    fs.writeFileSync(path, base64Data, "base64");
+    fs.writeFileSync(path, base64Data, 'base64');
 
     return path;
-  } else return "";
+  } else return '';
 };
 
 const getUserId = async (name) => {
   const query = `SELECT * FROM quasar_telegrambot_users_new WHERE username='${name}'`;
   const { rows } = await client.query(query);
 
-  return rows[0] ? rows[0]["chat_id"] : undefined;
+  return rows[0] ? rows[0]['chat_id'] : undefined;
 };
 module.exports = router;

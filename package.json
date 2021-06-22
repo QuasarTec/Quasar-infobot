@@ -12,7 +12,6 @@
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
-    "eslint": "^7.28.0",
     "express": "^4.17.1",
     "form-data": "^2.3.3",
     "kill-port-process": "2.3.0",
@@ -27,6 +26,9 @@
     "python-shell": "^3.0.0"
   },
   "devDependencies": {
+    "eslint": "^7.29.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "prettier": "2.3.1"
   }
 }

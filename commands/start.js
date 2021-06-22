@@ -1,16 +1,16 @@
-const client = require("../db");
-const checkOnChatId = require("../utils/CheckOnChatId");
-const fs = require("fs");
+const client = require('../db');
+const checkOnChatId = require('../utils/CheckOnChatId');
+const fs = require('fs');
 
 let welcomeText = ` приветствуем тебя! Я главный бот компании Quasar Technology, в моем арсенале имеется все  необходимое для автоматизации твоего  бизнеса!\n\nЧто бы начать пользоваться моим функционалом, сервисами и инструментами, ты должен быть зарегистрирован на главном сайте компании, с учетом реферальной ссылки по которой тебя пригласил наставник! Если Вам не была выдана реферальная ссылка для регистрации на оф. сайте компании, обратитесь за ней к своему пригласителю..`;
 
 var options = {
   reply_markup: JSON.stringify({
     inline_keyboard: [
-      [{ text: "О компании", callback_data: "about" }],
-      [{ text: "Сервисы и маркетинг", callback_data: "services" }],
-      [{ text: "Как зарегистрироваться?", callback_data: "how_to_register" }],
-      [{ text: "Проверить регистрацию", callback_data: "check" }],
+      [{ text: 'О компании', callback_data: 'about' }],
+      [{ text: 'Сервисы и маркетинг', callback_data: 'services' }],
+      [{ text: 'Как зарегистрироваться?', callback_data: 'how_to_register' }],
+      [{ text: 'Проверить регистрацию', callback_data: 'check' }],
     ],
   }),
 };

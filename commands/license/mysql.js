@@ -1,12 +1,12 @@
-const mysql = require("mysql2/promise");
+const mysql = require('mysql2/promise');
 
 const query = async (query) => {
   // create the connection
   const connection = await mysql.createConnection({
-    host: "udanisqn.beget.tech",
-    user: "udanisqn_11111",
-    password: "Vedaza73",
-    database: "udanisqn_11111",
+    host: 'udanisqn.beget.tech',
+    user: 'udanisqn_11111',
+    password: 'Vedaza73',
+    database: 'udanisqn_11111',
   });
 
   // query database

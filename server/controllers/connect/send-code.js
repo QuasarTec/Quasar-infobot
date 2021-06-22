@@ -1,9 +1,9 @@
-const client = require("../../../db");
+const client = require('../../../db');
 
 module.exports = async (req, res, bot) => {
   let { username } = req.body;
 
-  if (username[0] === "@") username = username.substring(1);
+  if (username[0] === '@') username = username.substring(1);
 
   const checkUserExist = `SELECT chat_id FROM quasar_telegrambot_users_new WHERE username = '${username}'`;
 
@@ -11,7 +11,7 @@ module.exports = async (req, res, bot) => {
 
   if (user.rowCount === 0)
     return res.json({
-      status: "Not Found",
+      status: 'Not Found',
     });
 
   let code = await generateCode();
@@ -23,7 +23,7 @@ module.exports = async (req, res, bot) => {
   bot.sendMessage(user.rows[0].chat_id, `Ваш код подтверждения: ${code}`);
 
   res.json({
-    status: "OK",
+    status: 'OK',
   });
 };
 

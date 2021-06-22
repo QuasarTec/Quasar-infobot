@@ -1,4 +1,4 @@
-const add_accrual = require("../../../utils/add_accrual");
+const add_accrual = require('../../../utils/add_accrual');
 
 module.exports = (req, res) => {
   var { usernames, amount, services } = req.body;

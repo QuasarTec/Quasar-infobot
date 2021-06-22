@@ -1,11 +1,11 @@
-const client = require("../../db");
-const axios = require("axios");
+const client = require('../../db');
+const axios = require('axios');
 
-const client_mysql = require("./mysql");
+const client_mysql = require('./mysql');
 
 const INLINE_OPTIONS = {
   reply_markup: {
-    inline_keyboard: [[{ text: "Назад", callback_data: "main" }]],
+    inline_keyboard: [[{ text: 'Назад', callback_data: 'main' }]],
   },
 };
 
@@ -13,19 +13,16 @@ module.exports = async (bot, msg) => {
   if (await checkDate(msg.chat.id, msg.chat.username)) {
     bot.sendMessage(
       msg.chat.id,
-      "Данная акция распростроняется, только для людей зарегестрированных начиная с 11.06.21 включительно",
+      'Данная акция распростроняется, только для людей зарегестрированных начиная с 11.06.21 включительно',
       INLINE_OPTIONS
     );
     return;
   }
 
-  if (
-    (await checkRecived(msg.chat.id, msg.chat.username)) &&
-    msg.chat.username !== "jnecua123"
-  ) {
+  if ((await checkRecived(msg.chat.id, msg.chat.username)) && msg.chat.username !== 'jnecua123') {
     bot.sendMessage(
       msg.chat.id,
-      "Похоже Вы уже получили свою подарочную лицензию, по правилам компании получить подарок можно только 1 раз",
+      'Похоже Вы уже получили свою подарочную лицензию, по правилам компании получить подарок можно только 1 раз',
       INLINE_OPTIONS
     );
     return;
@@ -34,7 +31,7 @@ module.exports = async (bot, msg) => {
   let inviter = await getInviterName(msg.chat.username);
 
   let query = `SELECT * FROM \`Licensi\` WHERE Username = '${
-    inviter[0] === "@" ? inviter : "@" + inviter
+    inviter[0] === '@' ? inviter : '@' + inviter
   }';`;
   let user = await client_mysql.query(query);
 
@@ -64,12 +61,7 @@ module.exports = async (bot, msg) => {
   }
 
   if (
-    await checkLicensesPerDay(
-      user[0].LimitDay,
-      user[0].LimitDate,
-      user[0].PromoType,
-      user[0].id
-    )
+    await checkLicensesPerDay(user[0].LimitDay, user[0].LimitDate, user[0].PromoType, user[0].id)
   ) {
     bot.sendMessage(
       msg.chat.id,
@@ -78,7 +70,7 @@ module.exports = async (bot, msg) => {
     return;
   }
 
-  if (user[0].ActivateLicens === "false") {
+  if (user[0].ActivateLicens === 'false') {
     bot.sendMessage(
       msg.chat.id,
       `Уважаемый @${msg.chat.username}, к сожалению у вашего пригласителя не активирована функция распространения подарочных, программных лицензий.. \nЕсли Вы хотите получить свой подарок, перешлите данное сообщение пригласителя и попросите его обратиться в администрацию компании для успешного решения данного вопроса\nЕсли у Вас возникли сложности или вопросы, обратитесь за разъяснениями к своему наставнику или в чаты Quasar Tehnology`,
@@ -91,17 +83,13 @@ module.exports = async (bot, msg) => {
 
   let doc_caption = `Описание VkConnect:\n• Многопоточность\n• Автоприём заявок в друзья\n• Автосообщение + Указание имени получателя\n• Рассылка заявок в друзья по ключевому слову \n• Рассылка заявок в друзья по рекомендованным друзьям \n• Лайкинг\n• Рандомизация текста \n• Автоматическая мультиупаковка аккаунтов \n• Возможность использования  прокси\n• Умный 6 уровневый рандомизированный автоответчик`;
 
-  await bot.sendPhoto(
-    msg.chat.id,
-    __dirname.replace("license", "static/img/gift_license.jpg"),
-    {
-      caption: photo_caption,
-    }
-  );
+  await bot.sendPhoto(msg.chat.id, __dirname.replace('license', 'static/img/gift_license.jpg'), {
+    caption: photo_caption,
+  });
 
   await bot.sendDocument(
     msg.chat.id,
-    __dirname.replace("license", "static/rar/services/VKConnect.rar"),
+    __dirname.replace('license', 'static/rar/services/VKConnect.rar'),
     {
       caption: doc_caption,
     }
@@ -129,12 +117,9 @@ const checkDate = async (chat_id, username) => {
 
   registration_date = new Date(registration_date.rows[0].datetime);
 
-  let start_date = new Date("2021-06-05T00:00:00.000Z");
+  let start_date = new Date('2021-06-05T00:00:00.000Z');
 
-  return (
-    start_date.getTime() > registration_date.getTime() &&
-    username !== "jnecua123"
-  );
+  return start_date.getTime() > registration_date.getTime() && username !== 'jnecua123';
 };
 
 const checkRecived = async (chat_id) => {
@@ -147,10 +132,9 @@ const checkRecived = async (chat_id) => {
 
 const getInviterName = async (username) => {
   const params = {
-    action: "get",
-    token:
-      "D!3%26%23!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%%23%@4112dhas91^^^^31",
-    by: "username",
+    action: 'get',
+    token: 'D!3%26%23!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%%23%@4112dhas91^^^^31',
+    by: 'username',
     by_text: username,
   };
 
@@ -159,7 +143,7 @@ const getInviterName = async (username) => {
       `https://api.easy-stars.ru/api/query/user/get?action=${params.action}&token=${params.token}&by=${params.by}&by_text=${params.by_text}`
     )
     .catch((err) => console.error(err));
-  if (resp.data.status === "error") {
+  if (resp.data.status === 'error') {
     bot.sendMessage(
       response.rows[0].chat_id,
       `Пользователя с ником @${params.by_text} на сайте https://easy-stars.ru не найдено.\nПроверьте ники, на идентичность.\nЕсли вы уверены, что зарегестрировались, под вашим телеграм ником, обратитесь за помощью на сайте`

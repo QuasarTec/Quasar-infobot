@@ -1,23 +1,23 @@
-const client = require("../../../db");
+const client = require('../../../db');
 
 module.exports = (req, res) => {
   let { usernames } = req.body;
 
   usernames.forEach((el) => {
-    if (el === "") {
+    if (el === '') {
       return;
     }
-    el = el.split(":");
+    el = el.split(':');
 
     let whom = el[0];
     let under_whom = el[1];
 
-    if (whom[0] === "@") {
+    if (whom[0] === '@') {
       //whom - string
       whom = whom.substring(1);
     }
 
-    if (under_whom[0] === "@") {
+    if (under_whom[0] === '@') {
       //under_whom - string
       under_whom = under_whom.substring(1);
     }
@@ -27,5 +27,5 @@ module.exports = (req, res) => {
     client.query(query);
   });
 
-  res.send("Успешно");
+  res.send('Успешно');
 };

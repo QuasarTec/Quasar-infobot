@@ -2,23 +2,23 @@ const multi_active = () => {
   let options = {
     usernames: [],
     services: getServices(),
-    token: prompt("Введите токен"),
+    token: prompt('Введите токен'),
   };
 
-  var usernames = document.getElementById("username").value;
+  var usernames = document.getElementById('username').value;
 
-  usernames = usernames.split("\n");
+  usernames = usernames.split('\n');
 
   usernames.forEach((el) => {
-    if (el[0] === "@") {
+    if (el[0] === '@') {
       el = el.substring(1);
     }
-    el = el.replaceAll(" ", "");
+    el = el.replaceAll(' ', '');
     options.usernames.push(el);
   });
 
-  if (options.usernames[0] === "" && options.usernames.length === 1) {
-    alert("Вы не ввели ники");
+  if (options.usernames[0] === '' && options.usernames.length === 1) {
+    alert('Вы не ввели ники');
     return;
   }
 
@@ -26,54 +26,46 @@ const multi_active = () => {
     return;
   }
 
-  axios
-    .post(
-      "https://matrix.easy-stars.ru/bot/admin-panel/users/activate",
-      options
-    )
-    .then((res) => {
-      alert(res.data);
-    });
+  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/activate', options).then((res) => {
+    alert(res.data);
+  });
 };
 
 const all_active = () => {
   let options = {
     all_users: true,
     services: getServices(),
-    token: prompt("Введите токен"),
+    token: prompt('Введите токен'),
   };
 
   if (services === undefined) {
     return;
   }
 
-  axios.post(
-    "https://matrix.easy-stars.ru/bot/admin-panel/users/activate",
-    options
-  );
+  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/activate', options);
 };
 
 const multi_deactive = () => {
   let options = {
     usernames: [],
     services: getServices(),
-    token: prompt("Введите токен"),
+    token: prompt('Введите токен'),
   };
 
-  var usernames = document.getElementById("username").value;
+  var usernames = document.getElementById('username').value;
 
-  usernames = usernames.split("\n");
+  usernames = usernames.split('\n');
 
   usernames.forEach((el) => {
-    if (el[0] === "@") {
+    if (el[0] === '@') {
       el = el.substring(1);
     }
-    el = el.replaceAll(" ", "");
+    el = el.replaceAll(' ', '');
     options.usernames.push(el);
   });
 
-  if (options.usernames[0] === "" && options.usernames.length === 1) {
-    alert("Вы не ввели ники");
+  if (options.usernames[0] === '' && options.usernames.length === 1) {
+    alert('Вы не ввели ники');
     return;
   }
 
@@ -81,45 +73,36 @@ const multi_deactive = () => {
     return;
   }
 
-  axios.post(
-    "https://matrix.easy-stars.ru/bot/admin-panel/users/deactivate",
-    options
-  );
+  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/deactivate', options);
 };
 
 const all_deactive = () => {
   let options = {
     all_users: true,
     services: getServices(),
-    token: prompt("Введите токен"),
+    token: prompt('Введите токен'),
   };
 
   if (services === undefined) {
     return;
   }
 
-  axios.post(
-    "https://matrix.easy-stars.ru/bot/admin-panel/users/deactivate",
-    options
-  );
+  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/deactivate', options);
 };
 
 const permutation = () => {
   let options = {
     usernames: getUsernames(),
-    token: prompt("Введите токен"),
+    token: prompt('Введите токен'),
   };
 
-  axios.post(
-    "https://matrix.easy-stars.ru/bot/admin-panel/users/permutation",
-    options
-  );
+  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/permutation', options);
 };
 
 const getServices = () => {
-  var services = document.getElementById("services");
+  var services = document.getElementById('services');
 
-  services = services.getElementsByTagName("input");
+  services = services.getElementsByTagName('input');
 
   services_trasformed = {};
 
@@ -136,7 +119,7 @@ const getServices = () => {
   }
 
   if (all_serviced_not_checked) {
-    alert("Вы не выбрали сервисы");
+    alert('Вы не выбрали сервисы');
     return;
   }
 
@@ -144,21 +127,21 @@ const getServices = () => {
 };
 
 const getUsernames = () => {
-  var usernames = document.getElementById("username").value;
+  var usernames = document.getElementById('username').value;
 
-  usernames_el = usernames.split("\n");
+  usernames_el = usernames.split('\n');
 
   var usernames = [];
 
   usernames_el.forEach((el) => {
-    if (el[0] === "@") {
+    if (el[0] === '@') {
       el = el.substring(1);
     }
     usernames.push(el);
   });
 
-  if (usernames[0] === "" && usernames.length === 1) {
-    alert("Вы не ввели ники");
+  if (usernames[0] === '' && usernames.length === 1) {
+    alert('Вы не ввели ники');
     return;
   }
 
@@ -170,19 +153,16 @@ const accrual = () => {
     usernames: getUsernames(),
     amount: 0,
     services: getServices(),
-    token: prompt("Введите токен"),
+    token: prompt('Введите токен'),
   };
 
-  options.amount = document.getElementById("amount").value;
+  options.amount = document.getElementById('amount').value;
 
-  if (options.amount === "") {
-    alert("Вы не ввели сумму");
+  if (options.amount === '') {
+    alert('Вы не ввели сумму');
   }
 
-  axios.post(
-    "https://matrix.easy-stars.ru/bot/admin-panel/users/accrual",
-    options
-  );
+  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/accrual', options);
 };
 
 const promo = () => {
@@ -192,21 +172,18 @@ const promo = () => {
   };
 
   if (options.usernames !== undefined && options.type !== undefined) {
-    options.token = prompt("Введите токен");
+    options.token = prompt('Введите токен');
   } else {
     return;
   }
 
-  axios.post(
-    "https://matrix.easy-stars.ru/bot/admin-panel/users/promo",
-    options
-  );
+  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/promo', options);
 };
 
 const getPackage = () => {
-  var packages = document.getElementById("packages");
+  var packages = document.getElementById('packages');
 
-  packages = packages.getElementsByTagName("input");
+  packages = packages.getElementsByTagName('input');
 
   var all_packeges_not_checked = true;
 
@@ -222,7 +199,7 @@ const getPackage = () => {
   }
 
   if (all_packeges_not_checked) {
-    alert("Вы не выбрали пакетов");
+    alert('Вы не выбрали пакетов');
     return;
   }
 
@@ -231,7 +208,7 @@ const getPackage = () => {
 
 const newsletters = async () => {
   let options = {
-    text: document.getElementById("text").value,
+    text: document.getElementById('text').value,
     chats: getChats(),
     img: await getImage(),
     date: getDate(),
@@ -240,34 +217,31 @@ const newsletters = async () => {
   all_fields_not_empty = true;
 
   Object.keys(options).forEach((el) => {
-    if (options[el] === undefined && el !== "img") {
+    if (options[el] === undefined && el !== 'img') {
       all_fields_not_empty = false;
     }
   });
 
   if (all_fields_not_empty) {
-    options.token = prompt("Введите токен");
+    options.token = prompt('Введите токен');
   } else {
     return;
   }
 
-  axios.post(
-    "https://matrix.easy-stars.ru/bot/admin-panel/users/newsletters",
-    options
-  );
+  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/newsletters', options);
 };
 
 const getDate = () => {
-  let date = document.getElementById("date");
+  let date = document.getElementById('date');
 
-  if (date.value === "") {
+  if (date.value === '') {
     return;
   }
   return date.value;
 };
 
 const getImage = async () => {
-  let image = document.getElementById("img").files[0];
+  let image = document.getElementById('img').files[0];
 
   if (image === undefined) {
     return;
@@ -285,9 +259,9 @@ const toBase64 = (file) =>
   });
 
 const getChats = () => {
-  let chats = document.getElementById("chats");
+  let chats = document.getElementById('chats');
 
-  chats = chats.getElementsByTagName("input");
+  chats = chats.getElementsByTagName('input');
 
   let active_chat_ids = [];
 
@@ -300,7 +274,7 @@ const getChats = () => {
   }
 
   if (active_chat_ids.length === 0) {
-    alert("Вы не выбрали чаты");
+    alert('Вы не выбрали чаты');
     return;
   }
 

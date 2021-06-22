@@ -22,11 +22,7 @@ Adapted from http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/exam
       crossorigin="anonymous"
     />
     <!--[if IE
-      ]><script
-        language="javascript"
-        type="text/javascript"
-        src="../../Extras/excanvas.js"
-      ></script
+      ]><script language="javascript" type="text/javascript" src="../../Extras/excanvas.js"></script
     ><![endif]-->
 
     <!-- JIT Library File -->
@@ -45,10 +41,10 @@ Adapted from http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/exam
       body {
         margin: 0;
         padding: 0;
-        font-family: "Lucida Grande", Verdana;
+        font-family: 'Lucida Grande', Verdana;
         font-size: 0.9em;
         text-align: center;
-        background-image: url("./img/bg.png");
+        background-image: url('./img/bg.png');
       }
 
       input,
@@ -182,27 +178,24 @@ Adapted from http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/exam
         var ua = navigator.userAgent,
           iStuff = ua.match(/iPhone/i) || ua.match(/iPad/i),
           typeOfCanvas = typeof HTMLCanvasElement,
-          nativeCanvasSupport =
-            typeOfCanvas == "object" || typeOfCanvas == "function",
+          nativeCanvasSupport = typeOfCanvas == 'object' || typeOfCanvas == 'function',
           textSupport =
             nativeCanvasSupport &&
-            typeof document.createElement("canvas").getContext("2d").fillText ==
-              "function";
+            typeof document.createElement('canvas').getContext('2d').fillText == 'function';
         //I'm setting this based on the fact that ExCanvas provides text support for IE
         //and that as of today iPhone/iPad current text support is lame
-        labelType =
-          !nativeCanvasSupport || (textSupport && !iStuff) ? "Native" : "HTML";
-        nativeTextSupport = labelType == "Native";
+        labelType = !nativeCanvasSupport || (textSupport && !iStuff) ? 'Native' : 'HTML';
+        nativeTextSupport = labelType == 'Native';
         useGradients = nativeCanvasSupport;
         animate = !(iStuff || !nativeCanvasSupport);
       })();
 
       function init() {
         // The JSON here would need to be adapted to a swagmap (or vice-versa), of course...
-        let json = "importJsonHere";
+        let json = 'importJsonHere';
         var st = new $jit.ST({
           //id of viz container element
-          injectInto: "infovis",
+          injectInto: 'infovis',
           //set duration for the animation
           duration: 400,
           //set animation transition type
@@ -223,13 +216,13 @@ Adapted from http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/exam
             width: 140,
             //autoHeight: true,
             //autoWidth: true,
-            type: "rectangle",
-            color: "#5d4c61",
+            type: 'rectangle',
+            color: '#5d4c61',
             overridable: true,
           },
 
           Edge: {
-            type: "bezier",
+            type: 'bezier',
             overridable: true,
           },
 
@@ -251,12 +244,12 @@ Adapted from http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/exam
               st.onClick(node.id);
             };
             label.onmouseover = function () {
-              console.log("Mouse over " + node.name);
+              console.log('Mouse over ' + node.name);
               console.log(typeof node.data.instructions);
 
               // Remove old tooltips, just in case...
-              $(".node_tooltip").each(function () {
-                if ($(this).attr("id") == "label-" + label.id) {
+              $('.node_tooltip').each(function () {
+                if ($(this).attr('id') == 'label-' + label.id) {
                   return;
                 }
                 $(this).mouseout();
@@ -301,13 +294,13 @@ Adapted from http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/exam
 
             //set label styles
             var style = label.style;
-            style.width = 140 + "px";
-            style.height = 17 + "px";
-            style.cursor = "pointer";
-            style.color = "#FFF";
-            style.fontSize = "1.2em";
-            style.textAlign = "center";
-            style.paddingTop = "3px";
+            style.width = 140 + 'px';
+            style.height = 17 + 'px';
+            style.cursor = 'pointer';
+            style.color = '#FFF';
+            style.fontSize = '1.2em';
+            style.textAlign = 'center';
+            style.paddingTop = '3px';
           },
 
           //This method is called right before plotting
@@ -319,11 +312,11 @@ Adapted from http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/exam
             //add some color to the nodes in the path between the
             //root node and the selected node.
             if (node.selected) {
-              node.data.$color = "#8743FF";
+              node.data.$color = '#8743FF';
             } else {
               delete node.data.$color;
               //if the node belongs to the last plotted level
-              if (!node.anySubnode("exist")) {
+              if (!node.anySubnode('exist')) {
                 //count children number
                 var count = 0;
                 node.eachSubnode(function (n) {
@@ -332,12 +325,12 @@ Adapted from http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/exam
                 //assign a node color based on
                 //how many children it has
                 node.data.$color = [
-                  "#5d4c61",
-                  "#513757",
-                  "#6a4373",
-                  "#8f519c",
-                  "#b659c9",
-                  "#d400ff",
+                  '#5d4c61',
+                  '#513757',
+                  '#6a4373',
+                  '#8f519c',
+                  '#b659c9',
+                  '#d400ff',
                 ][count];
               }
             }
@@ -350,7 +343,7 @@ Adapted from http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/exam
           //override the Edge global style properties.
           onBeforePlotLine: function (adj) {
             if (adj.nodeFrom.selected && adj.nodeTo.selected) {
-              adj.data.$color = "#eed";
+              adj.data.$color = '#eed';
               adj.data.$lineWidth = 3;
             } else {
               delete adj.data.$color;
@@ -363,7 +356,7 @@ Adapted from http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/exam
         st.plot();
         //st.geom.translate(new $jit.Complex(-300, 0), "current");
         st.onClick(st.root);
-        console.log("done");
+        console.log('done');
       }
     </script>
   </head>
@@ -373,22 +366,14 @@ Adapted from http://philogb.github.io/jit/static/v20/Jit/Examples/Spacetree/exam
       <div class="container">
         <div class="row justify-content-between">
           <div class="logo">
-            <a href="https://meet.qtconnect.ru"
-              ><img src="./img/logo.svg" alt="Connect Logo"
-            /></a>
+            <a href="https://meet.qtconnect.ru"><img src="./img/logo.svg" alt="Connect Logo" /></a>
           </div>
           <nav class="nav">
             <div class="row justify-content-between align-items-center nav-bar">
-              <a
-                href="https://meet.qtconnect.ru"
-                target="_blank"
-                rel="noopener noreferrer"
+              <a href="https://meet.qtconnect.ru" target="_blank" rel="noopener noreferrer"
                 >Главная</a
               >
-              <a
-                href="https://easy-stars.ru"
-                target="_blank"
-                rel="noopener noreferrer"
+              <a href="https://easy-stars.ru" target="_blank" rel="noopener noreferrer"
                 >Easy Stars</a
               >
             </div>

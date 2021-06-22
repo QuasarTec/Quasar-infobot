@@ -1,6 +1,6 @@
-const client = require("../db");
+const client = require('../db');
 
-const getAllReferals = async (ids, index, viz = false, type = "last_pay") => {
+const getAllReferals = async (ids, index, viz = false, type = 'last_pay') => {
   return new Promise(async (resolve, reject) => {
     if (index < 1) {
       resolve([]);
@@ -11,9 +11,9 @@ const getAllReferals = async (ids, index, viz = false, type = "last_pay") => {
 
     for (let i = 0; i < ids.length; i++) {
       let query =
-        type === "last_pay"
+        type === 'last_pay'
           ? `SELECT username, id, last_pay  FROM quasar_telegrambot_users_new WHERE ref_id = '${ids[i]}';`
-          : `SELECT u.username, u.id, m.${type} FROM marketings m left join quasar_telegrambot_users_new u on u.id=m.user_id WHERE u.ref_id = '${ids[i]}';`;
+          : `SELECT u.username, u.id, m.${type} FROM marketings m left  quasar_telegrambot_users_new u on u.id=m.user_id WHERE u.ref_id = '${ids[i]}';`;
 
       client.query(query, async (err, res) => {
         if (err) {
@@ -34,10 +34,7 @@ const getAllReferals = async (ids, index, viz = false, type = "last_pay") => {
                   id: res.rows[j].id,
                   data: {},
                   children: [],
-                  active:
-                    parseInt(
-                      (new Date() - res.rows[j][type]) / (24 * 3600 * 1000)
-                    ) <= 30,
+                  active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
                 });
               } else {
                 refs.push({
@@ -45,10 +42,7 @@ const getAllReferals = async (ids, index, viz = false, type = "last_pay") => {
                   id: res.rows[j].id,
                   refs: [],
                   parent,
-                  active:
-                    parseInt(
-                      (new Date() - res.rows[j][type]) / (24 * 3600 * 1000)
-                    ) <= 30,
+                  active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
                 });
               }
             }
@@ -64,7 +58,7 @@ const getAllReferals = async (ids, index, viz = false, type = "last_pay") => {
         let parent;
 
         if (respose.rowCount === 0) {
-          parent = "error";
+          parent = 'error';
         } else {
           parent = respose.rows[0].username;
         }
@@ -79,16 +73,8 @@ const getAllReferals = async (ids, index, viz = false, type = "last_pay") => {
               name: res.rows[j].username,
               id: res.rows[j].id,
               data: {},
-              children: await getAllReferals(
-                [new_ids[j]],
-                index - 1,
-                viz,
-                type
-              ),
-              active:
-                parseInt(
-                  (new Date() - res.rows[j][type]) / (24 * 3600 * 1000)
-                ) <= 30,
+              children: await getAllReferals([new_ids[j]], index - 1, viz, type),
+              active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
             });
           } else {
             refs.push({
@@ -96,10 +82,7 @@ const getAllReferals = async (ids, index, viz = false, type = "last_pay") => {
               id: res.rows[j].id,
               refs: await getAllReferals([new_ids[j]], index - 1, viz, type),
               parent,
-              active:
-                parseInt(
-                  (new Date() - res.rows[j][type]) / (24 * 3600 * 1000)
-                ) <= 30,
+              active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
             });
           }
         }

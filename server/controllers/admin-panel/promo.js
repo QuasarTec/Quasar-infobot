@@ -1,24 +1,24 @@
-const client = require("../../../commands/license/mysql");
+const client = require('../../../commands/license/mysql');
 
 module.exports = (req, res) => {
   let { usernames, type } = req.body;
 
   var licenses, limitDay;
 
-  if (type === "p1") {
+  if (type === 'p1') {
     licenses = 500;
     limitDay = 17;
-  } else if (type === "p2") {
+  } else if (type === 'p2') {
     licenses = 700;
     limitDay = 24;
-  } else if (type === "p3") {
+  } else if (type === 'p3') {
     licenses = 1000;
     limitDay = 40;
   }
 
   usernames.forEach((el) => {
-    if (el[0] !== "@") {
-      el = "@" + el;
+    if (el[0] !== '@') {
+      el = '@' + el;
     }
 
     const query = `INSERT INTO Licensi (\`Username\`, \`Timeset\`, \`Activate\`, \`ActivateLicens\`, \`LimitDay\`, \`Limit\`, \`LimitDate\`, \`PromoType\`) VALUES ('${el}', '${new Date()
@@ -28,5 +28,5 @@ module.exports = (req, res) => {
     client.query(query);
   });
 
-  res.send("Успешно");
+  res.send('Успешно');
 };

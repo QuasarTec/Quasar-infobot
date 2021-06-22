@@ -1,7 +1,7 @@
-const adminPanel = require("./adminPanel");
-const beAdmin = require("./beAdmin");
-const changeText = require("./changeText");
-const activateDeactivateBot = require("./activateDeactivateBot");
+const adminPanel = require('./adminPanel');
+const beAdmin = require('./beAdmin');
+const changeText = require('./changeText');
+const activateDeactivateBot = require('./activateDeactivateBot');
 
 module.exports = {
   adminPanel,
