@@ -10,6 +10,7 @@ const transformRefs = (refs, index = 9) => {
       value: refs[i].username,
       level: 9 - index,
       parent: refs[i].parent,
+      active: refs[i].active
     });
   }
 
@@ -25,6 +26,7 @@ const transformRefs = (refs, index = 9) => {
               value: r[j].value,
               level: r[j].level,
               parent: r[j].parent,
+              active: r[j].active
             });
             continue;
           }
@@ -32,6 +34,7 @@ const transformRefs = (refs, index = 9) => {
             value: r[j],
             level: 9 - index,
             parent: r[j].parent,
+            active: r[j].active
           });
         }
       }
@@ -47,7 +50,7 @@ const transformRefs = (refs, index = 9) => {
   }
 };
 
-module.exports = async (msg, link = false, services = 'last_pay') => {
+module.exports = async (msg, link = false, services = 'last_pay', active = false) => {
   let query = `SELECT username FROM quasar_telegrambot_users_new WHERE chat_id = ${msg.chat.id};`;
 
   let res = await client.query(query);
@@ -66,7 +69,7 @@ module.exports = async (msg, link = false, services = 'last_pay') => {
     return;
   }
 
-  let refs = await referrals.getAllReferals([res.rows[0].id], 9);
+  let refs = await referrals.getAllReferals([res.rows[0].id], 9, false, services, active);
 
   let text = '';
 
@@ -78,6 +81,16 @@ module.exports = async (msg, link = false, services = 'last_pay') => {
   }
 
   refs = refs.flat();
+
+  if (active) {
+    let actived_refs = [];
+    for (let i = 0; i < refs.length; i++) {
+      if (refs[i].active) {
+        actived_refs.push(refs[i])
+      }
+    }
+    refs = actived_refs;
+  }
 
   levels = 0;
 

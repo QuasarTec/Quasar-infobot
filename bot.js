@@ -157,7 +157,7 @@ bot.on('callback_query', async (callbackQuery) => {
     };
     await bot.sendPhoto(msg.chat.id, `${__dirname}/commands/static/img/main.jpg`, opts);
   } else if (action === 'pay') {
-    const res = await commands.account.pay(msg, bot, 'last_pay');
+    const res = await commands.account.pay(msg, bot, 'last_pay', 12, 'USD');
     if (res !== true) {
       text = res;
     }
@@ -191,7 +191,7 @@ bot.on('callback_query', async (callbackQuery) => {
 
       opts.reply_markup = JSON.stringify({
         inline_keyboard: [
-          [{ text: 'Назад', callback_data: `account_${service}` }],
+          [{ text: 'Назад', callback_data: service === '' ? `account` : `account_${service}` }],
           [{ text: 'Главное меню', callback_data: 'main' }],
         ],
       });
@@ -210,7 +210,7 @@ bot.on('callback_query', async (callbackQuery) => {
     link = await commands.refs.downRefferals(msg, true);
     let opts = {};
     let text = `Уважаемый партнёр, для просмотра личной структуры нажмите  нужную Вам кнопку в меню`;
-
+    console.log(action)
     if (action.split('_').length > 1) {
       service = action.split('_');
 
@@ -219,20 +219,20 @@ bot.on('callback_query', async (callbackQuery) => {
       service = service.join('_');
 
       link = await commands.refs.downRefferals(msg, true, service);
-
       opts.reply_markup = JSON.stringify({
         inline_keyboard: [
           [{ text: 'Визуальный просмотр', url: link }],
-          [{ text: 'Показать списком', callback_data: `refs_list_${service}` }],
-          [{ text: 'Назад', callback_data: `account_${service}` }],
+          [{ text: 'Показать списком', callback_data: `refs_list_${service}` }, { text: 'Показать списком активных', callback_data: `active_refs_list_${service}` }],
+          [{ text: 'Назад', callback_data: service === '' ? `account` : `account_${service}` }],
           [{ text: 'Главное меню', callback_data: 'main' }],
         ],
       });
     } else {
+
       opts.reply_markup = JSON.stringify({
         inline_keyboard: [
           [{ text: 'Визуальный просмотр', url: link }],
-          [{ text: 'Показать списком', callback_data: 'refs_list' }],
+          [{ text: 'Показать списком', callback_data: 'refs_list'}, { text: 'Показать списком активных', callback_data: `active_refs_list` }],
           [{ text: 'Назад', callback_data: 'account' }],
           [{ text: 'Главное меню', callback_data: 'main' }],
         ],
@@ -242,8 +242,25 @@ bot.on('callback_query', async (callbackQuery) => {
     let img = fs.readFileSync(`${__dirname}/commands/static/img/refs.jpg`);
     await bot.sendPhoto(msg.chat.id, img);
     bot.sendMessage(msg.chat.id, text, opts);
-  } else if (action === 'refs_list' || action.split('_')[0] === 'refs') {
-    text = await commands.refs.downRefferals(msg);
+  } else if (action === 'refs_list' || action.split('_')[0] === 'refs' || (action.split('_')[0] === 'active' && action.split('_')[1] === 'refs')) {
+    if (action.split('_')[0] === 'active') {
+      let service = action.split('_');
+
+      service.shift()
+      service.shift()
+      service.shift()
+
+      service = service.join('_');
+      
+      if (service === '') {
+        service = 'last_pay';
+      }
+
+      text = await commands.refs.downRefferals(msg, false, service, true);
+    } else {
+      text = await commands.refs.downRefferals(msg);
+
+    }
 
     if (action.split('_').length > 1) {
       service = action.split('_');
@@ -251,11 +268,16 @@ bot.on('callback_query', async (callbackQuery) => {
       service.shift();
       service.shift();
 
+      if (action.split('_')[0] === 'active') {
+        service.shift();
+        
+      }
+
       service = service.join('_');
 
       opts.reply_markup = JSON.stringify({
         inline_keyboard: [
-          [{ text: 'Назад', callback_data: `refs_${service}` }],
+          [{ text: 'Назад', callback_data: service === '' ? 'refs' : `refs_${service}` }],
           [{ text: 'Главное меню', callback_data: 'main' }],
         ],
       });
@@ -300,7 +322,7 @@ bot.on('callback_query', async (callbackQuery) => {
       service = service.join('_');
 
       opts.reply_markup = JSON.stringify({
-        inline_keyboard: [[{ text: 'Личный кабинет', callback_data: `account_${service}` }]],
+        inline_keyboard: [[{ text: 'Личный кабинет', callback_data: service === '' ? `account` : `account_${service}` }]],
       });
     } else {
       opts.reply_markup = JSON.stringify({
@@ -515,7 +537,7 @@ bot.on('callback_query', async (callbackQuery) => {
       service = service.join('_');
 
       opts.reply_markup = JSON.stringify({
-        inline_keyboard: [[{ text: 'Назад', callback_data: `account_${service}` }]],
+        inline_keyboard: [[{ text: 'Назад', callback_data: service === '' ? `account` : `account_${service}` }]],
       });
     } else {
       opts.reply_markup = {
@@ -556,7 +578,7 @@ bot.on('callback_query', async (callbackQuery) => {
         service = service.join('_');
 
         opts.reply_markup = JSON.stringify({
-          inline_keyboard: [[{ text: 'Назад', callback_data: `account_${service}` }]],
+          inline_keyboard: [[{ text: 'Назад', callback_data: service === '' ? `account` : `account_${service}` }]],
         });
       } else {
         opts.reply_markup = {

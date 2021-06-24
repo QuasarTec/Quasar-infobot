@@ -91,13 +91,11 @@ router.get('/referrals-vizualization', async (req, res) => {
 
   json = transformByDeactivated(json);
 
-  console.log(JSON.stringify(json));
-
   json = JSON.stringify(json);
 
   let html = fs.readFileSync('./static/refs/index.html');
 
-  html = html.toString().split('"importJsonHere"');
+  html = html.toString().split("'importJsonHere'");
 
   res.send(html[0] + json + html[1]);
 });
@@ -105,8 +103,14 @@ router.get('/referrals-vizualization', async (req, res) => {
 router.post('/pay/confirm', (req, res) => {
   let { sign, desk } = req.body;
 
+  let user;
+
   if (sign === undefined) {
     return res.send('sign required');
+  }
+
+  if (desk === undefined) {
+    desk = 'last_pay';
   }
 
   let query = `SELECT chat_id, id, ref_id, username FROM quasar_telegrambot_users_new WHERE sign = '${sign}'`;
@@ -229,21 +233,20 @@ router.post('/pay/confirm', (req, res) => {
 
         await client.query(query);
       });
-      ///А дальше уже не бесплатный пробный период
-
+      
       bot.sendMessage(
         response.rows[0].chat_id,
         'В честь запуска бота, мы дарим вам пробный период, на все сервисы компании на срок в 2 недели!'
       );
 
-      pay_distrib(response, desk);
-
+      ///А дальше уже не бесплатный пробный период
       res.json({
         status: 'Succesfully',
       });
     });
 
-    if (response.rows[0].ref_id !== 0) {
+    if (response.rows[0].ref_id !== null) {
+      pay_distrib(response, desk);
       return;
     }
 
@@ -283,13 +286,13 @@ router.post('/pay/confirm', (req, res) => {
 
       var inviterId;
 
-      if (res.rowCount === 0) {
-        inviterId = findWeakBranch(661); //Поиск слабого звена относительно аккаунта @Quasar_Company (661 - id записи Quasar_Company в бд)
+      if (res.rowCount === 0 || res.rows[0].id === 180) {
+        inviterId = await findWeakBranch(661); //Поиск слабого звена относительно аккаунта @Quasar_Company (661 - id записи Quasar_Company в бд)
       } else {
         query = `SELECT id FROM quasar_telegrambot_users_new WHERE ref_id = ${res.rows[0].id}`;
         let count_refs = await client.query(query);
         if (count_refs.rowCount >= 5) {
-          inviterId = findWeakBranch(res.rows[0].id);
+          inviterId = await findWeakBranch(res.rows[0].id);
         } else {
           inviterId = res.rows[0].id;
         }
@@ -302,6 +305,8 @@ router.post('/pay/confirm', (req, res) => {
           console.error(err);
           return;
         }
+        pay_distrib(response, desk);
+
       });
     });
   });
@@ -341,7 +346,16 @@ const findWeakBranch = async (id) => {
           min_count_refs_user = el;
         }
       });
-      return min_count_refs_user;
+      let get_id_min_count_refs_user_query = `SELECT id FROM quasar_telegrambot_users_new WHERE username = '${min_count_refs_user}'`;
+
+      let id_min_count_refs_user = await client.query(get_id_min_count_refs_user_query);
+
+      if (id_min_count_refs_user.rowCount === 0) {
+        console.error('Бля миша, что-то пошло по пизде');
+        return;
+      }
+
+      return id_min_count_refs_user.rows[0].id;
     }
   }
 };
