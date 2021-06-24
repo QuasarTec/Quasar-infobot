@@ -1,6 +1,6 @@
 const client = require('../db');
 
-const getAllReferals = async (ids, index, viz = false, type = 'last_pay') => {
+const getAllReferals = async (ids, index, viz = false, type = 'last_pay', active = false) => {
   return new Promise(async (resolve, reject) => {
     if (index < 1) {
       resolve([]);
@@ -37,13 +37,13 @@ const getAllReferals = async (ids, index, viz = false, type = 'last_pay') => {
                   active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
                 });
               } else {
-                refs.push({
-                  username: res.rows[j].username,
-                  id: res.rows[j].id,
-                  refs: [],
-                  parent,
-                  active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
-                });
+                  refs.push({
+                    username: res.rows[j].username,
+                    id: res.rows[j].id,
+                    refs: [],
+                    parent,
+                    active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
+                  });
               }
             }
           }
@@ -73,17 +73,17 @@ const getAllReferals = async (ids, index, viz = false, type = 'last_pay') => {
               name: res.rows[j].username,
               id: res.rows[j].id,
               data: {},
-              children: await getAllReferals([new_ids[j]], index - 1, viz, type),
+              children: await getAllReferals([new_ids[j]], index - 1, viz, type, active),
               active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
             });
           } else {
-            refs.push({
-              username: res.rows[j].username,
-              id: res.rows[j].id,
-              refs: await getAllReferals([new_ids[j]], index - 1, viz, type),
-              parent,
-              active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
-            });
+                refs.push({
+                  username: res.rows[j].username,
+                  id: res.rows[j].id,
+                  refs: await getAllReferals([new_ids[j]], index - 1, viz, type,active),
+                  parent,
+                  active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
+              });
           }
         }
 
@@ -100,6 +100,7 @@ const transformRefs = (refs, index = 9) => {
 
   for (let i = 0; i < refs.length; i++) {
     newRefs.push({
+      id: refs[i].id,
       value: refs[i].username,
       level: 9 - index,
       parent: refs[i].parent,
@@ -115,6 +116,7 @@ const transformRefs = (refs, index = 9) => {
         for (let j = 0; j < r.length; j++) {
           if (r[j].constructor === Object) {
             newRefs.push({
+              id: r[j].id,
               value: r[j].value,
               level: r[j].level,
               parent: r[j].parent,
@@ -122,6 +124,7 @@ const transformRefs = (refs, index = 9) => {
             continue;
           }
           refsNextLevel.push({
+            id: r[j].id,
             value: r[j],
             level: 9 - index,
             parent: r[j].parent,

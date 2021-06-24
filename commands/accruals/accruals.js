@@ -17,7 +17,7 @@ module.exports = async (data, service) => {
 
   sending_msg.opts.reply_markup = {
     inline_keyboard: [
-      [{ text: 'Назад', callback_data: `account_${service}` }],
+      [{ text: 'Назад', callback_data: service === '' ? `account` : service === '' ? `account` : `account_${service}` }],
       [{ text: 'Главная', callback_data: 'main' }],
     ],
   };

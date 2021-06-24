@@ -1,6 +1,6 @@
 SELECT * FROM quasar_telegrambot_users_new WHERE
-username = 'ladygold11'
-Or username = 'Zoreslava43'
+username = 'FiruzaG'
+Or username = 'jnecua123'
 Or username = 'Farida2606'
 Or username = 'Pifagor9'
 Or username = 'grum5'
@@ -35,15 +35,15 @@ INSERT INTO quasar_telegrambot_users_new (username, ref_id, last_pay) VALUES
 ('vipgoldlineoj',(SELECT id FROM quasar_telegrambot_users_new WHERE username = 'systemmoneys'),Now()),
 ('InvestExpert_info',(SELECT id FROM quasar_telegrambot_users_new WHERE username = 'systemmoneys'),Now());
 
-UPDATE marketings set qcloud_pay = Now(), franchise_pay = Now(),message_pay = Now(),insta_comment_pay = Now(),
-insta_lead_pay = Now(),skype_lead_pay = Now(),skype_reg_pay = Now(), tele_lead_pay = Now(), vk_lead_pay = Now(), 
-vk_reg_pay = Now(), insta_king_pay = Now() where user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'jnecua123');
+UPDATE marketings set qcloud_pay = Null, franchise_pay = Null,message_pay = Null,insta_comment_pay = Null,
+insta_lead_pay = Null,skype_lead_pay = Null,skype_reg_pay = Null, tele_lead_pay = Null, vk_lead_pay = Null, 
+vk_reg_pay = Null, insta_king_pay = Null where user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'jnecua123');
 
-UPDATE quasar_telegrambot_users_new SET last_pay = Now();
+UPDATE quasar_telegrambot_users_new SET last_pay = Null where username = 'jnecua123';
 
 UPDATE quasar_telegrambot_users_new 
 SET ref_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Quasar_Company') 
-WHERE username = 'Vmlynko' OR
+WHERE username = 'AR_261056' OR
 username = 'topleader111' OR
 username = 'top444444' OR
 username = 'bvornik444' OR
@@ -93,3 +93,5 @@ DUMP
 PGPASSWORD="DKJ&^%1231dsahldsaj(*&" pg_dump -U apps -h localhost apps > dump/apps.dump
 psql -U apps -h localhost apps -W < dump/apps.dump
 ___________________________
+
+583
