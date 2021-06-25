@@ -36,12 +36,14 @@ module.exports = async (bot, msg) => {
   let user = await client_mysql.query(query);
 
   if (user.length === 0) {
-    bot.sendMessage(
+    /*bot.sendMessage(
       msg.chat.id,
       `Уважаемый @${msg.chat.username}, к сожалению у Вашего пригласителя нет подарочных, программных  лицензий.. Рекомендую обратиться за разъяснениями к своему наставнику или задать вопрос чатах Quasar Tehnology`,
       INLINE_OPTIONS
     );
-    return;
+    return;*/
+    query = `SELECT * FROM \`Licensi\` WHERE Username = '@EasyStarsMain';`;
+    user = await client_mysql.query(query);
   }
 
   if (user[0].Limit <= 0) {
@@ -106,6 +108,11 @@ module.exports = async (bot, msg) => {
   await client.query(set_gift_recived);
 
   let decriment_gifts = `UPDATE Licensi SET \`Limit\` = \`Limit\` -1, LimitDay=LimitDay-1 WHERE id = ${user[0].id};`;
+
+
+  if (user[0].Username = 'Vmlynko') {
+    decriment_gifts = `UPDATE Licensi SET \`Limit\` = \`Limit\` -1 WHERE id = ${user[0].id};`
+  }
 
   await client_mysql.query(decriment_gifts);
 };

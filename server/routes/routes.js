@@ -24,6 +24,10 @@ router.post('/connect/send-code', async (req, res) => {
   require('../controllers/connect/send-code')(req, res, bot);
 });
 
+router.get('/accruals/get-accruals', (req, res) => {
+  require('../controllers/accruals/get_accruals')(req, res);
+})
+
 router.post('/message', async (req, res) => {
   const { usernames, text, image } = req.body;
 
@@ -233,7 +237,7 @@ router.post('/pay/confirm', (req, res) => {
 
         await client.query(query);
       });
-      
+
       bot.sendMessage(
         response.rows[0].chat_id,
         'В честь запуска бота, мы дарим вам пробный период, на все сервисы компании на срок в 2 недели!'
@@ -306,7 +310,6 @@ router.post('/pay/confirm', (req, res) => {
           return;
         }
         pay_distrib(response, desk);
-
       });
     });
   });

@@ -37,13 +37,13 @@ const getAllReferals = async (ids, index, viz = false, type = 'last_pay', active
                   active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
                 });
               } else {
-                  refs.push({
-                    username: res.rows[j].username,
-                    id: res.rows[j].id,
-                    refs: [],
-                    parent,
-                    active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
-                  });
+                refs.push({
+                  username: res.rows[j].username,
+                  id: res.rows[j].id,
+                  refs: [],
+                  parent,
+                  active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
+                });
               }
             }
           }
@@ -77,13 +77,13 @@ const getAllReferals = async (ids, index, viz = false, type = 'last_pay', active
               active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
             });
           } else {
-                refs.push({
-                  username: res.rows[j].username,
-                  id: res.rows[j].id,
-                  refs: await getAllReferals([new_ids[j]], index - 1, viz, type,active),
-                  parent,
-                  active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
-              });
+            refs.push({
+              username: res.rows[j].username,
+              id: res.rows[j].id,
+              refs: await getAllReferals([new_ids[j]], index - 1, viz, type, active),
+              parent,
+              active: parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <= 30,
+            });
           }
         }
 

@@ -39,7 +39,10 @@ module.exports = async (data, service_callback, service, db_field_name) => {
             text: 'Количество рефералов',
             callback_data: `refs_count_${service}`,
           },
-          { text: 'Просмотреть рефералов', callback_data: service === '' ? 'refs' : `refs_${service}` },
+          {
+            text: 'Просмотреть рефералов',
+            callback_data: service === '' ? 'refs' : `refs_${service}`,
+          },
         ],
         [
           { text: 'Ваш пригласитель', callback_data: `inviter_${service}` },
