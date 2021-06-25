@@ -31,10 +31,7 @@ module.exports = async (action, data) => {
     return service_check(data, 'pay_autopilot', 'Autopilot', 'autopilot_pay');
   } else if (action === 'service_insta_king') {
     return service_check(data, 'pay_insta_king', 'Insta King', 'insta_king_pay');
-  } 
-  
-  
-  else if (action === 'pay_connect') {
+  } else if (action === 'pay_connect') {
     const res = await pay(data.msg, data.bot);
     if (res !== true) {
       sending_msg.text = res;

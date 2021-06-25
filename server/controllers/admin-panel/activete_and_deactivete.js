@@ -1,6 +1,9 @@
+const services = require('../../../commands/services');
 const client = require('../../../db');
+const pay_distrib = require('../../../utils/pay_distrib');
+const pay_distrip = require('../../../utils/pay_distrib')
 
-module.exports = (req, res, date) => {
+module.exports = async (req, res, date) => {
   var { usernames, services } = req.body;
 
   var query;
@@ -49,6 +52,40 @@ module.exports = (req, res, date) => {
     }
 
     client.query(query);
+  };
+
+  if (date === 'Null') {
+    return res.send('ok');
+  }
+
+  for (let i = 0; i < usernames.length; i++) {
+    const get_id_query = `SELECT id FROM quasar_telegrambot_users_new WHERE username = '${usernames[i]}'`;
+
+    let res = await client.query(get_id_query);
+
+    if (res.rowCount === 0) {
+      continue
+    }
+
+    let services_list = Object.keys(services)
+
+    let activate_services = [];
+
+    for (let j = 0; j < services_list.length; j++) {
+      if (services[services_list[j]]) {
+        if (services_list[j] === 'connect') {
+          services_list[j] = 'last_pay'
+        } else {
+          services_list[j] += '_pay'
+        }
+        activate_services.push(services_list[j])
+      }
+    }
+
+
+    for (let j = 0; j < activate_services.length; j++) {
+      pay_distrib(res, activate_services[j]);
+    }
   }
 
   return res.send('ok');

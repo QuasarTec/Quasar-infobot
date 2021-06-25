@@ -1,5 +1,5 @@
 SELECT * FROM quasar_telegrambot_users_new WHERE
-username = 'FiruzaG'
+username = 'inna0312'
 Or username = 'jnecua123'
 Or username = 'Farida2606'
 Or username = 'Pifagor9'
@@ -73,7 +73,7 @@ INSERT INTO payments_history (marketing, amount, user_id) VALUES ('franchise_pay
 
 INSERT INTO marketings (user_id) VALUES (583);
 
-UPDATE quasar_telegrambot_users_new SET sign = 'test' WHERE username = 'jnecua123';
+UPDATE quasar_telegrambot_users_new SET sign = 'test' WHERE username = 'inna0312';
 
 CREATE TABLE chats (
     id serial primary key,

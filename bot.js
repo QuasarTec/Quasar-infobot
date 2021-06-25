@@ -210,7 +210,6 @@ bot.on('callback_query', async (callbackQuery) => {
     link = await commands.refs.downRefferals(msg, true);
     let opts = {};
     let text = `Уважаемый партнёр, для просмотра личной структуры нажмите  нужную Вам кнопку в меню`;
-    console.log(action)
     if (action.split('_').length > 1) {
       service = action.split('_');
 
@@ -222,17 +221,22 @@ bot.on('callback_query', async (callbackQuery) => {
       opts.reply_markup = JSON.stringify({
         inline_keyboard: [
           [{ text: 'Визуальный просмотр', url: link }],
-          [{ text: 'Показать списком', callback_data: `refs_list_${service}` }, { text: 'Показать списком активных', callback_data: `active_refs_list_${service}` }],
+          [
+            { text: 'Показать списком', callback_data: `refs_list_${service}` },
+            { text: 'Показать списком активных', callback_data: `active_refs_list_${service}` },
+          ],
           [{ text: 'Назад', callback_data: service === '' ? `account` : `account_${service}` }],
           [{ text: 'Главное меню', callback_data: 'main' }],
         ],
       });
     } else {
-
       opts.reply_markup = JSON.stringify({
         inline_keyboard: [
           [{ text: 'Визуальный просмотр', url: link }],
-          [{ text: 'Показать списком', callback_data: 'refs_list'}, { text: 'Показать списком активных', callback_data: `active_refs_list` }],
+          [
+            { text: 'Показать списком', callback_data: 'refs_list' },
+            { text: 'Показать списком активных', callback_data: `active_refs_list` },
+          ],
           [{ text: 'Назад', callback_data: 'account' }],
           [{ text: 'Главное меню', callback_data: 'main' }],
         ],
@@ -242,16 +246,22 @@ bot.on('callback_query', async (callbackQuery) => {
     let img = fs.readFileSync(`${__dirname}/commands/static/img/refs.jpg`);
     await bot.sendPhoto(msg.chat.id, img);
     bot.sendMessage(msg.chat.id, text, opts);
-  } else if (action === 'refs_list' || action.split('_')[0] === 'refs' || (action.split('_')[0] === 'active' && action.split('_')[1] === 'refs')) {
+  } else if (
+    action === 'refs_list' ||
+    action.split('_')[0] === 'refs' ||
+    (action.split('_')[0] === 'active' && action.split('_')[1] === 'refs')
+  ) {
+    let text = '';
+    let opts = {}
     if (action.split('_')[0] === 'active') {
       let service = action.split('_');
 
-      service.shift()
-      service.shift()
-      service.shift()
+      service.shift();
+      service.shift();
+      service.shift();
 
       service = service.join('_');
-      
+
       if (service === '') {
         service = 'last_pay';
       }
@@ -259,7 +269,6 @@ bot.on('callback_query', async (callbackQuery) => {
       text = await commands.refs.downRefferals(msg, false, service, true);
     } else {
       text = await commands.refs.downRefferals(msg);
-
     }
 
     if (action.split('_').length > 1) {
@@ -270,7 +279,6 @@ bot.on('callback_query', async (callbackQuery) => {
 
       if (action.split('_')[0] === 'active') {
         service.shift();
-        
       }
 
       service = service.join('_');
@@ -289,6 +297,7 @@ bot.on('callback_query', async (callbackQuery) => {
         ],
       });
     }
+    bot.sendMessage(msg.chat.id, text, opts)
   } else if (action === 'ref_link' || action.split('_')[0] === 'ref') {
     const params = {
       action: 'get',
@@ -302,7 +311,7 @@ bot.on('callback_query', async (callbackQuery) => {
         `https://api.easy-stars.ru/api/query/user/get?action=${params.action}&token=${params.token}&by=${params.by}&by_text=${params.by_text}`
       )
       .catch((err) => console.error(err));
-    if (response.data.status === 'error') {
+    if (response.data.status === 'error' || response === undefined) {
       text = `Пользователя с ником @${params.by_text} на сайте https://easy-stars.ru не найдено.\nПроверьте ники, на идентичность.\nЕсли вы уверены, что зарегестрировались, под вашим телеграм ником, обратитесь за помощью на сайте`;
     } else {
       if (response.data.result.User.referral_link === false) {
@@ -322,7 +331,14 @@ bot.on('callback_query', async (callbackQuery) => {
       service = service.join('_');
 
       opts.reply_markup = JSON.stringify({
-        inline_keyboard: [[{ text: 'Личный кабинет', callback_data: service === '' ? `account` : `account_${service}` }]],
+        inline_keyboard: [
+          [
+            {
+              text: 'Личный кабинет',
+              callback_data: service === '' ? `account` : `account_${service}`,
+            },
+          ],
+        ],
       });
     } else {
       opts.reply_markup = JSON.stringify({
@@ -537,7 +553,9 @@ bot.on('callback_query', async (callbackQuery) => {
       service = service.join('_');
 
       opts.reply_markup = JSON.stringify({
-        inline_keyboard: [[{ text: 'Назад', callback_data: service === '' ? `account` : `account_${service}` }]],
+        inline_keyboard: [
+          [{ text: 'Назад', callback_data: service === '' ? `account` : `account_${service}` }],
+        ],
       });
     } else {
       opts.reply_markup = {
@@ -578,7 +596,9 @@ bot.on('callback_query', async (callbackQuery) => {
         service = service.join('_');
 
         opts.reply_markup = JSON.stringify({
-          inline_keyboard: [[{ text: 'Назад', callback_data: service === '' ? `account` : `account_${service}` }]],
+          inline_keyboard: [
+            [{ text: 'Назад', callback_data: service === '' ? `account` : `account_${service}` }],
+          ],
         });
       } else {
         opts.reply_markup = {

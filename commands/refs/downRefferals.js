@@ -10,7 +10,7 @@ const transformRefs = (refs, index = 9) => {
       value: refs[i].username,
       level: 9 - index,
       parent: refs[i].parent,
-      active: refs[i].active
+      active: refs[i].active,
     });
   }
 
@@ -26,7 +26,7 @@ const transformRefs = (refs, index = 9) => {
               value: r[j].value,
               level: r[j].level,
               parent: r[j].parent,
-              active: r[j].active
+              active: r[j].active,
             });
             continue;
           }
@@ -34,7 +34,7 @@ const transformRefs = (refs, index = 9) => {
             value: r[j],
             level: 9 - index,
             parent: r[j].parent,
-            active: r[j].active
+            active: r[j].active,
           });
         }
       }
@@ -86,7 +86,7 @@ module.exports = async (msg, link = false, services = 'last_pay', active = false
     let actived_refs = [];
     for (let i = 0; i < refs.length; i++) {
       if (refs[i].active) {
-        actived_refs.push(refs[i])
+        actived_refs.push(refs[i]);
       }
     }
     refs = actived_refs;
