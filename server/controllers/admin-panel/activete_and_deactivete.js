@@ -1,7 +1,7 @@
 const services = require('../../../commands/services');
 const client = require('../../../db');
 const pay_distrib = require('../../../utils/pay_distrib');
-const pay_distrip = require('../../../utils/pay_distrib')
+const pay_distrip = require('../../../utils/pay_distrib');
 
 module.exports = async (req, res, date) => {
   var { usernames, services } = req.body;
@@ -52,7 +52,7 @@ module.exports = async (req, res, date) => {
     }
 
     client.query(query);
-  };
+  }
 
   if (date === 'Null') {
     return res.send('ok');
@@ -64,24 +64,23 @@ module.exports = async (req, res, date) => {
     let res = await client.query(get_id_query);
 
     if (res.rowCount === 0) {
-      continue
+      continue;
     }
 
-    let services_list = Object.keys(services)
+    let services_list = Object.keys(services);
 
     let activate_services = [];
 
     for (let j = 0; j < services_list.length; j++) {
       if (services[services_list[j]]) {
         if (services_list[j] === 'connect') {
-          services_list[j] = 'last_pay'
+          services_list[j] = 'last_pay';
         } else {
-          services_list[j] += '_pay'
+          services_list[j] += '_pay';
         }
-        activate_services.push(services_list[j])
+        activate_services.push(services_list[j]);
       }
     }
-
 
     for (let j = 0; j < activate_services.length; j++) {
       pay_distrib(res, activate_services[j]);

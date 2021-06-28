@@ -156,7 +156,7 @@ module.exports = async (action, data) => {
     service = service.join('_');
 
     if (action === 'accruals') {
-      service = 'connect'
+      service = 'connect';
     }
 
     return await require('../../commands/accruals/accruals')(data, service);

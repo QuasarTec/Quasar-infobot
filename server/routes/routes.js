@@ -26,7 +26,7 @@ router.post('/connect/send-code', async (req, res) => {
 
 router.get('/accruals/get-accruals', (req, res) => {
   require('../controllers/accruals/get_accruals')(req, res);
-})
+});
 
 router.post('/message', async (req, res) => {
   const { usernames, text, image } = req.body;
@@ -290,7 +290,10 @@ router.post('/pay/confirm', (req, res) => {
 
     let chat_id = inviter_id.rows[0].chat_id;
 
-    bot.sendMessage(chat_id, `По вашей реферальной ссылке был заргестрирован пользователь @${response.rows[0].username}`)
+    bot.sendMessage(
+      chat_id,
+      `По вашей реферальной ссылке был заргестрирован пользователь @${response.rows[0].username}`
+    );
 
     query = `SELECT id FROM quasar_telegrambot_users_new WHERE username='${inviter}'`;
 

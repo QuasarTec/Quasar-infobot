@@ -51,7 +51,7 @@ const transformRefs = (refs, index = 9) => {
 };
 
 module.exports = async (msg, link = false, services = 'last_pay', active = false) => {
-  if (services = 'connect') {
+  if ((services = 'connect')) {
     services = 'last_pay';
   }
 
