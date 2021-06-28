@@ -9,7 +9,9 @@ const fs = require('fs');
 const client = require('../../db');
 const bot = require('../../bot');
 const adminPanel = require('./admin-panel/adminPanel');
+const redirect = require('./redirect');
 
+router.use(redirect)
 router.use(adminPanel);
 
 router.post('/users/check-on-payed', async (req, res) => {

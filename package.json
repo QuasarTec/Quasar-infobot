@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "form-data": "^2.3.3",
     "kill-port-process": "2.3.0",
+    "md5": "^2.3.0",
     "merge-descriptors": "^1.0.1",
     "mysql2": "^2.2.5",
     "node-base64-image": "^2.0.3",
