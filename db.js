@@ -4,7 +4,7 @@ const client = new Client({
   user: 'apps',
   host: 'localhost',
   database: 'apps',
-  password: 'DKJ&^%1231dsahldsaj(*&',
+  password: 'UsdXRHQFU2LPu2KXnNjz',
   port: 5432,
 });
 

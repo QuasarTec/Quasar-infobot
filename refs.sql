@@ -98,7 +98,7 @@ ___________________________
 
 DUMP
 PGPASSWORD="DKJ&^%1231dsahldsaj(*&" pg_dump -U apps -h localhost apps > dump/apps.dump
-psql -U apps -h localhost apps -W < dump/apps.dump
+psql -U apps -h database-apps.cluster-c0w0nxnsuhxv.eu-north-1.rds.amazonaws.com apps -W < dump/apps.dump
 ___________________________
 
 SELECT SUM(amount) AS total FROM payments_history WHERE
