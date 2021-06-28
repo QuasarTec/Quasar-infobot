@@ -8,7 +8,7 @@ module.exports = (response, type) => {
 
   if (type === 'last_pay') {
     levles = 9;
-    amount = 675;
+    amount = 8;
   } else if (type === 'qcloud_pay') {
     levles = 9;
     amount = 495;
@@ -50,7 +50,7 @@ module.exports = (response, type) => {
   getAllInviters(response.rows[0].id, levels, type).then(async (inviters) => {
     inviters = inviters.filter((inviter) => inviter.id !== response.rows[0].id);
     for (let i = 0; i < inviters.length; i++) {
-      add_accrual(inviters[i].username, +(amount / inviters.length).toFixed(2), type);
+      add_accrual(inviters[i].username, +(amount / levles).toFixed(2) - 0.01, type);
     }
 
     /*await axios({

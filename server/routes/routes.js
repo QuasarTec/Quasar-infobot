@@ -280,6 +280,18 @@ router.post('/pay/confirm', (req, res) => {
       inviter = inviter.substring(1);
     }
 
+    let get_inviter_id = `SELECT chat_id FROM quasar_telegrambot_users_new WHERE Lower(username) = '${inviter.toLowerCase()}'`;
+
+    let inviter_id = await client.query(get_inviter_id);
+
+    if (inviter_id.rowCount === 0) {
+      return;
+    }
+
+    let chat_id = inviter_id.rows[0].chat_id;
+
+    bot.sendMessage(chat_id, `По вашей реферальной ссылке был заргестрирован пользователь @${response.rows[0].username}`)
+
     query = `SELECT id FROM quasar_telegrambot_users_new WHERE username='${inviter}'`;
 
     client.query(query, async (err, res) => {
