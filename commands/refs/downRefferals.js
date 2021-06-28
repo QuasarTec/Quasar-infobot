@@ -51,6 +51,10 @@ const transformRefs = (refs, index = 9) => {
 };
 
 module.exports = async (msg, link = false, services = 'last_pay', active = false) => {
+  if (services = 'connect') {
+    services = 'last_pay';
+  }
+
   let query = `SELECT username FROM quasar_telegrambot_users_new WHERE chat_id = ${msg.chat.id};`;
 
   let res = await client.query(query);

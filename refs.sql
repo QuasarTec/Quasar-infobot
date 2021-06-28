@@ -1,11 +1,18 @@
-SELECT * FROM quasar_telegrambot_users_new WHERE
-username = 'inna0312'
-Or username = 'jnecua123'
-Or username = 'Farida2606'
-Or username = 'Pifagor9'
-Or username = 'grum5'
-Or username = 'Popovi52'
-Or username = 'AlexandrZhaaa'
+SELECT id FROM quasar_telegrambot_users_new WHERE
+username = 'topleader111'
+Or username = 'top444444'
+Or username = 'bvornik444'
+Or username = 'asia0001'
+Or username = 'EasyStarsMain'
+Or username = 'Quasar_Company'
+Or username = 'Lead_4'
+Or username = 'VOVO4KA1224'
+Or username = 'systemmoneys'
+Or username = 'Kdan_dev'
+Or username = 'ShoSupport'
+Or username = 'BeverleySok'
+Or username = 'ImyaaPolzovatelya'
+Or username = 'LevShma'
 
 SELECT username, id, ref_id FROM quasar_telegrambot_users_new WHERE
 username = 'Nadia_Magia'
@@ -67,7 +74,7 @@ ALTER TABLE marketings ADD COLUMN tele_lead_pay timestamp;
 ALTER TABLE marketings ADD COLUMN vk_lead_pay timestamp;
 ALTER TABLE marketings ADD COLUMN vk_reg_pay timestamp;
 
-SELECT SUM(amount) AS total FROM payments_history;
+SELECT SUM(amount) AS total FROM payments_history WHERE currency = 'USD';
 
 INSERT INTO payments_history (marketing, amount, user_id) VALUES ('franchise_pay', 10.57, (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'jnecua123'));
 
@@ -94,4 +101,33 @@ PGPASSWORD="DKJ&^%1231dsahldsaj(*&" pg_dump -U apps -h localhost apps > dump/app
 psql -U apps -h localhost apps -W < dump/apps.dump
 ___________________________
 
-583
+SELECT SUM(amount) AS total FROM payments_history WHERE
+id = 180
+OR id = 661
+OR id = 588
+OR id = 595
+OR id = 589
+OR id = 582
+OR id = 108
+OR id = 598
+OR id = 192
+OR id = 586
+OR id = 587
+OR id = 596
+OR id = 16
+OR id = 67
+
+ 598
+ 661
+ 588
+ 595
+ 589
+ 582
+ 108
+ 180
+ 192
+ 586
+ 587
+ 596
+  16
+  67
