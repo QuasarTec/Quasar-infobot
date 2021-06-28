@@ -97,5 +97,8 @@ module.exports = async (msg, bot) => {
 
   let chat_id = inviter_id.rows[0].chat_id;
 
-  bot.sendMessage(chat_id, `По вашей реферальной ссылке был заргестрирован пользователь @${msg.chat.username}`)
+  bot.sendMessage(
+    chat_id,
+    `По вашей реферальной ссылке был заргестрирован пользователь @${msg.chat.username}`
+  );
 };

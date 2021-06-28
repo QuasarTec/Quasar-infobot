@@ -252,7 +252,7 @@ bot.on('callback_query', async (callbackQuery) => {
     (action.split('_')[0] === 'active' && action.split('_')[1] === 'refs')
   ) {
     let text = '';
-    let opts = {}
+    let opts = {};
     if (action.split('_')[0] === 'active') {
       let service = action.split('_');
 
@@ -297,7 +297,7 @@ bot.on('callback_query', async (callbackQuery) => {
         ],
       });
     }
-    bot.sendMessage(msg.chat.id, text, opts)
+    bot.sendMessage(msg.chat.id, text, opts);
   } else if (action === 'ref_link' || action.split('_')[0] === 'ref') {
     const params = {
       action: 'get',

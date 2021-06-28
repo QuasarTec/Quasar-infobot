@@ -109,9 +109,8 @@ module.exports = async (bot, msg) => {
 
   let decriment_gifts = `UPDATE Licensi SET \`Limit\` = \`Limit\` -1, LimitDay=LimitDay-1 WHERE id = ${user[0].id};`;
 
-
-  if (user[0].Username = 'Vmlynko') {
-    decriment_gifts = `UPDATE Licensi SET \`Limit\` = \`Limit\` -1 WHERE id = ${user[0].id};`
+  if ((user[0].Username = 'Vmlynko')) {
+    decriment_gifts = `UPDATE Licensi SET \`Limit\` = \`Limit\` -1 WHERE id = ${user[0].id};`;
   }
 
   await client_mysql.query(decriment_gifts);

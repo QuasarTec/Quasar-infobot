@@ -1,13 +1,13 @@
 const client = require('../db.js');
 
 const new_accruals = async () => {
-	let query = `SELECT username FROM quasar_telegrambot_users_new WHERE last_pay < Now()`;
+  let query = `SELECT username FROM quasar_telegrambot_users_new WHERE last_pay < Now()`;
 
-	let res = await client.query(query);
+  let res = await client.query(query);
 
-	for (let i = 0; i < res.rowCount; i++) {
-		console.log("@"+res.rows[i].username);
-	}
-}
+  for (let i = 0; i < res.rowCount; i++) {
+    console.log('@' + res.rows[i].username);
+  }
+};
 
-new_accruals()
+new_accruals();
