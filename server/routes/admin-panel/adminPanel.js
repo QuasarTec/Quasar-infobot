@@ -72,7 +72,11 @@ router.get('/admin-panel/users/newsletters', async (req, res) => {
 });
 
 router.post('/admin-panel/users/activate', (req, res) => {
+<<<<<<< HEAD
   require('../../controllers/admin-panel/activete_and_deactivete')(req, res, new Date());
+=======
+  require('../../controllers/admin-panel/activete_and_deactivete')(req, res, 'Now()');
+>>>>>>> 62e31abc236f76d63cbfe1fbe849ada25c9d7725
 });
 
 router.post('/admin-panel/users/deactivate', (req, res) => {
