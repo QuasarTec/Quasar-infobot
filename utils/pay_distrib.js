@@ -5,10 +5,12 @@ const add_accrual = require('./add_accrual');
 
 module.exports = (response, type) => {
   let levels, amount;
+  let curr = 'rub';
 
   if (type === 'last_pay') {
     levles = 9;
     amount = 8;
+    curr = 'usd';
   } else if (type === 'qcloud_pay') {
     levles = 9;
     amount = 495;
@@ -47,20 +49,24 @@ module.exports = (response, type) => {
     amount = 295;
   }
 
+  let data = {};
+
   getAllInviters(response.rows[0].id, levels, type).then(async (inviters) => {
     inviters = inviters.filter((inviter) => inviter.id !== response.rows[0].id);
     for (let i = 0; i < inviters.length; i++) {
+      data[inviters[i].username] = {};
+      data[inviters[i].username][curr] = +(amount / levles).toFixed(2) - 0.01;
       add_accrual(inviters[i].username, +(amount / levles).toFixed(2) - 0.01, type);
     }
 
-    /*await axios({
-            method: "post",
-            url: "https://api.easy-stars.ru/api/pay/add_balance",
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            data: `token=${encodeURIComponent(token)}&json=${JSON.stringify(data)}`
-        }).catch((err) => {
-            console.error(err)
-        })*/
+    await axios({
+      method: 'post',
+      url: 'https://api.easy-stars.ru/api/pay/add_balance',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      data: `token=${encodeURIComponent(token)}&json=${JSON.stringify(data)}`,
+    }).catch((err) => {
+      console.error(err);
+    });
   });
   /*axios({
             url: 'https://api.easy-stars.ru/api/query/stars',

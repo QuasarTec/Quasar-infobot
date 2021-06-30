@@ -11,7 +11,7 @@ const bot = require('../../bot');
 const adminPanel = require('./admin-panel/adminPanel');
 const redirect = require('./redirect');
 
-router.use(redirect)
+router.use(redirect);
 router.use(adminPanel);
 
 router.post('/users/check-on-payed', async (req, res) => {
@@ -150,9 +150,13 @@ router.post('/pay/confirm', (req, res) => {
     });
 
     if (desk === 'last_pay') {
-      query = `UPDATE quasar_telegrambot_users_new SET last_pay = Now(), sign = Null WHERE chat_id = '${response.rows[0].chat_id}'`;
+      query = `UPDATE quasar_telegrambot_users_new SET last_pay = '${new Date().toUTCString()}', sign = Null WHERE chat_id = '${
+        response.rows[0].chat_id
+      }'`;
     } else {
-      query = `UPDATE marketings SET ${desk} = Now() WHERE user_id = ${response.rows[0].id};`;
+      query = `UPDATE marketings SET ${desk} = '${new Date().toUTCString()}' WHERE user_id = ${
+        response.rows[0].id
+      };`;
     }
 
     client.query(query, (err) => {

@@ -173,7 +173,7 @@ const checkLicensesPerDay = async (limitDay, limitDate, promoType, id) => {
       licenses = 40;
     }
 
-    updateLimitDate = `UPDATE Licensi SET LimitDay = ${licenses}, LimitDate = Now() WHERE id = ${id}`;
+    updateLimitDate = `UPDATE Licensi SET LimitDay = ${licenses}, LimitDate = '${new Date().toUTCString()}' WHERE id = ${id}`;
 
     client_mysql.query(updateLimitDate);
 

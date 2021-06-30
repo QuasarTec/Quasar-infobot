@@ -23,7 +23,9 @@ module.exports = (req, res) => {
 
     const query = `INSERT INTO Licensi (\`Username\`, \`Timeset\`, \`Activate\`, \`ActivateLicens\`, \`LimitDay\`, \`Limit\`, \`LimitDate\`, \`PromoType\`) VALUES ('${el}', '${new Date()
       .toJSON()
-      .slice(0, 10)}', 1, true, ${limitDay}, ${licenses}, Now(), ${type[1]});`;
+      .slice(0, 10)}', 1, true, ${limitDay}, ${licenses}, '${new Date().toUTCString()}', ${
+      type[1]
+    });`;
 
     client.query(query);
   });

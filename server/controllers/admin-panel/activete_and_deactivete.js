@@ -21,7 +21,9 @@ module.exports = async (req, res, date) => {
   }
 
   if (services.connect) {
-    query = `UPDATE quasar_telegrambot_users_new SET last_pay = ${date}`;
+    query = `UPDATE quasar_telegrambot_users_new SET last_pay = ${
+      date === 'Null' ? 'Null' : `'${date}'`
+    }`;
 
     query += ' WHERE ';
 

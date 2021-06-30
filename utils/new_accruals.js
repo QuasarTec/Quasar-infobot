@@ -1,7 +1,7 @@
 const client = require('../db.js');
 
 const new_accruals = async () => {
-  let query = `SELECT username FROM quasar_telegrambot_users_new WHERE last_pay < Now()`;
+  let query = `SELECT username FROM quasar_telegrambot_users_new WHERE last_pay < '${new Date().toUTCString()}'`;
 
   let res = await client.query(query);
 
