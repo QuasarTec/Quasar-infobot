@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 SELECT * FROM quasar_telegrambot_users_new WHERE
 username = 'oleg3857'
 Or username = 'vadim8967'
@@ -7,16 +7,6 @@ Or username = 'grid848'
 Or username = 'kostj974'
 Or username = 'burov304'
 Or username = 'avd157'
-=======
-SELECT id FROM quasar_telegrambot_users_new WHERE
-username = 'topleader111'
-Or username = 'top444444'
-Or username = 'bvornik444'
-Or username = 'asia0001'
-Or username = 'EasyStarsMain'
-Or username = 'Quasar_Company'
-Or username = 'Lead_4'
->>>>>>> 62e31abc236f76d63cbfe1fbe849ada25c9d7725
 Or username = 'VOVO4KA1224'
 Or username = 'systemmoneys'
 Or username = 'Kdan_dev'
@@ -24,10 +14,6 @@ Or username = 'ShoSupport'
 Or username = 'BeverleySok'
 Or username = 'ImyaaPolzovatelya'
 Or username = 'LevShma'
-<<<<<<< HEAD
-
-=======
->>>>>>> 62e31abc236f76d63cbfe1fbe849ada25c9d7725
 
 SELECT username, id, ref_id FROM quasar_telegrambot_users_new WHERE
 id = (SELECT ref_id FROM quasar_telegrambot_users_new WHERE username = 'oleg3857')
@@ -95,20 +81,7 @@ INSERT INTO payments_history (marketing, amount, user_id) VALUES ('franchise_pay
 
 INSERT INTO marketings (user_id) VALUES (583);
 
-<<<<<<< HEAD
 UPDATE quasar_telegrambot_users_new SET sign = 'test' WHERE username = 'Quasar_Company';
-
-@blin935
-@filimon328
-@klim52
-@grid848
-
-@kostj974
-@burov304
-@avd157
-=======
-UPDATE quasar_telegrambot_users_new SET sign = 'test' WHERE username = 'inna0312';
->>>>>>> 62e31abc236f76d63cbfe1fbe849ada25c9d7725
 
 CREATE TABLE chats (
     id serial primary key,
@@ -125,13 +98,9 @@ INSERT INTO newsletters (chat_ids, msg_text, img, send_time) VALUES ('{"-5584704
 ___________________________
 
 DUMP
-<<<<<<< HEAD
 PGPASSWORD="admin12345" pg_dump -U synapse_user -h 127.0.0.1 synapse > dump/apps_synapse.dump
 psql -U synapse_user -h apps-database.cluster-c0w0nxnsuhxv.eu-north-1.rds.amazonaws.com synapse -W < dump/apps_synapse.dump
-=======
-PGPASSWORD="DKJ&^%1231dsahldsaj(*&" pg_dump -U apps -h localhost apps > dump/apps.dump
-psql -U apps -h database-apps.cluster-c0w0nxnsuhxv.eu-north-1.rds.amazonaws.com apps -W < dump/apps.dump
->>>>>>> 62e31abc236f76d63cbfe1fbe849ada25c9d7725
+
 ___________________________
 
 SELECT SUM(amount) AS total FROM payments_history WHERE
@@ -163,21 +132,3 @@ OR id = 67
  587
  596
   16
-<<<<<<< HEAD
-  67
-
-ALTER TABLE marketings  ALTER COLUMN qcloud_pay TYPE timestamp with time zone;
-ALTER TABLE marketings  ALTER COLUMN franchise_pay TYPE timestamp with time zone;
-ALTER TABLE marketings  ALTER COLUMN message_pay TYPE timestamp with time zone;
-ALTER TABLE marketings  ALTER COLUMN insta_comment_pay TYPE timestamp with time zone;
-ALTER TABLE marketings  ALTER COLUMN insta_lead_pay TYPE timestamp with time zone;
-ALTER TABLE marketings  ALTER COLUMN skype_lead_pay TYPE timestamp with time zone;
-ALTER TABLE marketings  ALTER COLUMN skype_reg_pay TYPE timestamp with time zone;
-ALTER TABLE marketings  ALTER COLUMN tele_lead_pay TYPE timestamp with time zone;
-ALTER TABLE marketings  ALTER COLUMN vk_lead_pay TYPE timestamp with time zone;
-ALTER TABLE marketings  ALTER COLUMN vk_reg_pay TYPE timestamp with time zone;
-ALTER TABLE marketings  ALTER COLUMN insta_king_pay TYPE timestamp with time zone;
-ALTER TABLE marketings  ALTER COLUMN autopilot_pay TYPE timestamp with time zone;
-=======
-  67
->>>>>>> 62e31abc236f76d63cbfe1fbe849ada25c9d7725
