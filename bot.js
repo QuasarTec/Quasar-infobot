@@ -583,7 +583,7 @@ bot.on('callback_query', async (callbackQuery) => {
       .catch((err) => console.error(err));
     if (resp === undefined) return;
     if (resp.data.status === 'error') {
-      options.reply_markup = JSON.stringify({
+      opts.reply_markup = JSON.stringify({
         inline_keyboard: [[{ text: 'Тех. Поддержка', callback_data: 'support' }]],
       });
       text = `Пользователь с ником @${params.by_text}` + not_found;
@@ -952,6 +952,10 @@ const findPayedServces = async (id) => {
   const res = await client.query(query);
 
   let text = '';
+
+  if (res.rowCount = 0) {
+    return '';
+  }
 
   Object.keys(res.rows[0]).forEach((el) => {
     if (

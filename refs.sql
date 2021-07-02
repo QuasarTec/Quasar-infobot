@@ -99,36 +99,13 @@ ___________________________
 
 DUMP
 PGPASSWORD="admin12345" pg_dump -U synapse_user -h 127.0.0.1 synapse > dump/apps_synapse.dump
-psql -U synapse_user -h apps-database.cluster-c0w0nxnsuhxv.eu-north-1.rds.amazonaws.com synapse -W < dump/apps_synapse.dump
+PGPASSWORD="4Y5FvarAv3hT69B" pg_dump -U apps -h matrix-apps.c0w0nxnsuhxv.eu-north-1.rds.amazonaws.com apps > dump/apps.dump
+psql -U synapse_user -h matrix-apps.c0w0nxnsuhxv.eu-north-1.rds.amazonaws.com synapse -W < dump/apps_synapse.dump
 
 ___________________________
 
-SELECT SUM(amount) AS total FROM payments_history WHERE
-id = 180
-OR id = 661
-OR id = 588
-OR id = 595
-OR id = 589
-OR id = 582
-OR id = 108
-OR id = 598
-OR id = 192
-OR id = 586
-OR id = 587
-OR id = 596
-OR id = 16
-OR id = 67
+SELECT * FROM payments_history WHERE
+user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'systemmoneys')
+ORDER BY datetime ASC;
 
- 598
- 661
- 588
- 595
- 589
- 582
- 108
- 180
- 192
- 586
- 587
- 596
-  16
+SELECT sum(amount) AS total FROM payments_history WHERE datetime > '2021-06-27 12:37:42.215118+00';

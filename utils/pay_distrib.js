@@ -1,6 +1,4 @@
 const getAllInviters = require('./findInviters');
-const axios = require('axios');
-const token = 'D!3&#!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%#%@4112dhas91^^^^31';
 const add_accrual = require('./add_accrual');
 
 module.exports = (response, type) => {
@@ -49,24 +47,13 @@ module.exports = (response, type) => {
     amount = 295;
   }
 
-  let data = {};
-
   getAllInviters(response.rows[0].id, levels, type).then(async (inviters) => {
     inviters = inviters.filter((inviter) => inviter.id !== response.rows[0].id);
+
     for (let i = 0; i < inviters.length; i++) {
-      data[inviters[i].username] = {};
-      data[inviters[i].username][curr] = +(amount / levles).toFixed(2) - 0.01;
       add_accrual(inviters[i].username, +(amount / levles).toFixed(2) - 0.01, type);
     }
-
-    await axios({
-      method: 'post',
-      url: 'https://api.easy-stars.ru/api/pay/add_balance',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      data: `token=${encodeURIComponent(token)}&json=${JSON.stringify(data)}`,
-    }).catch((err) => {
-      console.error(err);
-    });
+    
   });
   /*axios({
             url: 'https://api.easy-stars.ru/api/query/stars',

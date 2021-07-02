@@ -3,7 +3,7 @@ const axios = require('axios');
 const token = 'D!3&#!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%#%@4112dhas91^^^^31';
 
 const send_pays = async () => {
-  let query = `SELECT * FROM payments_history;`;
+  let query = `SELECT * FROM payments_history WHERE datetime > '2021-06-29 23:01:01.450158';`;
 
   let res = await client.query(query);
 
