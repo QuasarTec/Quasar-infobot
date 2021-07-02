@@ -953,7 +953,7 @@ const findPayedServces = async (id) => {
 
   let text = '';
 
-  if (res.rowCount = 0) {
+  if (res.rowCount === 0) {
     return '';
   }
 
