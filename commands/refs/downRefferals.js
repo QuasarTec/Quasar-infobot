@@ -60,7 +60,7 @@ module.exports = async (msg, link = false, services = 'last_pay', active = false
   let res = await client.query(query);
 
   if (link) {
-    return `https://matrix.easy-stars.ru/bot/referrals-vizualization?username=${res.rows[0].username}&type=${services}`;
+    return `https://bot.quasaria.ru/bot/referrals-vizualization?username=${res.rows[0].username}&type=${services}`;
   }
 
   await checkOnChatId(msg.chat.username, msg.chat.id);

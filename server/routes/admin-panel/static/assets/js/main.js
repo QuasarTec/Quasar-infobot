@@ -26,7 +26,7 @@ const multi_active = () => {
     return;
   }
 
-  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/activate', options).then((res) => {
+  axios.post('https://bot.quasaria.ru/bot/admin-panel/users/activate', options).then((res) => {
     alert(res.data);
   });
 };
@@ -42,7 +42,7 @@ const all_active = () => {
     return;
   }
 
-  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/activate', options);
+  axios.post('https://bot.quasaria.ru/bot/admin-panel/users/activate', options);
 };
 
 const multi_deactive = () => {
@@ -73,7 +73,7 @@ const multi_deactive = () => {
     return;
   }
 
-  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/deactivate', options);
+  axios.post('https://bot.quasaria.ru/bot/admin-panel/users/deactivate', options);
 };
 
 const all_deactive = () => {
@@ -87,7 +87,7 @@ const all_deactive = () => {
     return;
   }
 
-  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/deactivate', options);
+  axios.post('https://bot.quasaria.ru/bot/admin-panel/users/deactivate', options);
 };
 
 const permutation = () => {
@@ -96,7 +96,7 @@ const permutation = () => {
     token: prompt('Введите токен'),
   };
 
-  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/permutation', options);
+  axios.post('https://bot.quasaria.ru/bot/admin-panel/users/permutation', options);
 };
 
 const getServices = () => {
@@ -162,7 +162,7 @@ const accrual = () => {
     alert('Вы не ввели сумму');
   }
 
-  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/accrual', options);
+  axios.post('https://bot.quasaria.ru/bot/admin-panel/users/accrual', options);
 };
 
 const promo = () => {
@@ -177,7 +177,7 @@ const promo = () => {
     return;
   }
 
-  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/promo', options);
+  axios.post('https://bot.quasaria.ru/bot/admin-panel/users/promo', options);
 };
 
 const getPackage = () => {
@@ -228,7 +228,7 @@ const newsletters = async () => {
     return;
   }
 
-  axios.post('https://matrix.easy-stars.ru/bot/admin-panel/users/newsletters', options);
+  axios.post('https://bot.quasaria.ru/bot/admin-panel/users/newsletters', options);
 };
 
 const getDate = () => {
