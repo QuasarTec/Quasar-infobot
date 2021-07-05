@@ -12,22 +12,24 @@ module.exports = (username, amount, service) => {
 
   client.query(query);
 
-  username = "@" + username;
+  username = '@' + username;
 
   let data = {};
-  data[username] = {}
+  data[username] = {};
   data[username][currency.toLocaleLowerCase()] = amount;
 
-  console.log(data)
+  console.log(data);
 
   axios({
     method: 'post',
     url: 'https://api.easy-stars.ru/api/pay/add_balance',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data: `token=${encodeURIComponent(token)}&json=${JSON.stringify(data)}`,
-  }).catch((err) => {
-    console.error(err);
-  }).then((res) => {
-    console.log(res.data);
   })
+    .catch((err) => {
+      console.error(err);
+    })
+    .then((res) => {
+      console.log(res.data);
+    });
 };

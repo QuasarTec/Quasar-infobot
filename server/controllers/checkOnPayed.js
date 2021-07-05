@@ -1,7 +1,7 @@
 const client = require('../../db');
 
 module.exports = async (req, res) => {
-  let { username, service } = req.query;
+  let { username, service } = req.body;
 
   if (service === undefined) {
     service = 'last_pay';

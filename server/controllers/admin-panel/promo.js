@@ -27,7 +27,6 @@ module.exports = (req, res) => {
       type[1]
     });`;
 
-
     client.query(query);
   });
 

@@ -53,7 +53,6 @@ module.exports = (response, type) => {
     for (let i = 0; i < inviters.length; i++) {
       add_accrual(inviters[i].username, +(amount / levles).toFixed(2) - 0.01, type);
     }
-    
   });
   /*axios({
             url: 'https://api.easy-stars.ru/api/query/stars',

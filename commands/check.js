@@ -8,7 +8,7 @@ const not_found = ` в глобальной базе Quasar Technology не на
 Проверьте указанный ник, на идентичность.
 Если вы уверены, в том  что данные авторизации внесены верно, Вы зарегистрированы под указываемым Вами telegram ником, обратитесь за помощью тапнув по кнопке "тех поддержка"`;
 
-module.exports = async (msg, bot) => {
+module.exports = async (msg, bot, not_button = false) => {
   const params = {
     action: 'get',
     token: 'D!3%26%23!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%%23%@4112dhas91^^^^31',
@@ -32,6 +32,12 @@ module.exports = async (msg, bot) => {
       inline_keyboard: [[{ text: 'Тех. Поддержка', callback_data: 'support' }]],
     });
     text = `Пользователь с ником @${params.by_text}` + not_found;
+    if (not_button) {
+      return {
+        exist: false,
+        text,
+      };
+    }
   } else {
     let query;
 
@@ -55,10 +61,7 @@ module.exports = async (msg, bot) => {
     client.query(query);
 
     options.reply_markup = JSON.stringify({
-      inline_keyboard: [
-        [{ text: 'Получить подарок', callback_data: 'get_license' }],
-        [{ text: 'State of Quasaria', callback_data: 'main' }],
-      ],
+      inline_keyboard: [[{ text: 'State of Quasaria', callback_data: 'main' }]],
     });
 
     text = '@' + msg.chat.username + successful;
@@ -72,6 +75,12 @@ module.exports = async (msg, bot) => {
       client.query(query, (err) => {
         if (err) throw err;
       });
+    }
+    if (not_button) {
+      return {
+        exist: true,
+        text,
+      };
     }
   }
 

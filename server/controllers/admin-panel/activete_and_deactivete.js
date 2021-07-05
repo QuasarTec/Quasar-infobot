@@ -55,7 +55,7 @@ module.exports = async (req, res, date) => {
 
     client.query(query);
   }
-  
+
   if (date === 'Null') {
     return res.send('ok');
   }

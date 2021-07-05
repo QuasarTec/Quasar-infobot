@@ -8,9 +8,9 @@ var options = {
   reply_markup: JSON.stringify({
     inline_keyboard: [
       [{ text: 'О компании', callback_data: 'about' }],
-      [{ text: 'Сервисы и маркетинг', callback_data: 'services' }],
-      [{ text: 'Как зарегистрироваться?', callback_data: 'how_to_register' }],
-      [{ text: 'Проверить регистрацию', callback_data: 'check' }],
+      [{ text: 'Получить подарок', callback_data: 'get_license' }][
+        { text: 'Оплата', callback_data: 'services' }
+      ],
     ],
   }),
 };

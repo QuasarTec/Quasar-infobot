@@ -123,7 +123,26 @@ bot.on('callback_query', async (callbackQuery) => {
     } else {
       query = `INSERT into quasar_telegrambot_news (text) VALUES ('${news.text}')`;
     }
-    await client.query(query);
+
+    client.query(query);
+
+    const getAllUserChatIds = `SELECT chat_id FROM payment_history WHERE chat_id IS NOT NULL;`;
+
+    const { rows } = await client.query(getAllUserChatIds);
+
+    rows.forEach((row) => {
+      if (news.text === undefined) {
+        if (news.caption) {
+          bot.sendPhoto(row.id, news.photo_id, {
+            caption: news.caption,
+          });
+        } else {
+          bot.sendPhoto(row.id, news.photo_id);
+        }
+        return;
+      }
+      bot.sendMessage(row.id, news.text);
+    });
   } else if (action === 'deny') {
     text = 'Рассылка была отменена';
     isSendingMessage = false;
@@ -644,6 +663,19 @@ bot.on('callback_query', async (callbackQuery) => {
       }
     }
   } else if (action === 'services') {
+    let user_exist = await commands.check(msg, bot, true);
+
+    if (!user_exist.exist) {
+      bot.sendMessage(msg.chat.id, user_exist.text, {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: 'Как зарегистрироваться?', callback_data: 'how_to_register' }],
+            [{ text: 'Назад', callback_data: 'start' }],
+          ],
+        },
+      });
+    }
+
     let text = `@${msg.chat.username}, переходя по кнопкам, ты ознакомишься с информацией о стоимости  услуг/маркетингов на сервисы и программные продукты компании Quasar Tehnology`;
     let opts = {};
     opts.reply_markup = {
@@ -695,7 +727,10 @@ bot.on('callback_query', async (callbackQuery) => {
 
     bot.sendMessage(msg.chat.id, caption, {
       reply_markup: {
-        inline_keyboard: [[{ text: 'Назад', callback_data: 'main' }]],
+        inline_keyboard: [
+          [{ text: 'Как зарегистрироваться?', callback_data: 'how_to_register' }],
+          [{ text: 'Назад', callback_data: 'main' }],
+        ],
       },
     });
   } else if (action === 'get_license') {
