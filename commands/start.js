@@ -8,7 +8,8 @@ var options = {
   reply_markup: JSON.stringify({
     inline_keyboard: [
       [{ text: 'О компании', callback_data: 'about' }],
-      [{ text: 'Получить подарок', callback_data: 'get_license' }][
+      [{ text: 'Получить подарок', callback_data: 'get_license' }],
+      [
         { text: 'Оплата', callback_data: 'services' }
       ],
     ],

@@ -2,7 +2,7 @@ const client = require('../db');
 const axios = require('axios');
 const token = 'D!3&#!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%#%@4112dhas91^^^^31';
 
-module.exports = (username, amount, service) => {
+module.exports = (username, amount, service, send_to_site = true) => {
   let currency = 'RUB';
   if (service === 'last_pay') {
     service = 'connect';
@@ -12,24 +12,27 @@ module.exports = (username, amount, service) => {
 
   client.query(query);
 
-  username = '@' + username;
+  if (send_to_site) {
+    username = '@' + username;
 
-  let data = {};
-  data[username] = {};
-  data[username][currency.toLocaleLowerCase()] = amount;
+    let data = {};
+    data[username] = {};
+    data[username][currency.toLocaleLowerCase()] = amount;
 
-  console.log(data);
+    console.log(data);
 
-  axios({
-    method: 'post',
-    url: 'https://api.easy-stars.ru/api/pay/add_balance',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    data: `token=${encodeURIComponent(token)}&json=${JSON.stringify(data)}`,
-  })
-    .catch((err) => {
-      console.error(err);
+    axios({
+      method: 'post',
+      url: 'https://api.easy-stars.ru/api/pay/add_balance',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      data: `token=${encodeURIComponent(token)}&json=${JSON.stringify(data)}`,
     })
-    .then((res) => {
-      console.log(res.data);
-    });
+      .catch((err) => {
+        console.error(err);
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
+  }
+
 };

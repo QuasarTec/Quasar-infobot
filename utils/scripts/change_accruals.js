@@ -20,9 +20,17 @@ const changre_accruals = async () => {
 
       sum.rows[0].total = Number(sum.rows[0].total);
 
-      console.log(sum.rows[0].total, ' ', amount, ' ', (amount - sum.rows[0].total).toFixed(2));
+      let toAdd = (amount - sum.rows[0].total).toFixed(2)
+
+      add_to_db(toAdd, username);
     });
   });
 };
+
+const add_to_db = (toAdd, username) => {
+  const query = `INSERT INTO payments_history (user_id, amount, currency) VALUES ((SELECT id FROM quasar_telegrambot_users_new WHERE username ='${username}'), ${toAdd}, 'USD')`;
+  console.log(query)
+  client.query(query)
+}
 
 changre_accruals();
