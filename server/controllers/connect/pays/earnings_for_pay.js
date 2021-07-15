@@ -1,11 +1,9 @@
 const client = require('../../../../db');
 
 module.exports = async (req, res) => {
-    let {
-        username
-    } = req.query;
+    let { username } = req.query;
 
-    if (username[0] === "@") {
+    if (username[0] === '@') {
         username = username.substring(1);
     }
 
@@ -14,6 +12,9 @@ module.exports = async (req, res) => {
     let earnings = await client.query(get_earnings_for_pay);
 
     return res.json({
-        total: earnings.rows[0].total === null ? 0 : Number(earnings.rows[0].total === null).toFixed(2)
-    })
-}
+        total:
+            earnings.rows[0].total === null
+                ? 0
+                : Number(earnings.rows[0].total === null).toFixed(2),
+    });
+};

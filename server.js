@@ -13,5 +13,5 @@ app.use(express.static('static/refs'));
 app.use('/', routes);
 
 app.listen(PORT, () => {
-  console.log(`The server is listening on port ${PORT}`);
+    console.log(`The server is listening on port ${PORT}`);
 });

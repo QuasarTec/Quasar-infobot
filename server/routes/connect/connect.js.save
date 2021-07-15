@@ -17,12 +17,12 @@ router.get('/users/accruals/get-pay-link', async (req, res) => {
     await require('../../controllers/connect/pays/get-pay-link.js')(req, res);
 });
 
-router.get('/users/refs/refs-list', async (req, res) => {
-    await require('../../controllers/connect/refs/refs_list')(req, res);
+router.get('/users/accruals/get-pay-link', async (req, res) => {
+    await require('../../controllers/connect/pays/get-pay-link.js')(req, res);
 });
 
-router.get('/users/refs/refs-link', async (req, res) => {
-    await require('../../controllers/connect/refs/refs_link')(req, res);
+router.get('/users/refs/refs-list', async (req, res) => {
+    await require('../../controllers/connect/refs/refs_list')(req, res);
 });
 
 router.get('/users/refs/refs-count', async (req, res) => {
@@ -33,7 +33,7 @@ router.get('/users/refs/mentor', async (req, res) => {
     await require('../../controllers/connect/refs/mentor')(req, res);
 });
 
-router.get('/users/refs/viz-link', async (req, res) => {
+router.post('/users/refs/viz-link', async (req, res) => {
     await require('../../controllers/connect/refs/refs_link')(req, res);
 });
 
