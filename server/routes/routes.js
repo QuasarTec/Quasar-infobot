@@ -60,12 +60,15 @@ router.post('/message', async (req, res) => {
 router.get('/referrals-vizualization', async (req, res) => {
     let root = req.query.username;
     let type = req.query.type;
+
     if (root === undefined) {
         res.send(
             'Ошибка! Похоже вы попали не туда\n<a href="https://meet.qtconnect.ru" target="_blank">Главная</a>'
         );
         return;
     }
+
+    root = root.replaceAll('@', '')
 
     if (type === undefined) {
         type = 'last_pay';
@@ -306,6 +309,8 @@ router.post('/pay/confirm', (req, res) => {
             `По вашей реферальной ссылке был заргестрирован пользователь @${response.rows[0].username}`
         );
 
+        console.log(inviter)
+
         query = `SELECT id FROM quasar_telegrambot_users_new WHERE username='${inviter}'`;
 
         client.query(query, async (err, res) => {
@@ -327,6 +332,8 @@ router.post('/pay/confirm', (req, res) => {
                     inviterId = res.rows[0].id;
                 }
             }
+
+            console.log(inviterId);
 
             query = `UPDATE quasar_telegrambot_users_new SET ref_id = ${inviterId} WHERE chat_id=${response.rows[0].chat_id}`;
 
@@ -359,14 +366,24 @@ const findWeakBranch = async (id) => {
         if (levels[i].length < 5 ** (i + 1)) {
             let users_of_level = {};
             let parents = [];
+
+            if (i === 0) {
+                users_of_level[levels[i][0].parent] = [];
+                parents = [levels[i][0].parent]
+            } else {
+                levels[i-1].forEach(el => {
+                    users_of_level[el.value] = [];
+                    parents.push(el.value)
+                })
+            }
+            
             levels[i].forEach((el) => {
-                if (users_of_level[el.parent] === undefined) {
-                    users_of_level[el.parent] = [el];
-                    parents.push(el.parent);
-                } else {
-                    users_of_level[el.parent].push(el);
-                }
+                users_of_level[el.parent].push(el);
             });
+
+            console.log(users_of_level)
+            console.log(parents)
+
             let min_count_refs = 5;
             let min_count_refs_user;
             parents.forEach((el) => {
@@ -375,6 +392,7 @@ const findWeakBranch = async (id) => {
                     min_count_refs_user = el;
                 }
             });
+
             let get_id_min_count_refs_user_query = `SELECT id FROM quasar_telegrambot_users_new WHERE username = '${min_count_refs_user}'`;
 
             let id_min_count_refs_user = await client.query(get_id_min_count_refs_user_query);

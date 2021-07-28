@@ -1,6 +1,6 @@
 const client = require('../db');
 
-const getAllReferals = async (ids, index, viz = false, type = 'last_pay', active = false) => {
+const getAllReferals = async (ids, index, viz = false, type = 'last_pay') => {
     return new Promise(async (resolve, reject) => {
         if (index < 1) {
             resolve([]);
@@ -83,8 +83,7 @@ const getAllReferals = async (ids, index, viz = false, type = 'last_pay', active
                                 [new_ids[j]],
                                 index - 1,
                                 viz,
-                                type,
-                                active
+                                type
                             ),
                             active:
                                 parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <=
@@ -94,7 +93,7 @@ const getAllReferals = async (ids, index, viz = false, type = 'last_pay', active
                         refs.push({
                             username: res.rows[j].username,
                             id: res.rows[j].id,
-                            refs: await getAllReferals([new_ids[j]], index - 1, viz, type, active),
+                            refs: await getAllReferals([new_ids[j]], index - 1, viz, type),
                             parent,
                             active:
                                 parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <=

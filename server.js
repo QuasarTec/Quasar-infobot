@@ -10,6 +10,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use(express.static('static/refs'));
+app.use('/instructions', express.static('instructions'));
+
 app.use('/', routes);
 
 app.listen(PORT, () => {

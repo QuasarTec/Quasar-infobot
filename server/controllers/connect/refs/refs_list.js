@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
     if (active === 'true') {
         active = true;
     } else if (active === 'false') {
-        active = 'false';
+        active = false;
     } else {
         return res.json({
             status: "error",

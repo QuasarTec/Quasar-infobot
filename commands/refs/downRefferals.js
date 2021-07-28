@@ -73,7 +73,7 @@ module.exports = async (msg, link = false, services = 'last_pay', active = false
         return;
     }
 
-    let refs = await referrals.getAllReferals([res.rows[0].id], 9, false, services, active);
+    let refs = await referrals.getAllReferals([res.rows[0].id], 9, false, services);
 
     let text = '';
 

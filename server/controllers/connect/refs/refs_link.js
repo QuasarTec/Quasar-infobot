@@ -5,6 +5,8 @@ module.exports = async (req, res) => {
         username
     } = req.query;
 
+    console.log(username)
+
     if (username === undefined) {
         return res.json({
             status: "error",
@@ -12,9 +14,7 @@ module.exports = async (req, res) => {
         })
     }
 
-    if (username[0] === "@") {
-        username = username.substring(1)
-    }
+    username = username.replaceAll('@', '');
 
     const userExist = `SELECT ref_id FROM quasar_telegrambot_users_new WHERE username = '${username}'`;
 
@@ -26,6 +26,7 @@ module.exports = async (req, res) => {
             error: "Not Found"
         })
     }
+
 
     res.json({
         status: "ok",

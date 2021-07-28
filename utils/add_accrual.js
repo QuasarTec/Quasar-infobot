@@ -9,7 +9,6 @@ module.exports = (username, amount, service, send_to_site = true) => {
         currency = 'USD';
     }
     let query = `INSERT INTO payments_history (marketing, amount, user_id, currency) VALUES ('${service}', ${amount}, (SELECT id FROM quasar_telegrambot_users_new WHERE username = '${username}'), '${currency}');`;
-
     client.query(query);
 
     if (send_to_site) {

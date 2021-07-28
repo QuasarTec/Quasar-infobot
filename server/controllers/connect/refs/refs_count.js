@@ -32,8 +32,6 @@ module.exports = async (req, res) => {
         await referrals.getAllReferals([id.rows[0].id], 9)
     );
 
-    console.log(await referrals.getAllReferals([id.rows[0].id], 9))
-
     return res.json({
         status: "ok",
         count: response.flat().length === undefined ? 0 : response.flat().length
