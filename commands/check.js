@@ -9,11 +9,15 @@ const not_found = ` в глобальной базе Quasar Technology не на
 Если вы уверены, в том  что данные авторизации внесены верно, Вы зарегистрированы под указываемым Вами telegram ником, обратитесь за помощью тапнув по кнопке "тех поддержка"`;
 
 module.exports = async (msg, bot, not_button = false) => {
+    const get_ref_uuid = `SELECT ref_uuid FROM quasar_telegrambot_users_new WHERE username = '${msg.chat.username}';`;
+
+    const ref_uuid = (await client.query(get_ref_uuid)).rows[0].ref_uuid;
+
     const params = {
         action: 'get',
         token: 'D!3%26%23!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%%23%@4112dhas91^^^^31',
-        by: 'username',
-        by_text: msg.chat.username,
+        by: ref_uuid ? 'ref_uuid' : 'username',
+        by_text: ref_uuid ? ref_uuid : '@' + msg.chat.username,
     };
 
     let text;

@@ -7,13 +7,9 @@ const addDays = (date, days) => {
 };
 
 module.exports = async (req, res) => {
-    let { username } = req.query;
+    let { ref_uuid } = req.query;
 
-    if (username[0] === '@') {
-        username = username.substring(1);
-    }
-
-    let get_last_pay_date = `SELECT last_pay FROM quasar_telegrambot_users_new WHERE username = '${username}'`;
+    let get_last_pay_date = `SELECT last_pay FROM quasar_telegrambot_users_new WHERE ref_uuid = '${ref_uuid}'`;
 
     let date = await client.query(get_last_pay_date);
 

@@ -3,19 +3,15 @@ const client = require('../../../../db');
 
 module.exports = async (req, res) => {
     let {
-        username,
+        ref_uuid,
         active
     } = req.query;
 
-    if (username === undefined) {
+    if (ref_uuid === undefined) {
         return res.json({
             status: "error",
-            error: "'username' is not defined"
+            error: "'ref_uuid' is not defined"
         })
-    }
-
-    if (username[0] === "@") {
-        username = username.substring(1)
     }
 
     if (active === undefined) {
@@ -36,7 +32,7 @@ module.exports = async (req, res) => {
         })
     }
 
-    let getId = `SELECT chat_id FROM quasar_telegrambot_users_new WHERE username = '${username}'`;
+    let getId = `SELECT chat_id, username FROM quasar_telegrambot_users_new WHERE ref_uuid = '${ref_uuid}'`;
 
     let chat_id = await client.query(getId);
 
@@ -49,7 +45,7 @@ module.exports = async (req, res) => {
 
     let msg = {
         chat: {
-            username,
+            username: chat_id.rows[0].username,
             id: chat_id.rows[0].chat_id
         }
     }

@@ -25,12 +25,16 @@ module.exports = async (msg, bot, pay_name = 'last_pay', amount = 960, curr = 'R
     if (parseInt((new Date() - res.rows[0][pay_name]) / (24 * 3600 * 1000)) <= 30) {
         return 'Время вашей подписки ещё не истекло';
     } else {
+        const get_ref_uuid = `SELECT ref_uuid FROM quasar_telegrambot_users_new WHERE username = '${msg.chat.username}';`;
+
+        const ref_uuid = (await client.query(get_ref_uuid)).rows[0].ref_uuid;
+
         let response = await axios({
             method: 'post',
             url: 'https://api.quasaria.ru/api/pay/get_pay_link',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            data: `token=${encodeURIComponent(token)}&username=${encodeURIComponent(
-                '@' + msg.chat.username
+            data: `token=${encodeURIComponent(token)}&${ref_uuid ? 'ref_uuid' : 'username'}=${encodeURIComponent(
+                ref_uuid ? ref_uuid : '@' + msg.chat.username
             )}&m_curr=${curr}&m_amount=${amount}&desc=${pay_name}`,
         }).catch((err) => console.error(err));
         if (response.data.status === 'error') {

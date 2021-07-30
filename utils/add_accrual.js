@@ -2,7 +2,7 @@ const client = require('../db');
 const axios = require('axios');
 const token = 'D!3&#!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%#%@4112dhas91^^^^31';
 
-module.exports = (username, amount, service, send_to_site = true) => {
+module.exports = async (username, amount, service, send_to_site = true) => {
     let currency = 'RUB';
     if (service === 'last_pay') {
         service = 'connect';
@@ -12,13 +12,27 @@ module.exports = (username, amount, service, send_to_site = true) => {
     client.query(query);
 
     if (send_to_site) {
-        username = '@' + username;
+        const get_ref_uuid = `SELECT ref_uuid FROM quasar_telegrambot_users_new WHERE username = '${username}';`;
 
-        let data = {};
-        data[username] = {};
-        data[username][currency.toLocaleLowerCase()] = amount;
+        const ref_uuid = (await client.query(get_ref_uuid)).rows[0].ref_uuid;
 
-        console.log(data);
+        if (ref_uuid) {
+            var data = [{
+                ref_uuid,
+                cur: {
+
+                }
+            }];
+            data[0]["cur"][currency.toLocaleLowerCase()] = amount
+        } else {
+            var data = [{
+                username: "@"+username,
+                cur: {
+
+                }
+            }];
+            data[0]["cur"][currency.toLocaleLowerCase()] = amount
+        }
 
         axios({
             method: 'post',

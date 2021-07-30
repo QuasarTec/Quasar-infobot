@@ -1,5 +1,24 @@
 const express = require('express');
+const client = require('../../../db');
 const router = express.Router();
+
+
+router.use(async (req, res, next) => {
+    let {
+        ref_uuid,
+        username
+    } = req.body
+    if (ref_uuid) {
+        const check_on_ref_uuid = `SELECT username FROM quasar_telegrambot_users_new WHERE ref_uuid = '${ref_uuid}'`
+    
+        const res = await client.query(check_on_ref_uuid);
+
+        if (res.rowCount === 0) {
+            await client.query(`UPDATE quasar_telegrambot_users_new SET ref_uuid = '${ref_uuid}' WHERE username = '${username}'`)
+        }
+    }
+    next()
+});
 
 router.get('/users/get_pay_date', async (req, res) => {
     await require('../../controllers/connect/pays/get_pay_date')(req, res);

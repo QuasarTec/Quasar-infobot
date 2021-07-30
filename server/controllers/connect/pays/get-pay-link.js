@@ -4,25 +4,28 @@ const axios = require('axios');
 
 module.exports = async (req, res) => {
     let {
+        ref_uuid,
         username
     } = req.query
 
-    if (username === undefined) {
+    if (ref_uuid === undefined) {
         res.json({
             status: "error",
-            error: "username is not defined"
+            error: "ref_uuid is not defined"
         })
     }
 
-    if (username[0] !== "@") {
-        username = "@" + username
+    if (username[0] === "@") {
+        username = username.substring(1)
     }
 
     let response = await axios({
         method: 'post',
         url: 'https://api.quasaria.ru/api/pay/get_pay_link',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        data: `token=${encodeURIComponent(token)}&username=${encodeURIComponent(username)}&m_curr=USD&m_amount=12&desc=last_pay`,
+        data: `token=${encodeURIComponent(token)}&ref_uuid=${encodeURIComponent(
+            ref_uuid
+        )}&m_curr=USD&m_amount=12&desc=last_pay`,
     }).catch(err => res.json({
         status: "error",
         error: err
@@ -37,7 +40,7 @@ module.exports = async (req, res) => {
         });
         return true;
     } else if (response.data.status === 'success') {
-        const userExist = `SELECT id FROM quasar_telegrambot_users_new WHERE username = '${username.substring(1)}'`;
+        const userExist = `SELECT id FROM quasar_telegrambot_users_new WHERE username = '${username}' OR ref_uuid = '${ref_uuid}'`;
 
         const user = await client.query(userExist);
 
@@ -48,7 +51,7 @@ module.exports = async (req, res) => {
             });
         }
 
-        query = `UPDATE quasar_telegrambot_users_new SET sign = '${response.data.response.sing}' WHERE username = '${username.substring(1)}';`;
+        query = `UPDATE quasar_telegrambot_users_new SET sign = '${response.data.response.sing}' WHERE username = '${username}' OR ref_uuid = '${ref_uuid}';`;
 
         client.query(query, err => {
             if (err) {

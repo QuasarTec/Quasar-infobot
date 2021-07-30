@@ -2,21 +2,17 @@ const client = require("../../../../db");
 
 module.exports = async (req, res) => {
     let {
-        username
+        ref_uuid
     } = req.query;
 
-    if (username === undefined) {
+    if (ref_uuid === undefined) {
         return res.json({
             status: "error",
-            error: "'username' is not defined"
+            error: "'ref_uuid' is not defined"
         })
     }
 
-    if (username[0] === "@") {
-        username = username.substring(1)
-    }
-
-    const ref_id_query = `SELECT ref_id FROM quasar_telegrambot_users_new WHERE username = '${username}'`;
+    const ref_id_query = `SELECT ref_id FROM quasar_telegrambot_users_new WHERE ref_uuid = '${ref_uuid}'`;
 
     let ref_id = await client.query(ref_id_query);
 

@@ -3,21 +3,17 @@ const referrals = require('../../../../utils/findRefs');
 
 module.exports = async (req, res) => {
     let {
-        username
+        ref_uuid
     } = req.query;
 
-    if (username === undefined) {
+    if (ref_uuid === undefined) {
         return res.json({
             status: "error",
-            error: "'username' is not defined"
+            error: "'ref_uuid' is not defined"
         })
     }
 
-    if (username[0] === "@") {
-        username = username.substring(1)
-    }
-
-    let query = `SELECT id FROM quasar_telegrambot_users_new WHERE username = '${username}'`;
+    let query = `SELECT id FROM quasar_telegrambot_users_new WHERE ref_uuid = '${ref_uuid}'`;
 
     const id = await client.query(query);
 

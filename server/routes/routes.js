@@ -34,6 +34,10 @@ router.get('/accruals/get-accruals', (req, res) => {
     require('../controllers/accruals/get_accruals')(req, res);
 });
 
+router.put('/users/insert-user', (req, res) => {
+    require('../controllers/site/insertUser')(req, res);
+})
+
 router.post('/message', async (req, res) => {
     const { usernames, text, image } = req.body;
 
@@ -126,7 +130,7 @@ router.post('/pay/confirm', (req, res) => {
         desk = 'last_pay';
     }
 
-    let query = `SELECT chat_id, id, ref_id, username FROM quasar_telegrambot_users_new WHERE sign = '${sign}'`;
+    let query = `SELECT chat_id, id, ref_id, ref_uuid, username FROM quasar_telegrambot_users_new WHERE sign = '${sign}'`;
 
     client.query(query, async (err, response) => {
         if (err) {
@@ -150,14 +154,14 @@ router.post('/pay/confirm', (req, res) => {
             }
 
             if (res.rowCount === 0) {
-                const query = `INSERT INTO marketings (username, user_id) VALUES ((SELECT username FROM quasar_telegrambot_users_new WHERE id = ${response.rows[0].id}), ${response.rows[0].id})`;
+                const query = `INSERT INTO marketings (user_id) VALUES (${response.rows[0].id})`;
 
                 await client.query(query);
             }
         });
 
         if (desk === 'last_pay') {
-            query = `UPDATE quasar_telegrambot_users_new SET last_pay = '${new Date().toUTCString()}', sign = Null WHERE chat_id = '${response.rows[0].chat_id
+            query = `UPDATE quasar_telegrambot_users_new SET last_pay = '${new Date().toUTCString()}', sign = Null WHERE ref_uuid = '${response.rows[0].ref_uuid
                 }'`;
         } else {
             query = `UPDATE marketings SET ${desk} = '${new Date().toUTCString()}' WHERE user_id = ${response.rows[0].id
@@ -171,13 +175,15 @@ router.post('/pay/confirm', (req, res) => {
                 return;
             }
 
-            bot.sendMessage(
-                response.rows[0].chat_id,
-                'Оплата прошла успешно!\nВы можете пользоваться технологией Connect'
-            );
+            if(response.rows[0].chat_id) {
+                bot.sendMessage(
+                    response.rows[0].chat_id,
+                    'Оплата прошла успешно!\nВы можете пользоваться технологией Connect'
+                );
+            }
 
             //Бесплатные пробный период
-            let query = `SELECT m.*, u.last_pay FROM marketings m left join quasar_telegrambot_users_new u on u.id=m.user_id WHERE u.chat_id = '${response.rows[0].chat_id}'`;
+            let query = `SELECT m.*, u.last_pay FROM marketings m left join quasar_telegrambot_users_new u on u.id=m.user_id WHERE u.ref_uuid = '${response.rows[0].ref_uuid}'`;
 
             client.query(query, async (err, res) => {
                 if (err) {
@@ -190,7 +196,7 @@ router.post('/pay/confirm', (req, res) => {
                 var test_period_sevices = [];
 
                 if (res.rowCount === 0) {
-                    let query = `INSERT INTO marketings (user_id) VALUES ((SELECT id FROM quasar_telegrambot_users_new WHERE chat_id = '${response.rows[0].chat_id}'))`;
+                    let query = `INSERT INTO marketings (user_id) VALUES ((SELECT id FROM quasar_telegrambot_users_new WHERE ref_uuid = '${response.rows[0].ref_uuid}'))`;
                     client.query(query);
                     test_period_sevices = [
                         'qcloud_pay',
@@ -248,15 +254,16 @@ router.post('/pay/confirm', (req, res) => {
                 query = query.slice(0, -2);
 
                 query += ` WHERE user_id = ${response.rows[0].id};`;
-
                 await client.query(query);
             });
 
-            bot.sendMessage(
-                response.rows[0].chat_id,
-                'В честь запуска бота, мы дарим вам пробный период, на все сервисы компании на срок в 2 недели!'
-            );
-
+            if(response.rows[0].chat_id) {
+               bot.sendMessage(
+                    response.rows[0].chat_id,
+                    'В честь запуска бота, мы дарим вам пробный период, на все сервисы компании на срок в 2 недели!'
+                ); 
+            }
+            
             ///А дальше уже не бесплатный пробный период
             res.json({
                 status: 'Succesfully',
@@ -268,11 +275,13 @@ router.post('/pay/confirm', (req, res) => {
             return;
         }
 
+        const ref_uuid = response.rows[0].ref_uuid;
+
         const params = {
             action: 'get',
             token: 'D!3%26%23!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%%23%@4112dhas91^^^^31',
-            by: 'username',
-            by_text: response.rows[0].username,
+            by: ref_uuid ? 'ref_uuid' : 'username',
+            by_text: ref_uuid ? ref_uuid : '@' + response.rows[0].username,
         };
 
         const resp = await axios
@@ -281,10 +290,12 @@ router.post('/pay/confirm', (req, res) => {
             )
             .catch((err) => console.error(err));
         if (resp.data.status === 'error') {
-            bot.sendMessage(
-                response.rows[0].chat_id,
-                `Пользователя с ником @${params.by_text} на сайте https://quasaria.ru не найдено.\nПроверьте ники, на идентичность.\nЕсли вы уверены, что зарегестрировались, под вашим телеграм ником, обратитесь за помощью на сайте`
-            );
+            if (response.rows[0].chat_id) {
+                bot.sendMessage(
+                    response.rows[0].chat_id,
+                    `Пользователя с ником @${params.by_text} на сайте https://quasaria.ru не найдено.\nПроверьте ники, на идентичность.\nЕсли вы уверены, что зарегестрировались, под вашим телеграм ником, обратитесь за помощью на сайте`
+                );
+            }
             return;
         }
 
@@ -304,12 +315,12 @@ router.post('/pay/confirm', (req, res) => {
 
         let chat_id = inviter_id.rows[0].chat_id;
 
-        bot.sendMessage(
-            chat_id,
-            `По вашей реферальной ссылке был заргестрирован пользователь @${response.rows[0].username}`
-        );
-
-        console.log(inviter)
+        if (chat_id) {
+            bot.sendMessage(
+                chat_id,
+                `По вашей реферальной ссылке был заргестрирован пользователь @${response.rows[0].username}`
+            );
+        }
 
         query = `SELECT id FROM quasar_telegrambot_users_new WHERE username='${inviter}'`;
 
@@ -335,7 +346,7 @@ router.post('/pay/confirm', (req, res) => {
 
             console.log(inviterId);
 
-            query = `UPDATE quasar_telegrambot_users_new SET ref_id = ${inviterId} WHERE chat_id=${response.rows[0].chat_id}`;
+            query = `UPDATE quasar_telegrambot_users_new SET ref_id = ${inviterId} WHERE ref_uuid = '${response.rows[0].ref_uuid}'`;
 
             client.query(query, (err, res) => {
                 if (err) {
@@ -380,9 +391,6 @@ const findWeakBranch = async (id) => {
             levels[i].forEach((el) => {
                 users_of_level[el.parent].push(el);
             });
-
-            console.log(users_of_level)
-            console.log(parents)
 
             let min_count_refs = 5;
             let min_count_refs_user;

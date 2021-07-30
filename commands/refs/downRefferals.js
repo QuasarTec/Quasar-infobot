@@ -55,7 +55,7 @@ module.exports = async (msg, link = false, services = 'last_pay', active = false
         services = 'last_pay';
     }
 
-    let query = `SELECT username FROM quasar_telegrambot_users_new WHERE chat_id = ${msg.chat.id};`;
+    let query = `SELECT username FROM quasar_telegrambot_users_new WHERE username = '${msg.chat.username}';`;
 
     let res = await client.query(query);
 
@@ -65,7 +65,7 @@ module.exports = async (msg, link = false, services = 'last_pay', active = false
 
     await checkOnChatId(msg.chat.username, msg.chat.id);
 
-    query = `SELECT ref_id, username, id FROM quasar_telegrambot_users_new WHERE chat_id = '${msg.chat.id}'`;
+    query = `SELECT ref_id, username, id FROM quasar_telegrambot_users_new WHERE username = '${msg.chat.username}'`;
 
     res = await client.query(query);
     if (res.rows.length === 0) {
