@@ -161,11 +161,12 @@ router.post('/pay/confirm', (req, res) => {
         });
 
         if (desk === 'last_pay') {
-            query = `UPDATE quasar_telegrambot_users_new SET last_pay = '${new Date().toUTCString()}', sign = Null WHERE ref_uuid = '${response.rows[0].ref_uuid
+            query = `UPDATE quasar_telegrambot_users_new SET last_pay = '${new Date().toUTCString()}', sign = Null WHERE id = '${response.rows[0].id
                 }'`;
         } else {
             query = `UPDATE marketings SET ${desk} = '${new Date().toUTCString()}' WHERE user_id = ${response.rows[0].id
                 };`;
+            
         }
 
         client.query(query, (err) => {
@@ -183,7 +184,7 @@ router.post('/pay/confirm', (req, res) => {
             }
 
             //Бесплатные пробный период
-            let query = `SELECT m.*, u.last_pay FROM marketings m left join quasar_telegrambot_users_new u on u.id=m.user_id WHERE u.ref_uuid = '${response.rows[0].ref_uuid}'`;
+            let query = `SELECT m.*, u.last_pay FROM marketings m left join quasar_telegrambot_users_new u on u.id=m.user_id WHERE u.id = '${response.rows[0].id}'`;
 
             client.query(query, async (err, res) => {
                 if (err) {
@@ -196,7 +197,7 @@ router.post('/pay/confirm', (req, res) => {
                 var test_period_sevices = [];
 
                 if (res.rowCount === 0) {
-                    let query = `INSERT INTO marketings (user_id) VALUES ((SELECT id FROM quasar_telegrambot_users_new WHERE ref_uuid = '${response.rows[0].ref_uuid}'))`;
+                    let query = `INSERT INTO marketings (user_id) VALUES ((SELECT id FROM quasar_telegrambot_users_new WHERE id = '${response.rows[0].id}'))`;
                     client.query(query);
                     test_period_sevices = [
                         'qcloud_pay',
@@ -344,9 +345,7 @@ router.post('/pay/confirm', (req, res) => {
                 }
             }
 
-            console.log(inviterId);
-
-            query = `UPDATE quasar_telegrambot_users_new SET ref_id = ${inviterId} WHERE ref_uuid = '${response.rows[0].ref_uuid}'`;
+            query = `UPDATE quasar_telegrambot_users_new SET ref_id = ${inviterId} WHERE id = '${response.rows[0].id}'`;
 
             client.query(query, (err, res) => {
                 if (err) {
