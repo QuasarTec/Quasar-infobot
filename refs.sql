@@ -109,13 +109,3 @@ user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'systemm
 ORDER BY datetime ASC;
 
 SELECT sum(amount) AS total FROM payments_history WHERE datetime > '2021-06-27 12:37:42.215118+00';
-
-
-@EasyStarsMain
-@Quasar_Company
-@topleader111
-@olyudmila6
-@verakr8
-@yava369
-@Evgeniy_Sakardin
-@s1_alter

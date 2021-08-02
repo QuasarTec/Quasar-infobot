@@ -16,13 +16,13 @@ var options = {
 };
 
 module.exports = async (msg, bot) => {
-    const { username, id } = msg.from;
+    const { username, id } = msg.chat;
 
     const query = `INSERT INTO quasar_telegrambot_users_new (username, chat_id) 
                     VALUES ('${username}', '${id}')`;
 
     await checkOnChatId(username, id);
-    const doesExistQuery = `SELECT * FROM quasar_telegrambot_users_new WHERE chat_id = '${id}'`;
+    const doesExistQuery = `SELECT * FROM quasar_telegrambot_users_new WHERE chat_id = '${id}' OR username = '${username}'`;
 
     client.query(doesExistQuery, async (err, res) => {
         if (err) throw err;

@@ -118,16 +118,19 @@ router.get('/referrals-vizualization', async (req, res) => {
 });
 
 router.post('/pay/confirm', (req, res) => {
-    let { sign, desk } = req.body;
+    let { sign, desc } = req.body;
 
-    let user;
+    console.log({
+        sign,
+        desc
+    })
 
     if (sign === undefined) {
         return res.send('sign required');
     }
 
-    if (desk === undefined) {
-        desk = 'last_pay';
+    if (desc === undefined) {
+        desc = 'last_pay';
     }
 
     let query = `SELECT chat_id, id, ref_id, ref_uuid, username FROM quasar_telegrambot_users_new WHERE sign = '${sign}'`;
@@ -160,11 +163,11 @@ router.post('/pay/confirm', (req, res) => {
             }
         });
 
-        if (desk === 'last_pay') {
+        if (desc === 'last_pay') {
             query = `UPDATE quasar_telegrambot_users_new SET last_pay = '${new Date().toUTCString()}', sign = Null WHERE id = '${response.rows[0].id
                 }'`;
         } else {
-            query = `UPDATE marketings SET ${desk} = '${new Date().toUTCString()}' WHERE user_id = ${response.rows[0].id
+            query = `UPDATE marketings SET ${desc} = '${new Date().toUTCString()}' WHERE user_id = ${response.rows[0].id
                 };`;
             
         }
@@ -272,7 +275,7 @@ router.post('/pay/confirm', (req, res) => {
         });
 
         if (response.rows[0].ref_id !== null) {
-            pay_distrib(response, desk);
+            pay_distrib(response, desc);
             return;
         }
 
@@ -352,7 +355,7 @@ router.post('/pay/confirm', (req, res) => {
                     console.error(err);
                     return;
                 }
-                pay_distrib(response, desk);
+                pay_distrib(response, desc);
             });
         });
     });

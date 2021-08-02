@@ -20,7 +20,7 @@ interface Row {
 const send_message = async function (): Promise<void> {
     const new_users_msg = `За прошлый день, наша команда пополнилась на ${await get_new_users_count()} человек!`;
 
-    await bot.sendMessage(-514439816, new_users_msg);
+    await bot.sendMessage(-1001286565304, new_users_msg);
 }
 
 const save_users_count = async function (): Promise<void> {
@@ -70,7 +70,7 @@ const start = async function (): Promise<void> {
     await save_users_count();
     setTimeout(() => {
         process.exit(0)
-    }, 1000)
+    }, 2000)
 }
 
 start();

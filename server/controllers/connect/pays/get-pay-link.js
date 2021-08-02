@@ -15,6 +15,13 @@ module.exports = async (req, res) => {
         })
     }
 
+    if (username === undefined) {
+        res.json({
+            status: "error",
+            error: "username is not defined"
+        })
+    }
+
     if (username[0] === "@") {
         username = username.substring(1)
     }
