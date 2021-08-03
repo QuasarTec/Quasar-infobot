@@ -3,27 +3,24 @@ let token = 'D!3&#!@aidaDHAI(I*12331231AKAJJjjjho1233h12313^%#%@4112dhas91^^^^31
 const axios = require('axios');
 
 module.exports = async (req, res) => {
-    let {
-        ref_uuid,
-        username
-    } = req.query
+    let { ref_uuid, username } = req.query;
 
     if (ref_uuid === undefined) {
         res.json({
-            status: "error",
-            error: "ref_uuid is not defined"
-        })
+            status: 'error',
+            error: 'ref_uuid is not defined',
+        });
     }
 
     if (username === undefined) {
         res.json({
-            status: "error",
-            error: "username is not defined"
-        })
+            status: 'error',
+            error: 'username is not defined',
+        });
     }
 
-    if (username[0] === "@") {
-        username = username.substring(1)
+    if (username[0] === '@') {
+        username = username.substring(1);
     }
 
     let response = await axios({
@@ -33,10 +30,12 @@ module.exports = async (req, res) => {
         data: `token=${encodeURIComponent(token)}&ref_uuid=${encodeURIComponent(
             ref_uuid
         )}&m_curr=USD&m_amount=12&desc=last_pay`,
-    }).catch(err => res.json({
-        status: "error",
-        error: err
-    }));
+    }).catch((err) =>
+        res.json({
+            status: 'error',
+            error: err,
+        })
+    );
     if (response === undefined) {
         return;
     }
@@ -60,17 +59,17 @@ module.exports = async (req, res) => {
 
         query = `UPDATE quasar_telegrambot_users_new SET sign = '${response.data.response.sing}' WHERE username = '${username}' OR ref_uuid = '${ref_uuid}';`;
 
-        client.query(query, err => {
+        client.query(query, (err) => {
             if (err) {
                 return res.json({
                     status: 'error',
-                    error: "query error",
+                    error: 'query error',
                 });
             }
             return res.json({
-                status: "ok",
-                link: response.data.response.link
-            })
+                status: 'ok',
+                link: response.data.response.link,
+            });
         });
     }
 };

@@ -117,8 +117,9 @@ bot.on('callback_query', async (callbackQuery) => {
         }
         let query;
         if (news.text === undefined) {
-            query = `INSERT into quasar_telegrambot_news (text, img_id) VALUES ('${news.caption === undefined ? '' : news.caption
-                }', '${news.photo_id}')`;
+            query = `INSERT into quasar_telegrambot_news (text, img_id) VALUES ('${
+                news.caption === undefined ? '' : news.caption
+            }', '${news.photo_id}')`;
         } else {
             query = `INSERT into quasar_telegrambot_news (text) VALUES ('${news.text}')`;
         }
@@ -194,8 +195,9 @@ bot.on('callback_query', async (callbackQuery) => {
         if (response === undefined) {
             text = 'Похоже у вас нет рефералов';
         } else {
-            text = `У вас ${response.flat().length
-                } рефералов.\nПриводите ещё, чтобы зарабатывать больше!`;
+            text = `У вас ${
+                response.flat().length
+            } рефералов.\nПриводите ещё, чтобы зарабатывать больше!`;
         }
 
         var service;
@@ -1045,9 +1047,9 @@ const findPayedServces = async (id) => {
 
 const sendMessage = (chat_id, msg) => {
     bot.sendMessage(chat_id, msg);
-}
+};
 
 module.exports = {
     bot,
-    sendMessage
+    sendMessage,
 };

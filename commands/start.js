@@ -36,15 +36,15 @@ module.exports = async (msg, bot) => {
             const check_on_ref_uuid = `SELECT id FROM quasar_telegrambot_users_new WHERE ref_uuid = '${ref_uuid}'`;
 
             const ref_uuid_exist = await client.query(check_on_ref_uuid);
-    
+
             if (ref_uuid_exist.rowCount !== 0) {
                 const update = `UPDATE quasar_telegrambot_users_new SET chat_id = ${msg.chat.id}, username = '${username}' WHERE ref_uuid = '${ref_uuid}'`;
-    
-                await client.query(update)
+
+                await client.query(update);
             } else {
                 const update = `UPDATE quasar_telegrambot_users_new SET ref_uuid = '${ref_uuid}' WHERE chat_id = '${msg.chat.id}'`;
-    
-                await client.query(update)
+
+                await client.query(update);
             }
         }
 
@@ -71,12 +71,12 @@ const get_ref_uuid = async (msg) => {
 
     let res = await axios.get(get_user_url);
 
-    if (res === undefined || res.data.status === 'error' ) {
+    if (res === undefined || res.data.status === 'error') {
         return '';
     }
     let link = res.data.result.User.referral_link;
 
-    let ref_uuid = link.split('/')[link.split('/').length-1];
+    let ref_uuid = link.split('/')[link.split('/').length - 1];
 
     return ref_uuid;
-}
+};

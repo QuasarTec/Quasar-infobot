@@ -11,7 +11,7 @@ const bot = require('../../bot');
 const adminPanel = require('./admin-panel/adminPanel');
 const redirect = require('./redirect');
 const connect = require('./connect/connect');
-const notify = require('../../utils/notify_inviters')
+const notify = require('../../utils/notify_inviters');
 
 router.use(connect);
 
@@ -37,7 +37,7 @@ router.get('/accruals/get-accruals', (req, res) => {
 
 router.put('/users/insert-user', (req, res) => {
     require('../controllers/site/insertUser')(req, res);
-})
+});
 
 router.post('/message', async (req, res) => {
     const { usernames, text, image } = req.body;
@@ -73,7 +73,7 @@ router.get('/referrals-vizualization', async (req, res) => {
         return;
     }
 
-    root = root.replaceAll('@', '')
+    root = root.replaceAll('@', '');
 
     if (type === undefined) {
         type = 'last_pay';
@@ -160,12 +160,13 @@ router.post('/pay/confirm', (req, res) => {
         });
 
         if (desc === 'last_pay') {
-            query = `UPDATE quasar_telegrambot_users_new SET last_pay = '${new Date().toUTCString()}', sign = Null WHERE id = '${response.rows[0].id
-                }'`;
+            query = `UPDATE quasar_telegrambot_users_new SET last_pay = '${new Date().toUTCString()}', sign = Null WHERE id = '${
+                response.rows[0].id
+            }'`;
         } else {
-            query = `UPDATE marketings SET ${desc} = '${new Date().toUTCString()}' WHERE user_id = ${response.rows[0].id
-                };`;
-            
+            query = `UPDATE marketings SET ${desc} = '${new Date().toUTCString()}' WHERE user_id = ${
+                response.rows[0].id
+            };`;
         }
 
         client.query(query, (err) => {
@@ -175,7 +176,7 @@ router.post('/pay/confirm', (req, res) => {
                 return;
             }
 
-            if(response.rows[0].chat_id) {
+            if (response.rows[0].chat_id) {
                 bot.sendMessage(
                     response.rows[0].chat_id,
                     'Оплата прошла успешно!\nВы можете пользоваться технологией Connect'
@@ -220,7 +221,7 @@ router.post('/pay/confirm', (req, res) => {
                             service !== 'user_id' &&
                             (res.rows[0][service] === null ||
                                 parseInt((new Date() - res.rows[0][service]) / (24 * 3600 * 1000)) >
-                                30)
+                                    30)
                         ) {
                             test_period_sevices.push(service);
                         }
@@ -257,13 +258,13 @@ router.post('/pay/confirm', (req, res) => {
                 await client.query(query);
             });
 
-            if(response.rows[0].chat_id) {
-               bot.sendMessage(
+            if (response.rows[0].chat_id) {
+                bot.sendMessage(
                     response.rows[0].chat_id,
                     'В честь запуска бота, мы дарим вам пробный период, на все сервисы компании на срок в 2 недели!'
-                ); 
+                );
             }
-            
+
             ///А дальше уже не бесплатный пробный период
             res.json({
                 status: 'Succesfully',
@@ -271,7 +272,7 @@ router.post('/pay/confirm', (req, res) => {
         });
 
         if (response.rows[0].ref_id !== null) {
-            notify(bot, response.rows[0].username, response.rows[0].id, desc)
+            notify(bot, response.rows[0].username, response.rows[0].id, desc);
             pay_distrib(response, desc);
             return;
         }
@@ -379,14 +380,14 @@ const findWeakBranch = async (id) => {
 
             if (i === 0) {
                 users_of_level[levels[i][0].parent] = [];
-                parents = [levels[i][0].parent]
+                parents = [levels[i][0].parent];
             } else {
-                levels[i-1].forEach(el => {
+                levels[i - 1].forEach((el) => {
                     users_of_level[el.value] = [];
-                    parents.push(el.value)
-                })
+                    parents.push(el.value);
+                });
             }
-            
+
             levels[i].forEach((el) => {
                 users_of_level[el.parent].push(el);
             });

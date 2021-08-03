@@ -1,17 +1,15 @@
-const client = require('../../../../db')
+const client = require('../../../../db');
 
 module.exports = async (req, res) => {
-    let {
-        username
-    } = req.query;
+    let { username } = req.query;
 
-    console.log(username)
+    console.log(username);
 
     if (username === undefined) {
         return res.json({
-            status: "error",
-            error: "'username' is not defined"
-        })
+            status: 'error',
+            error: "'username' is not defined",
+        });
     }
 
     username = username.replaceAll('@', '');
@@ -22,14 +20,13 @@ module.exports = async (req, res) => {
 
     if (user.rowCount === 0) {
         return res.json({
-            status: "error",
-            error: "Not Found"
-        })
+            status: 'error',
+            error: 'Not Found',
+        });
     }
 
-
     res.json({
-        status: "ok",
-        link: `https://bot.quasaria.ru/bot/referrals-vizualization?username=${username}&type=last_pay`
-    })
-}
+        status: 'ok',
+        link: `https://bot.quasaria.ru/bot/referrals-vizualization?username=${username}&type=last_pay`,
+    });
+};

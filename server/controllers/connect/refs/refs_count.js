@@ -1,16 +1,14 @@
-const client = require("../../../../db");
+const client = require('../../../../db');
 const referrals = require('../../../../utils/findRefs');
 
 module.exports = async (req, res) => {
-    let {
-        ref_uuid
-    } = req.query;
+    let { ref_uuid } = req.query;
 
     if (ref_uuid === undefined) {
         return res.json({
-            status: "error",
-            error: "'ref_uuid' is not defined"
-        })
+            status: 'error',
+            error: "'ref_uuid' is not defined",
+        });
     }
 
     let query = `SELECT id FROM quasar_telegrambot_users_new WHERE ref_uuid = '${ref_uuid}'`;
@@ -19,17 +17,15 @@ module.exports = async (req, res) => {
 
     if (id.rowCount === 0) {
         return res.json({
-            status: "error",
-            error: "Not Found"
-        })
+            status: 'error',
+            error: 'Not Found',
+        });
     }
 
-    const response = referrals.transformRefs(
-        await referrals.getAllReferals([id.rows[0].id], 9)
-    );
+    const response = referrals.transformRefs(await referrals.getAllReferals([id.rows[0].id], 9));
 
     return res.json({
-        status: "ok",
-        count: response.flat().length === undefined ? 0 : response.flat().length
-    })
-}
+        status: 'ok',
+        count: response.flat().length === undefined ? 0 : response.flat().length,
+    });
+};

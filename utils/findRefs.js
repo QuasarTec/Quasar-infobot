@@ -79,12 +79,7 @@ const getAllReferals = async (ids, index, viz = false, type = 'last_pay') => {
                             name: res.rows[j].username,
                             id: res.rows[j].id,
                             data: {},
-                            children: await getAllReferals(
-                                [new_ids[j]],
-                                index - 1,
-                                viz,
-                                type
-                            ),
+                            children: await getAllReferals([new_ids[j]], index - 1, viz, type),
                             active:
                                 parseInt((new Date() - res.rows[j][type]) / (24 * 3600 * 1000)) <=
                                 30,

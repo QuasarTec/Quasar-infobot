@@ -17,21 +17,21 @@ module.exports = async (username, amount, service, send_to_site = true) => {
         const ref_uuid = (await client.query(get_ref_uuid)).rows[0].ref_uuid;
 
         if (ref_uuid) {
-            var data = [{
-                ref_uuid,
-                cur: {
-
-                }
-            }];
-            data[0]["cur"][currency.toLocaleLowerCase()] = amount
+            var data = [
+                {
+                    ref_uuid,
+                    cur: {},
+                },
+            ];
+            data[0]['cur'][currency.toLocaleLowerCase()] = amount;
         } else {
-            var data = [{
-                username: "@"+username,
-                cur: {
-
-                }
-            }];
-            data[0]["cur"][currency.toLocaleLowerCase()] = amount
+            var data = [
+                {
+                    username: '@' + username,
+                    cur: {},
+                },
+            ];
+            data[0]['cur'][currency.toLocaleLowerCase()] = amount;
         }
 
         axios({

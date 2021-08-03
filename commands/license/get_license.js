@@ -30,8 +30,9 @@ module.exports = async (bot, msg) => {
 
     let inviter = await getInviterName(msg.chat.username);
 
-    let query = `SELECT * FROM \`Licensi\` WHERE Username = '${inviter[0] === '@' ? inviter : '@' + inviter
-        }';`;
+    let query = `SELECT * FROM \`Licensi\` WHERE Username = '${
+        inviter[0] === '@' ? inviter : '@' + inviter
+    }';`;
     let user = await client_mysql.query(query);
 
     if (user.length === 0) {

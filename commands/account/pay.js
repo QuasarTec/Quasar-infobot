@@ -33,7 +33,9 @@ module.exports = async (msg, bot, pay_name = 'last_pay', amount = 960, curr = 'R
             method: 'post',
             url: 'https://api.quasaria.ru/api/pay/get_pay_link',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            data: `token=${encodeURIComponent(token)}&${ref_uuid ? 'ref_uuid' : 'username'}=${encodeURIComponent(
+            data: `token=${encodeURIComponent(token)}&${
+                ref_uuid ? 'ref_uuid' : 'username'
+            }=${encodeURIComponent(
                 ref_uuid ? ref_uuid : '@' + msg.chat.username
             )}&m_curr=${curr}&m_amount=${amount}&desc=${pay_name}`,
         }).catch((err) => console.error(err));
