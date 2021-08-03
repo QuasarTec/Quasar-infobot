@@ -158,10 +158,6 @@ const getInviterName = async (username) => {
         )
         .catch((err) => console.error(err));
     if (resp.data.status === 'error') {
-        bot.sendMessage(
-            response.rows[0].chat_id,
-            `Пользователя с ником @${params.by_text} на сайте https://quasaria.ru не найдено.\nПроверьте ники, на идентичность.\nЕсли вы уверены, что зарегестрировались, под вашим телеграм ником, обратитесь за помощью на сайте`
-        );
         return;
     }
 

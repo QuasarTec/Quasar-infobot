@@ -11,6 +11,7 @@ const bot = require('../../bot');
 const adminPanel = require('./admin-panel/adminPanel');
 const redirect = require('./redirect');
 const connect = require('./connect/connect');
+const notify = require('../../utils/notify_inviters')
 
 router.use(connect);
 
@@ -119,11 +120,6 @@ router.get('/referrals-vizualization', async (req, res) => {
 
 router.post('/pay/confirm', (req, res) => {
     let { sign, desc } = req.body;
-
-    console.log({
-        sign,
-        desc
-    })
 
     if (sign === undefined) {
         return res.send('sign required');
@@ -275,6 +271,7 @@ router.post('/pay/confirm', (req, res) => {
         });
 
         if (response.rows[0].ref_id !== null) {
+            notify(bot, response.rows[0].username, response.rows[0].id, desc)
             pay_distrib(response, desc);
             return;
         }
