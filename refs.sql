@@ -1,6 +1,5 @@
-
 SELECT * FROM quasar_telegrambot_users_new WHERE
-username = 'oleg3857'
+username = 'Quasar_Company'
 Or username = 'vadim8967'
 Or username = 'klim52'
 Or username = 'grid848'
@@ -37,25 +36,35 @@ Or id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Nadia_Mag
  Popovi52      | 227 |       
 
 INSERT INTO quasar_telegrambot_users_new (username, ref_id, last_pay) VALUES
-('GulsemAnarbaeva',123,Now()),
+('Connect1',(SELECT id FROM quasar_telegrambot_users_new WHERE username = 'brilliant989'),Now()),
 ('leoniv25',(SELECT id FROM quasar_telegrambot_users_new WHERE username = 'brilliant989'),Now()),
 ('okhlopru',(SELECT id FROM quasar_telegrambot_users_new WHERE username = 'brilliant989'),Now()),
 ('vipgoldlineoj',(SELECT id FROM quasar_telegrambot_users_new WHERE username = 'systemmoneys'),Now()),
 ('InvestExpert_info',(SELECT id FROM quasar_telegrambot_users_new WHERE username = 'systemmoneys'),Now());
 
-UPDATE marketings set qcloud_pay = Null, franchise_pay = Null,message_pay = Null,insta_comment_pay = Null,
-insta_lead_pay = Null,skype_lead_pay = Null,skype_reg_pay = Null, tele_lead_pay = Null, vk_lead_pay = Null, 
-vk_reg_pay = Null, insta_king_pay = Null where user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'olysa470330');
+UPDATE marketings set qcloud_pay = Now(), franchise_pay = Now(),message_pay = Now(),insta_comment_pay = Now(),
+insta_lead_pay = Now(),skype_lead_pay = Now(),skype_reg_pay = Now(), tele_lead_pay = Now(), vk_lead_pay = Now(), 
+vk_reg_pay = Now(), insta_king_pay = Now() 
+where user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Connect1') OR
+user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Connect2') OR
+user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Connect3') OR
+user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Connect4') OR
+user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Connect5');
 
-UPDATE quasar_telegrambot_users_new SET last_pay = Now() where username = 'Quasar_Company';
+UPDATE quasar_telegrambot_users_new SET last_pay = Now() 
+where username = 'Connect1' OR
+username = 'Connect2' OR
+username = 'Connect3' OR
+username = 'Connect4' OR
+username = 'Connect5';
 
 UPDATE quasar_telegrambot_users_new 
-SET ref_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Quasar_Company') 
-WHERE username = 'AR_261056' OR
-username = 'topleader111' OR
-username = 'top444444' OR
-username = 'bvornik444' OR
-username = 'asia0001';
+SET ref_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Connect1') 
+WHERE username = 'Lead_4' OR
+username = 'Quasar_Company' OR
+username = 'kavkaztrader' OR
+username = 'aritumgroup' OR
+username = 'Connect5';
 
     username    | id  | ref_id 
 ----------------+-----+--------
@@ -81,7 +90,7 @@ INSERT INTO payments_history (marketing, amount, user_id) VALUES ('franchise_pay
 
 INSERT INTO marketings (user_id) VALUES (583);
 
-UPDATE quasar_telegrambot_users_new SET sign = 'test' WHERE username = 'Quasar_Company';
+UPDATE quasar_telegrambot_users_new SET sign = 'test' WHERE username = 'black1rabbit';
 
 CREATE TABLE chats (
     id serial primary key,
