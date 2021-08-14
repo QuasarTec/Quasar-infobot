@@ -29,7 +29,6 @@ const changre_accruals = async () => {
 
 const add_to_db = (toAdd, username) => {
     const query = `INSERT INTO payments_history (user_id, amount, currency) VALUES ((SELECT id FROM quasar_telegrambot_users_new WHERE username ='${username}'), ${toAdd}, 'USD')`;
-    console.log(query);
     client.query(query);
 };
 

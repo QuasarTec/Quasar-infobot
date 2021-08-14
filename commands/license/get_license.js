@@ -29,6 +29,9 @@ module.exports = async (bot, msg) => {
     }
 
     let inviter = await getInviterName(msg.chat.username);
+    if (inviter === undefined) {
+        return bot.sendMessage('Произошла ошибка')
+    }
 
     let query = `SELECT * FROM \`Licensi\` WHERE Username = '${
         inviter[0] === '@' ? inviter : '@' + inviter

@@ -7,6 +7,17 @@ module.exports = async (req, res) => {
         service = 'last_pay';
     }
 
+    if(username === undefined) {
+        return res.json({
+            status: "error",
+            text: "username is required"
+        });
+    }
+
+    if (username[0] === "@") {
+        username.substring(1)
+    }
+
     const query =
         service === 'last_pay'
             ? `SELECT last_pay FROM quasar_telegrambot_users_new WHERE username = '${username}'`

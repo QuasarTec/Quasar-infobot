@@ -3,8 +3,6 @@ const client = require('../../../../db');
 module.exports = async (req, res) => {
     let { username } = req.query;
 
-    console.log(username);
-
     if (username === undefined) {
         return res.json({
             status: 'error',

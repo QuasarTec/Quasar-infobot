@@ -20,7 +20,11 @@ module.exports = async (req, res) => {
 
     const insert_user = `INSERT INTO quasar_telegrambot_users_new (username, ref_uuid) VALUES ('${username}', '${ref_uuid}')`;
 
-    client.query(insert_user);
+    await client.query(insert_user);
+
+    const insert_user_marketing = `INSERT INTO marketings (user_id) VALUES ((SELECT id FROM quasar_telegrambot_users_new WHERE username = '${username}'))`;
+
+    client.query(insert_user_marketing);
 
     return res.json({
         status: 'ok',

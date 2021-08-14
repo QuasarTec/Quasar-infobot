@@ -43,8 +43,5 @@ module.exports = async (username, amount, service, send_to_site = true) => {
             .catch((err) => {
                 console.error(err);
             })
-            .then((res) => {
-                console.log(res.data);
-            });
     }
 };

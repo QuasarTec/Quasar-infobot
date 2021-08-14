@@ -121,6 +121,8 @@ router.get('/referrals-vizualization', async (req, res) => {
 router.post('/pay/confirm', (req, res) => {
     let { sign, desc } = req.body;
 
+    console.log(req.body)
+
     if (sign === undefined) {
         return res.send('sign required');
     }
@@ -271,7 +273,7 @@ router.post('/pay/confirm', (req, res) => {
             });
         });
 
-        if (response.rows[0].ref_id !== null) {
+        if (response.rows[0].ref_id) {
             notify(bot, response.rows[0].username, response.rows[0].id, desc);
             pay_distrib(response, desc);
             return;
@@ -335,7 +337,7 @@ router.post('/pay/confirm', (req, res) => {
             var inviterId;
 
             if (res.rowCount === 0 || res.rows[0].id === 180) {
-                inviterId = await findWeakBranch(661); //Поиск слабого звена относительно аккаунта @Quasar_Company (661 - id записи Quasar_Company в бд)
+                inviterId = await findWeakBranch(180); //Поиск слабого звена относительно аккаунта @EasyStarsMain (180 - id записи Quasar_Company в бд)
             } else {
                 query = `SELECT id FROM quasar_telegrambot_users_new WHERE ref_id = ${res.rows[0].id}`;
                 let count_refs = await client.query(query);

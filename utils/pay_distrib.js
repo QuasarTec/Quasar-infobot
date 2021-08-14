@@ -48,7 +48,6 @@ module.exports = (response, type) => {
     }
 
     getAllInviters(response.rows[0].id, levels, type).then(async (inviters) => {
-        console.log(response.rows[0].id);
 
         inviters = inviters.filter((inviter) => inviter.id !== response.rows[0].id);
 

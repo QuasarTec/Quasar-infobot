@@ -18,6 +18,10 @@ var options = {
 module.exports = async (msg, bot) => {
     const { username, id } = msg.chat;
 
+    if (username === undefined || username === 'undefined') {
+        return bot.sendMessage(id, 'Похоже ваш ник был скрыт, или ваш ник недопустим. Попробуйте заново прописать /start. Если это не помогло обратитесь в тех поддержку')
+    }
+
     const query = `INSERT INTO quasar_telegrambot_users_new (username, chat_id) 
                     VALUES ('${username}', '${id}')`;
 
