@@ -2,7 +2,7 @@ const client = require('../db');
 
 const getAllReferals = async (ids, index, viz = false, type = 'last_pay') => {
     return new Promise(async (resolve, reject) => {
-        if (index < 1) {
+        if (index < 0) {
             resolve([]);
             return;
         }
@@ -25,7 +25,7 @@ const getAllReferals = async (ids, index, viz = false, type = 'last_pay') => {
                     resolve([]);
                     return;
                 }
-                if (index === 1) {
+                if (index === 0) {
                     if (viz) {
                         for (let j = 0; j < res.rowCount; j++) {
                             if (viz) {

@@ -57,7 +57,9 @@ module.exports = async (req, res) => {
             });
         }
 
-        query = `UPDATE quasar_telegrambot_users_new SET sign = '${response.data.response.sing}' WHERE username = '${username}' OR ref_uuid = '${ref_uuid}';`;
+        query = `INSERT INTO signatures (user_id, sign) VALUES
+        ((SELECT id FROM quasar_telegrambot_users_new WHERE username = '${username}' OR ref_uuid = '${ref_uuid}'), 
+        '${response.data.response.sing}');`;
 
         client.query(query, (err) => {
             if (err) {

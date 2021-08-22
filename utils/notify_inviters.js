@@ -2,7 +2,8 @@ const client = require('../db');
 const findInviters = require('./findInviters');
 
 const notify = async (bot, username, user_id, type) => {
-    const inviters = await findInviters(user_id, 9, type);
+    let inviters = await findInviters(user_id, 9, type);
+    inviters = inviters.filter((inviter) => inviter.id !== user_id);
 
     let inviter_ids = [];
     for (let i = 0; i < inviters.length; i++) {

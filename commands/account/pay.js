@@ -39,11 +39,14 @@ module.exports = async (msg, bot, pay_name = 'last_pay', amount = 960, curr = 'R
                 ref_uuid ? ref_uuid : '@' + msg.chat.username
             )}&m_curr=${curr}&m_amount=${amount}&desc=${pay_name}`,
         }).catch((err) => console.error(err));
+        
         if (response.data.status === 'error') {
             bot.sendMessage(msg.chat.id, 'Пользователь с таким ником на сайте не найден', opts);
             return true;
         } else if (response.data.status === 'success') {
-            query = `UPDATE quasar_telegrambot_users_new SET sign = '${response.data.response.sing}' WHERE chat_id = '${msg.chat.id}';`;
+            query = `INSERT INTO signatures (user_id, sign) VALUES
+                    ((SELECT id FROM quasar_telegrambot_users_new WHERE chat_id=${msg.chat.id}), 
+                    '${response.data.response.sing}');`
 
             client.query(query, (err, res) => {
                 if (err) {

@@ -118,3 +118,6 @@ user_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'systemm
 ORDER BY datetime ASC;
 
 SELECT sum(amount) AS total FROM payments_history WHERE datetime > '2021-06-27 12:37:42.215118+00';
+
+
+INSERT INTO signatures (user_id, sign) VALUES ((SELECT id FROM quasar_telegrambot_users_new WHERE username = 'belyakova63'), 'test');

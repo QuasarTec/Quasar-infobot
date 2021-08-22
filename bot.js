@@ -117,9 +117,8 @@ bot.on('callback_query', async (callbackQuery) => {
         }
         let query;
         if (news.text === undefined) {
-            query = `INSERT into quasar_telegrambot_news (text, img_id) VALUES ('${
-                news.caption === undefined ? '' : news.caption
-            }', '${news.photo_id}')`;
+            query = `INSERT into quasar_telegrambot_news (text, img_id) VALUES ('${news.caption === undefined ? '' : news.caption
+                }', '${news.photo_id}')`;
         } else {
             query = `INSERT into quasar_telegrambot_news (text) VALUES ('${news.text}')`;
         }
@@ -195,9 +194,8 @@ bot.on('callback_query', async (callbackQuery) => {
         if (response === undefined) {
             text = 'Похоже у вас нет рефералов';
         } else {
-            text = `У вас ${
-                response.flat().length
-            } рефералов.\nПриводите ещё, чтобы зарабатывать больше!`;
+            text = `У вас ${response.flat().length
+                } рефералов.\nПриводите ещё, чтобы зарабатывать больше!`;
         }
 
         var service;
@@ -957,7 +955,7 @@ bot.on('message', (message) => {
                     } else {
                         inviter = 'Похоже у пользователя нет пригласителя ';
                     }
-                    text += `ID: ${res.rows[i].id}\nИмя пользователя: ${res.rows[i].username}\nChat ID: ${res.rows[i].chat_id}\nЭто админ: ${res.rows[i].is_admin}\nСигнатура для оплаты: ${res.rows[i].sign}\nПргласитель: ${inviter}\n\nОплачено: ${payed}`;
+                    text += `ID: ${res.rows[i].id}\nИмя пользователя: ${res.rows[i].username}\nChat ID: ${res.rows[i].chat_id}\nЭто админ: ${res.rows[i].is_admin}\nПргласитель: ${inviter}\n\nОплачено: ${payed}`;
                 }
             }
             bot.sendMessage(message.chat.id, text, opts);

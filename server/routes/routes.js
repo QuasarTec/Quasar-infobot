@@ -131,7 +131,7 @@ router.post('/pay/confirm', (req, res) => {
         desc = 'last_pay';
     }
 
-    let query = `SELECT chat_id, id, ref_id, ref_uuid, username FROM quasar_telegrambot_users_new WHERE sign = '${sign}'`;
+    let query = `SELECT chat_id, id, ref_id, ref_uuid, username FROM quasar_telegrambot_users_new WHERE id = (SELECT user_id FROM signatures WHERE sign = '${sign}' LIMIT 1)`;
 
     client.query(query, async (err, response) => {
         if (err) {
@@ -161,14 +161,17 @@ router.post('/pay/confirm', (req, res) => {
             }
         });
 
+        //Delete signature
+        const delete_signature = `DELETE FROM signatures WHERE sign = '${sign}'`
+
+        await client.query(delete_signature)
+
         if (desc === 'last_pay') {
-            query = `UPDATE quasar_telegrambot_users_new SET last_pay = '${new Date().toUTCString()}', sign = Null WHERE id = '${
-                response.rows[0].id
-            }'`;
+            query = `UPDATE quasar_telegrambot_users_new SET last_pay = '${new Date().toUTCString()}' WHERE id = '${response.rows[0].id
+                }'`;
         } else {
-            query = `UPDATE marketings SET ${desc} = '${new Date().toUTCString()}' WHERE user_id = ${
-                response.rows[0].id
-            };`;
+            query = `UPDATE marketings SET ${desc} = '${new Date().toUTCString()}' WHERE user_id = ${response.rows[0].id
+                };`;
         }
 
         client.query(query, (err) => {
@@ -185,89 +188,6 @@ router.post('/pay/confirm', (req, res) => {
                 );
             }
 
-            //Бесплатные пробный период
-            let query = `SELECT m.*, u.last_pay FROM marketings m left join quasar_telegrambot_users_new u on u.id=m.user_id WHERE u.id = '${response.rows[0].id}'`;
-
-            client.query(query, async (err, res) => {
-                if (err) {
-                    res.send(err);
-                    console.error(err);
-                    return;
-                }
-
-                //Получаем список непроплаченных маркетингов
-                var test_period_sevices = [];
-
-                if (res.rowCount === 0) {
-                    let query = `INSERT INTO marketings (user_id) VALUES ((SELECT id FROM quasar_telegrambot_users_new WHERE id = '${response.rows[0].id}'))`;
-                    client.query(query);
-                    test_period_sevices = [
-                        'qcloud_pay',
-                        'franchise_pay',
-                        'message_pay',
-                        'insta_comment_pay',
-                        'insta_lead_pay',
-                        'skype_lead_pay',
-                        'skype_reg_pay',
-                        'tele_lead_pay',
-                        'vk_lead_pay',
-                        'vk_reg_pay',
-                        'insta_king_pay',
-                    ];
-                } else {
-                    let sevices = Object.keys(res.rows[0]);
-
-                    sevices.forEach((service) => {
-                        if (
-                            service !== 'id' &&
-                            service !== 'user_id' &&
-                            (res.rows[0][service] === null ||
-                                parseInt((new Date() - res.rows[0][service]) / (24 * 3600 * 1000)) >
-                                    30)
-                        ) {
-                            test_period_sevices.push(service);
-                        }
-                    });
-                }
-
-                //Оплачиваем их а 2 недели назад
-
-                query = `UPDATE marketings SET `;
-
-                let two_weeks_ago = new Date(
-                    new Date().getTime() - 2 * 7 * 24 * 3600 * 1000
-                ).toUTCString();
-
-                if (test_period_sevices.length === 0) {
-                    return;
-                }
-
-                test_period_sevices.forEach((service) => {
-                    if (service === 'last_pay') {
-                        let query = `UPDATE quasar_telegrambot_users_new SET last_pay = '${new Date(
-                            new Date().getTime() - 2 * 7 * 24 * 3600 * 1000
-                        ).toUTCString()}', `;
-
-                        client.query(query);
-                    } else {
-                        query += `${service} = '${two_weeks_ago}', `;
-                    }
-                });
-
-                query = query.slice(0, -2);
-
-                query += ` WHERE user_id = ${response.rows[0].id};`;
-                await client.query(query);
-            });
-
-            if (response.rows[0].chat_id) {
-                bot.sendMessage(
-                    response.rows[0].chat_id,
-                    'В честь запуска бота, мы дарим вам пробный период, на все сервисы компании на срок в 2 недели!'
-                );
-            }
-
-            ///А дальше уже не бесплатный пробный период
             res.json({
                 status: 'Succesfully',
             });
