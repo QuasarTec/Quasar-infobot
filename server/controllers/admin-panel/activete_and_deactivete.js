@@ -64,6 +64,10 @@ module.exports = async (req, res, date) => {
         let res = await client.query(get_id_query);
 
         if (res.rowCount === 0) {
+            let create_new_user = `INSERT INTO quasar_telegrambot_users_new (username, last_pay) VALUES ('${usernames[i]}', '${date}')`;
+
+            await client.query(create_new_user);
+
             continue;
         }
 
