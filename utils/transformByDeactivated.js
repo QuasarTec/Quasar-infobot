@@ -1,9 +1,6 @@
 const transformByDeactivated = (tree) => {
     for (let i = 0; i < tree.children.length; i++) {
         if (!tree.children[i].active) {
-            if (tree.children[i].children === undefined) {
-                continue;
-            }
             if (tree.children[i].children.length === 0) {
                 tree.children.splice(i, 1);
                 tree = transformByDeactivated(tree);
@@ -25,15 +22,13 @@ const deleteUser = (tree) => {
 
     //Нахожу ребёнка, с минимальным количеством детей
     for (let i = 0; i < tree.children.length; i++) {
-        if (tree.children[i].children === undefined || tree.children[min].children) {
-            continue;
-        }
         if (tree.children[i].children.length < tree.children[min].children.length) {
             min = i;
         }
     }
     //////////////////
 
+    //это массив где должны быть дети нового пользователя
     let new_childs = [];
 
     for (let i = 0; i < tree.children.length; i++) {

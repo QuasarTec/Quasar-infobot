@@ -26,6 +26,12 @@ const multi_active = () => {
         return;
     }
 
+    var distrib_el = document.getElementsByName('distrib')[0];
+
+    options.distrib = distrib_el.checked;
+
+    console.log(options);
+
     axios.post('https://bot.quasaria.ru/bot/admin-panel/users/activate', options).then((res) => {
         alert(res.data);
     });

@@ -1,7 +1,6 @@
 const services = require('../../../commands/services');
 const client = require('../../../db');
 const pay_distrib = require('../../../utils/pay_distrib');
-const pay_distrip = require('../../../utils/pay_distrib');
 
 module.exports = async (req, res, date) => {
     var { usernames, services } = req.body;
@@ -21,9 +20,8 @@ module.exports = async (req, res, date) => {
     }
 
     if (services.connect) {
-        query = `UPDATE quasar_telegrambot_users_new SET last_pay = ${
-            date === 'Null' ? 'Null' : `'${date}'`
-        }`;
+        query = `UPDATE quasar_telegrambot_users_new SET last_pay = ${date === 'Null' ? 'Null' : `'${date}'`
+            }`;
 
         query += ' WHERE ';
 
@@ -84,8 +82,11 @@ module.exports = async (req, res, date) => {
             }
         }
 
-        for (let j = 0; j < activate_services.length; j++) {
-            pay_distrib(res, activate_services[j]);
+
+        if (req.body.distrib) {
+            for (let j = 0; j < activate_services.length; j++) {
+                pay_distrib(res, activate_services[j]);
+            }
         }
     }
 

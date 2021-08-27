@@ -1,5 +1,5 @@
 SELECT * FROM quasar_telegrambot_users_new WHERE
-username = 'Quasar_Company'
+username = 'asia0001'
 Or username = 'vadim8967'
 Or username = 'klim52'
 Or username = 'grid848'
@@ -59,9 +59,9 @@ username = 'Connect4' OR
 username = 'Connect5';
 
 UPDATE quasar_telegrambot_users_new 
-SET ref_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'Connect1') 
-WHERE username = 'Lead_4' OR
-username = 'Quasar_Company' OR
+SET ref_id = (SELECT id FROM quasar_telegrambot_users_new WHERE username = 'vipgoldlineoj') 
+WHERE username = 'kouperwood' OR
+username = 'perfectvolf' OR
 username = 'kavkaztrader' OR
 username = 'aritumgroup' OR
 username = 'Connect5';

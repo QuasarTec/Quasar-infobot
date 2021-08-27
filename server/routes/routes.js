@@ -65,6 +65,7 @@ router.post('/message', async (req, res) => {
 router.get('/referrals-vizualization', async (req, res) => {
     let root = req.query.username;
     let type = req.query.type;
+    let dont_hide_deactivated = req.query.dont_hide_deactivated;
 
     if (root === undefined) {
         res.send(
@@ -107,7 +108,10 @@ router.get('/referrals-vizualization', async (req, res) => {
         children: await findRefs.getAllReferals([response.rows[0].id], levels, true, type),
     };
 
-    json = transformByDeactivated(json);
+    if (!dont_hide_deactivated) {
+        json = transformByDeactivated(json);
+
+    }
 
     json = JSON.stringify(json);
 
