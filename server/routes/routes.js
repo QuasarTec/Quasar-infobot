@@ -12,6 +12,7 @@ const adminPanel = require('./admin-panel/adminPanel');
 const redirect = require('./redirect');
 const connect = require('./connect/connect');
 const notify = require('../../utils/notify_inviters');
+const deleteLevel = require('../../utils/deleteLevels');
 
 router.use(connect);
 
@@ -110,8 +111,9 @@ router.get('/referrals-vizualization', async (req, res) => {
 
     if (!dont_hide_deactivated) {
         json = transformByDeactivated(json);
-
     }
+
+    json = deleteLevel(json, levels);
 
     json = JSON.stringify(json);
 
