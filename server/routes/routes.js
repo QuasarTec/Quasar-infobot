@@ -70,7 +70,7 @@ router.get('/referrals-vizualization', async (req, res) => {
 
     if (root === undefined) {
         res.send(
-            'Ошибка! Похоже вы попали не туда\n<a href="https://meet.qtconnect.ru" target="_blank">Главная</a>'
+            'Ошибка! Похоже вы попали не туда\n<a href="https://qtconnect.ru" target="_blank">Главная</a>'
         );
         return;
     }
@@ -110,7 +110,8 @@ router.get('/referrals-vizualization', async (req, res) => {
     };
 
     if (!dont_hide_deactivated) {
-        json = transformByDeactivated(json);
+        json = transformByDeactivated.preTransformDelete(json)
+        json = transformByDeactivated.transformByDeactivated(json);
     }
 
     json = deleteLevel(json, levels);

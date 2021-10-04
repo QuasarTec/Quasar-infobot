@@ -34,7 +34,8 @@ module.exports = async (username, amount, service, send_to_site = true) => {
             data[0]['cur'][currency.toLocaleLowerCase()] = amount;
         }
 
-        axios({
+
+        await axios({
             method: 'post',
             url: 'https://api.quasaria.ru/api/pay/add_balance',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -42,6 +43,10 @@ module.exports = async (username, amount, service, send_to_site = true) => {
         })
             .catch((err) => {
                 console.error(err);
+            })
+            .then((res) => {
+                console.log(data)
+
             })
     }
 };

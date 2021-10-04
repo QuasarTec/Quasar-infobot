@@ -17,6 +17,18 @@ const transformByDeactivated = (tree) => {
     return tree;
 };
 
+const preTransformDelete = (tree) => {
+    for (let i = 0; i < tree.children.length; i++) {
+        if (!tree.children[i].active && tree.children[i].children.length === 0) {
+            tree.children.splice(i, 1);
+        }
+    }
+    for (let i = 0; i < tree.children.length; i++) {
+        tree.children[i] = preTransformDelete(tree.children[i]);
+    }
+    return tree;
+}
+
 const deleteUser = (tree) => {
     let min = 0;
 
@@ -71,4 +83,4 @@ const deleteUser = (tree) => {
     return tree;
 };
 
-module.exports = transformByDeactivated;
+module.exports = {transformByDeactivated, preTransformDelete};

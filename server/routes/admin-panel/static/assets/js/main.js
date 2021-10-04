@@ -9,6 +9,8 @@ const multi_active = () => {
 
     usernames = usernames.split('\n');
 
+    console.log(usernames)
+
     usernames.forEach((el) => {
         if (el[0] === '@') {
             el = el.substring(1);
@@ -16,6 +18,8 @@ const multi_active = () => {
         el = el.replaceAll(' ', '');
         options.usernames.push(el);
     });
+
+    console.log(usernames)
 
     if (options.usernames[0] === '' && options.usernames.length === 1) {
         alert('Вы не ввели ники');
@@ -30,9 +34,9 @@ const multi_active = () => {
 
     options.distrib = distrib_el.checked;
 
-    console.log(options);
+    console.log(usernames);
 
-    axios.post('https://bot.quasaria.ru/bot/admin-panel/users/activate', options).then((res) => {
+    return axios.post('https://bot.quasaria.ru/bot/admin-panel/users/activate', options).then((res) => {
         alert(res.data);
     });
 };

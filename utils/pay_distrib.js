@@ -52,7 +52,7 @@ module.exports = (response, type) => {
         inviters = inviters.filter((inviter) => inviter.id !== response.rows[0].id);
 
         for (let i = 0; i < inviters.length; i++) {
-            add_accrual(inviters[i].username, +(amount / levles).toFixed(2) - 0.01, type);
+            await add_accrual(inviters[i].username, +(amount / levles).toFixed(2) - 0.01, type, true);
         }
     });
     /*axios({

@@ -57,7 +57,7 @@ module.exports = async (req, res, date) => {
     if (date === 'Null') {
         return res.send('ok');
     }
-
+    console.log(usernames)
     for (let i = 0; i < usernames.length; i++) {
         const get_id_query = `SELECT id FROM quasar_telegrambot_users_new WHERE username = '${usernames[i]}'`;
 
@@ -88,8 +88,9 @@ module.exports = async (req, res, date) => {
 
 
         if (req.body.distrib) {
-            for (let j = 0; j < activate_services.length; j++) {
-                pay_distrib(res, activate_services[j]);
+            for (let index = 0; index < activate_services.length; index++) {
+                await pay_distrib(res, activate_services[index]);
+                await sleep(5000)
             }
         }
     }
@@ -135,3 +136,7 @@ const check_services = (services) => {
 
     return result;
 };
+
+const sleep = (ms) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
